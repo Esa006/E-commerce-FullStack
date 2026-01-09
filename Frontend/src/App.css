@@ -1,0 +1,527 @@
+/* Merged styles from the style folder */
+
+/* Product Form Styles */
+.product-form-container {
+    margin-top: 1.5rem;
+}
+
+.product-form-card {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 0.25rem;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+}
+
+/* Product Details Styles */
+.product-image-container {
+    border: none;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+    padding: 0.5rem;
+    overflow: hidden;
+}
+
+.product-image {
+    max-height: 500px;
+    width: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.product-image:hover {
+    transform: scale(1.02);
+}
+
+/* Product Card Styles */
+.product-card {
+    border-radius: 10px !important;
+    overflow: hidden;
+}
+
+.product-card-img {
+    height: 280px;
+    object-fit: contain;
+    background-color: #ffffff;
+    padding: 1rem;
+}
+
+.product-card-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.25rem;
+}
+
+.product-card-price {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.product-card-btn {
+    font-size: 0.75rem !important;
+    border-radius: 5px !important;
+    letter-spacing: 0.5px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+/* Navbar Styles */
+.navbar-custom {
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+    padding: 0.5rem 0;
+}
+
+.brand-logo {
+    font-weight: 700;
+    font-size: 1.75rem;
+    text-decoration: none;
+    color: black;
+    text-transform: uppercase;
+}
+
+/* Footer Styles */
+.footer-container {
+    background-color: #ffffff;
+    border-top: 1px solid #eee;
+    margin-top: 4rem;
+}
+
+.footer-logo {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #000;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.footer-desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    max-width: 400px;
+}
+
+.footer-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    color: #333;
+}
+
+.footer-links li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+    color: #555;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: #000;
+}
+
+/* Orders Styles */
+.orders-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.order-card {
+    background: #fff;
+    border: 1px solid #eaeaec;
+    border-radius: 4px;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.order-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.order-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #eaeaec;
+}
+
+.order-status-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.35em 0.8em;
+    border-radius: 20px;
+}
+
+.status-success {
+    background-color: var(--bs-success);
+    color: white;
+}
+
+.status-warning {
+    background-color: var(--bs-warning);
+    color: white;
+}
+
+/* Order List Styles */
+.order-list-card {
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+    border: 0;
+}
+
+.order-list-header {
+    background-color: #fff;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-list-title {
+    margin-bottom: 0;
+    font-weight: 700;
+}
+
+.order-count-badge {
+    background-color: var(--bs-primary);
+    color: #fff;
+    padding: 0.35em 0.65em;
+    font-size: .75em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+}
+
+.order-list-table-container {
+    overflow-x: auto;
+}
+
+/* Checkout Styles */
+.checkout-container {
+    margin-top: 3rem !important;
+    padding-top: 3rem !important;
+    margin-bottom: 3rem;
+}
+
+.delivery-title {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.order-summary-card {
+    background-color: #f8f9fa;
+    border: none;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+    padding: 1.5rem;
+}
+
+.summary-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.summary-row.border-bottom {
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Cart Styles */
+.cart-item-image {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.cart-item-image.out-of-stock {
+    filter: grayscale(100%);
+}
+
+.cart-item-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.stock-limit-text {
+    font-size: 10px;
+    color: var(--bs-secondary);
+}
+
+.quantity-input {
+    max-width: fit-content;
+    border: 1px solid #ccc;
+}
+
+/* Admin Products Styles */
+.admin-products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.products-list-title {
+    font-weight: 700;
+}
+
+.products-table-container {
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+    overflow-x: auto;
+}
+
+.products-table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    vertical-align: middle;
+    background-color: #fff;
+    text-align: center;
+    border: 1px solid #dee2e6;
+}
+
+.products-table th,
+.products-table td {
+    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+}
+
+/* Admin Orders Styles */
+.admin-orders-container {
+    margin-top: 1.5rem;
+}
+
+.page-title {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.orders-table-container {
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+    overflow-x: auto;
+}
+
+.orders-table {
+    vertical-align: middle;
+    background-color: #fff;
+    text-align: center;
+}
+
+.orders-table-head {
+    background-color: #212529;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.875em;
+}
+
+.order-id {
+    font-weight: 700;
+}
+
+/* Admin Layout Styles */
+.admin-sidebar {
+    width: 250px;
+    min-height: 100vh;
+}
+
+.hover-effect:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 0.25rem;
+}
+
+/* Home Styles */
+.home-container {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.section-title {
+    font-weight: 700;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+    text-transform: capitalize;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 3px;
+    background-color: #212529;
+    bottom: -8px;
+    left: 0;
+}
+
+.loader {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--bs-secondary);
+}
+
+.product-form-card {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 0.25rem;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+}
+
+/* Product Details Styles */
+.product-image-container {
+    border: none;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+    padding: 0.5rem;
+    overflow: hidden;
+}
+
+.product-image {
+    max-height: 500px;
+    width: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.product-image:hover {
+    transform: scale(1.02);
+}
+
+/* Navbar Styles */
+.navbar-custom {
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+    padding: 0.5rem 0;
+}
+
+.brand-logo {
+    font-weight: 700;
+    font-size: 1.75rem;
+    text-decoration: none;
+    color: black;
+    text-transform: uppercase;
+}
+
+/* Admin Dashboard */
+.admin-sidebar {
+    width: 250px;
+    min-height: 100vh;
+}
+
+.hover-effect:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 0.25rem;
+}
+
+/* Product Card Styles */
+.product-card {
+    border-radius: 10px !important;
+    overflow: hidden;
+}
+
+.product-card-img {
+    height: 280px;
+    object-fit: contain;
+    background-color: #ffffff;
+    padding: 1rem;
+}
+
+.product-card-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.25rem;
+}
+
+/* Orders Styles */
+.orders-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.order-card {
+    background: #fff;
+    border: 1px solid #eaeaec;
+    border-radius: 4px;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.order-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Order List Styles */
+.order-list-card {
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+    border: 0;
+}
+
+.order-list-header {
+    background-color: #fff;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Footer Styles */
+.footer-container {
+    background-color: #ffffff;
+    border-top: 1px solid #eee;
+    margin-top: 4rem;
+}
+
+.footer-logo {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #000;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+/* Checkout Styles */
+.checkout-container {
+    margin-top: 3rem !important;
+    padding-top: 3rem !important;
+    margin-bottom: 3rem;
+}
+
+.delivery-title {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.order-summary-card {
+    background-color: #f8f9fa;
+    border: none;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+    padding: 1.5rem;
+}

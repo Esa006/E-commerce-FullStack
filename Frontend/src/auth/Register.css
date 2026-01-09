@@ -1,0 +1,14 @@
+.register-card {
+    max-width: 500px;
+    width: 100%;
+}
+
+.login-link {
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+.login-link:hover {
+    text-decoration: underline !important;
+    opacity: 0.8;
+}
