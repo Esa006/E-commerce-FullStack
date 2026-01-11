@@ -1,0 +1,80 @@
+/* =========================================
+   GLOBAL THEME CONFIGURATION
+   Change these variables to update the entire website's color scheme.
+   ========================================= */
+:root {
+    /* BRAND COLORS */
+    /* Primary: Main buttons, links, active states. Default: Blue (#0d6efd) */
+    --bs-primary: #0d6efd;
+
+    /* Secondary: Muted text, borders, secondary buttons. Default: Gray (#6c757d) */
+    --bs-secondary: #6c757d;
+
+    /* Success: Alerts, confirmation messages. Default: Green (#198754) */
+    --bs-success: #198754;
+
+    /* Danger: Delete buttons, error messages. Default: Red (#dc3545) */
+    --bs-danger: #dc3545;
+
+    /* Warning: Warnings, attention needed. Default: Yellow (#ffc107) */
+    --bs-warning: #ffc107;
+
+    /* Body Background: Overall page background color. */
+    --bs-body-bg: #f8f9fa;
+    /* Light Gray for better contrast */
+
+    /* Typography */
+    --bs-body-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* =========================================
+   BOOTSTRAP OVERRIDES
+   Ensures the variables above actually change the components.
+   ========================================= */
+
+/* Update Backgrounds */
+body {
+    background-color: var(--bs-body-bg);
+    font-family: var(--bs-body-font-family);
+}
+
+/* Update Primary Buttons */
+.btn-primary {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}
+
+.btn-outline-primary {
+    color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+/* Update Text Colors */
+.text-primary {
+    color: var(--bs-primary) !important;
+}
+
+/* Update Links */
+a {
+    color: var(--bs-primary);
+}
+
+a:hover {
+    color: var(--bs-primary);
+    /* You can darken this if needed */
+    opacity: 0.8;
+}
+
+/* =========================================
+   CUSTOM UTILITIES
+   ========================================= */
+.title-uppercase {
+    text-transform: uppercase;
+    font-size: 2rem;
+    letter-spacing: 1px;
+}
