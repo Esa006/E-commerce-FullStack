@@ -1,0 +1,70 @@
+/* Admin hover effect */
+.hover-effect:hover {
+    background-color: rgba(var(--bs-white-rgb), 0.1);
+    border-radius: 0.25rem;
+}
+
+
+.category-card-img {
+    height: 380px;
+}
+
+
+
+
+/* Product Details Page */
+.product-main-img {
+    max-height: 500px;
+}
+
+/* Cart Page */
+.cart-quantity-input {
+    max-width: 60px;
+}
+
+/* Orders Page */
+.loading-container {
+    min-height: 60vh;
+}
+
+
+.order-item-img {
+    width: 80px;
+    height: 100px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Shop Page */
+.shop-card-img {
+    height: 250px;
+}
+
+
+.qty-input-group {
+    width: 110px;
+}
+
+/* Override default Bootstrap flex behavior to prevent shrinking/growing issues */
+.qty-input-group .form-control {
+    flex: 0 0 auto !important;
+    width: 40px !important;
+}
+
+/* Custom Ratio 125% (Product Portrait) */
+.ratio-vertical {
+    --bs-aspect-ratio: 125%;
+}
+
+/* App.jsx main loader */
+.loading-main {
+    min-height: 60vh;
+}
+
+/* Custom Width for Action Buttons */
+.w-40 {
+    width: 40% !important;
+}
