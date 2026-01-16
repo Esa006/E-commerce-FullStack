@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import AuthApi from "../api/auth";
 
-import './Login.css';
+
 
 export default function Login() {
     const navigate = useNavigate();

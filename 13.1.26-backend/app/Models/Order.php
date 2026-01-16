@@ -35,6 +35,7 @@ class Order extends Model
         'name',
         'email',
         'status',
+        'payment_method',
         'tracking_number',
         'expected_delivery_date'
     ];

@@ -14,18 +14,12 @@ const Orders = () => {
         const fetchOrders = async () => {
             try {
                 const token = localStorage.getItem("ACCESS_TOKEN") || localStorage.getItem("admin_token");
-                // console.log("Fetching orders... Token present:", !!token);
 
                 const response = await ordersApi.getMyOrders();
                 // Handle different potential response structures (array or object)
                 const data = response.data.orders || response.data.data || response.data;
                 setOrders(Array.isArray(data) ? data : []);
             } catch (err) {
-                console.error("Error fetching orders:", err);
-                if (err.response) {
-                    console.error("Response data:", err.response.data);
-                    console.error("Response status:", err.response.status);
-                }
                 setError(err.response?.status === 401 ? "Please log in to view orders." : "Failed to load your orders. Please try again later.");
 
                 // Optional: Redirect if 401?

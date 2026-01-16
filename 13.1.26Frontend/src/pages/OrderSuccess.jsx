@@ -18,15 +18,23 @@ export default function OrderSuccess() {
         const stateData = location.state?.orderData || stateOrder;
         const stateOrderId = location.state?.orderId;
 
-        if (stateData && stateData.id) {
-            // Normalize order_items to items if needed
-            const normalizedData = {
-                ...stateData,
-                items: stateData.items || stateData.order_items || []
-            };
-            setOrderData(normalizedData);
-            setLoading(false);
-        } else if (stateOrderId) {
+        if (stateData) {
+            // Normalize: sometimes data is nested in .data (from axios response or manual wrapping)
+            const actualData = stateData.data || stateData;
+
+            if (actualData.id) {
+                // Normalize order_items to items if needed
+                const normalizedData = {
+                    ...actualData,
+                    items: actualData.items || actualData.order_items || []
+                };
+                setOrderData(normalizedData);
+                setLoading(false);
+                return;
+            }
+        }
+
+        if (stateOrderId) {
             fetchOrderDetails(stateOrderId);
         } else {
             // Fallback: try to see if just an ID was passed in state directly (unlikely but safe)

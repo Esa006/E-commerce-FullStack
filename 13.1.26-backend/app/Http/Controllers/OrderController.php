@@ -57,6 +57,7 @@ class OrderController extends Controller
                     'country' => $request->country,
                     'phone' => $request->phone,
                     'total_amount' => $request->total_amount,
+                    'payment_method' => $request->payment_method,
                     'status' => 'pending',
                 ]);
 
@@ -93,7 +94,7 @@ class OrderController extends Controller
                     }
                 }
 
-                return $newOrder;
+                return $newOrder->load('orderItems.product');
             });
 
             // Success Response

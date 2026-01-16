@@ -151,13 +151,16 @@ const Checkout = () => {
 
       if (response.data) {
         clearCart();
-        navigate('/order-success', { state: { order: response.data.order || response.data }, replace: true });
+        // Backend returns: { success: true, message: "...", data: { ...order... } }
+        const orderData = response.data.data || response.data.order || response.data;
         Swal.fire({
           icon: 'success',
           title: 'Order Placed!',
           text: 'Your order has been placed successfully.',
           timer: 2000,
           showConfirmButton: false
+        }).then(() => {
+          navigate('/order-success', { state: { order: orderData }, replace: true });
         });
       }
 

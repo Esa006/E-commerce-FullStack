@@ -30,7 +30,6 @@ const ProductDetails = () => {
   const [reviewComment, setReviewComment] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
 
-  const storageBaseUrl = "http://localhost:8000/storage/";
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -44,14 +43,21 @@ const ProductDetails = () => {
         }
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching product:", error);
+        // Show error popup
         if (error.response && error.response.status === 404) {
           setProductNotFound(true);
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load product. Please try again later.',
+          });
         }
         setLoading(false);
       }
     };
-    fetchProductData();
+
+
   }, [id]);
 
   useEffect(() => {
@@ -75,7 +81,7 @@ const ProductDetails = () => {
 
           setRelatedProducts(related);
         } catch (err) {
-          console.error("Error fetching related products", err);
+          // Handle error silently or via UI
         }
       };
       fetchRelated();
@@ -144,7 +150,6 @@ const ProductDetails = () => {
       setReviewRating(0);
       setReviewComment("");
     } catch (error) {
-      console.error(error);
       const msg = error.response?.data?.message || "Failed to submit review.";
       Swal.fire({ icon: 'error', title: 'Review Failed', text: msg });
     } finally {
@@ -313,17 +318,28 @@ const ProductDetails = () => {
           </div>
 
           {/* --- 🟢 PRODUCT SPECIFICATIONS --- */}
-          {productData.product_details && typeof productData.product_details === 'object' && Object.keys(productData.product_details).length > 0 && (
+          {productData.product_details && productData.product_details.length > 0 && (
             <div className="mt-4 pt-4 border-top">
               <h6 className="fw-bold text-uppercase mb-3">Product Specifications</h6>
               <table className="table table-bordered table-sm small mb-0">
                 <tbody>
-                  {Object.entries(productData.product_details).map(([key, value]) => (
-                    <tr key={key}>
-                      <td className="bg-light fw-semibold text-muted w-40 px-3 py-2">{key}</td>
-                      <td className="px-3 py-2">{value}</td>
-                    </tr>
-                  ))}
+                  {/* Handle array of {key, value} objects */}
+                  {Array.isArray(productData.product_details) ? (
+                    productData.product_details.map((item, index) => (
+                      <tr key={index}>
+                        <td className="bg-light fw-semibold text-muted w-40 px-3 py-2">{item.key}</td>
+                        <td className="px-3 py-2">{item.value}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    /* Fallback for plain object format */
+                    Object.entries(productData.product_details).map(([key, value]) => (
+                      <tr key={key}>
+                        <td className="bg-light fw-semibold text-muted w-40 px-3 py-2">{key}</td>
+                        <td className="px-3 py-2">{String(value)}</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

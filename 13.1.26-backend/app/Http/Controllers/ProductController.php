@@ -18,11 +18,16 @@ class ProductController extends Controller
         }
 
         if ($request->has('category')) {
-            $categories = explode(',', $request->category);
+            $categories = array_map('trim', explode(',', $request->category));
             $query->whereIn('category', $categories);
         }
 
-        return response()->json($query->orderBy('created_at', 'desc')->get());
+        $products = $query->orderBy('created_at', 'desc')->get();
+        
+        return response()->json([
+            'success' => true,
+            'data' => $products
+        ]);
     }
 
     public function getCategories()

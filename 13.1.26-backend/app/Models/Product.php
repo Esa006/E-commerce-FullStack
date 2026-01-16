@@ -96,8 +96,13 @@ class Product extends Model
                 return $img;
             }
 
-            // FORCE: Return the asset URL directly. 
-            return asset('storage/products/' . $img);
+            // If path already includes 'products/', use it as-is
+            if (str_starts_with($img, 'products/')) {
+                return asset('storage/' . $img);
+            }
+
+            // For images stored directly in storage/app/public (like p_img1.png)
+            return asset('storage/' . $img);
         }, $images);
     }
 

@@ -14,7 +14,6 @@ const WishlistProvider = ({ children }) => {
       const savedWishlist = localStorage.getItem("wishlistItems");
       return savedWishlist ? JSON.parse(savedWishlist) : [];
     } catch (error) {
-      console.error("Error loading wishlist:", error);
       return [];
     }
   });
@@ -44,13 +43,11 @@ const WishlistProvider = ({ children }) => {
       return;
     }
 
-    console.log("Toggling wishlist for product:", product);
     let wishlistData = [...wishlistItems];
     const existingItemIndex = wishlistData.findIndex(item => item.id === product.id);
 
     if (existingItemIndex > -1) {
       // Remove from wishlist
-      console.log("Removing from wishlist");
       wishlistData = wishlistData.filter(item => item.id !== product.id);
       Swal.fire({
         toast: true,
@@ -62,7 +59,6 @@ const WishlistProvider = ({ children }) => {
       });
     } else {
       // Add to wishlist
-      console.log("Adding to wishlist");
       wishlistData.push(product);
       Swal.fire({
         toast: true,
@@ -73,7 +69,6 @@ const WishlistProvider = ({ children }) => {
         timer: 1500
       });
     }
-    console.log("New wishlist data:", wishlistData);
     setWishlistItems(wishlistData);
   };
 

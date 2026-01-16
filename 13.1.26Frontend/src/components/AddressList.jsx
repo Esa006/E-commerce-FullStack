@@ -34,13 +34,11 @@ const AddressList = () => {
         try {
             setLoading(true);
             const res = await addressApi.getAddresses();
-            // console.log("Fetched addresses:", res.data);
 
             const rawData = res.data.addresses || res.data || [];
             setAddresses(normalizeAddresses(rawData));
             setError(null);
         } catch (err) {
-            console.error("Failed to fetch addresses", err);
             setError("Failed to load addresses.");
         } finally {
             setLoading(false);
@@ -71,9 +69,7 @@ const AddressList = () => {
 
         if (result.isConfirmed) {
             try {
-                console.log("Deleting address ID:", id);
                 const res = await addressApi.deleteAddress(id);
-                console.log("Delete response:", res);
 
 
                 // If backend returns updated list, usage it directly
@@ -83,7 +79,6 @@ const AddressList = () => {
                     // Fallback/Optimistic: Filter out deleted ID locally if backend doesn't return list
                     setAddresses(prev => prev.filter(addr => addr.id !== id));
                     // FORCE RE-FETCH TO VERIFY PERSISTENCE
-                    console.log("Forcing re-fetch to verify deletion...");
                     fetchAddresses();
                 }
 
@@ -153,7 +148,6 @@ const AddressList = () => {
             }
 
         } catch (err) {
-            console.error(err);
             const msg = err.response?.data?.message || "Failed to save address";
 
             // Show error message

@@ -1,0 +1,956 @@
+﻿composer : Loading composer 
+repositories with package 
+information
+At line:1 char:1
++ composer update 
+--no-interaction 2>&1 | 
+Out-File -FilePath 
+composer_u ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (Loading  
+   compose...age informati   
+ on:String) [], RemoteExc    
+eption
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
+Updating dependencies
+Your requirements could not 
+be resolved to an 
+installable set of packages.
+
+  Problem 1
+    - Root composer.json 
+requires 
+backpack/theme-tabler ^2.0 
+-> satisfiable by 
+backpack/theme-tabler[2.0.0, 
+2.0.1].
+    - Root composer.json 
+requires 
+spatie/laravel-backup * -> 
+satisfiable by 
+spatie/laravel-backup[0.0.1, 
+1.0.0, 1.1.0, 1.2.0, 2.0.0, 
+..., 2.10.0, 3.0.0, ..., 
+3.11.0, 4.0.0, ..., 4.19.2, 
+5.0.0, ..., 5.12.1, 6.0.0, 
+..., 6.16.5, 7.0.0, ..., 
+7.8.0, 8.0.0, ..., 8.8.2, 
+9.0.0, ..., 9.3.7].
+    - backpack/crud[7.0.0, 
+..., 7.0.22] require 
+laravel/framework ^12 -> 
+satisfiable by 
+laravel/framework[v12.1.1, 
+..., v12.47.0].
+    - 
+backpack/theme-tabler[2.0.0, 
+..., 2.0.1] require 
+backpack/crud ^7.0 -> 
+satisfiable by 
+backpack/crud[7.0.0, ..., 
+7.0.22].
+    - 
+illuminate/support[v5.1.41, 
+..., v5.2.45] require 
+paragonie/random_compat ~1.4 
+-> found paragonie/random_com
+pat[v1.4.0, v1.4.1, v1.4.2, 
+v1.4.3] but these were not 
+loaded, because they are 
+affected by security 
+advisories. To ignore the 
+advisories, add 
+("PKSA-cncr-q695-v65g") to 
+the audit "ignore" config. 
+To turn the feature off 
+entirely, you can set 
+"block-insecure" to false in 
+your "audit" config.
+    - 
+illuminate/support[v5.5.0, 
+..., v5.5.39] require 
+nesbot/carbon ^1.20 -> found 
+nesbot/carbon[1.20.0, ..., 
+1.39.1] but these were not 
+loaded, because they are 
+affected by security 
+advisories. To ignore the 
+advisories, add 
+("PKSA-csyb-yc4p-mnbs") to 
+the audit "ignore" config. 
+To turn the feature off 
+entirely, you can set 
+"block-insecure" to false in 
+your "audit" config.
+    - 
+illuminate/support[v5.5.40, 
+..., v5.5.44] require 
+nesbot/carbon ^1.24.1 -> 
+found nesbot/carbon[1.24.1, 
+..., 1.39.1] but these were 
+not loaded, because they are 
+affected by security 
+advisories. To ignore the 
+advisories, add 
+("PKSA-csyb-yc4p-mnbs") to 
+the audit "ignore" config. 
+To turn the feature off 
+entirely, you can set 
+"block-insecure" to false in 
+your "audit" config.
+    - 
+illuminate/support[v5.6.0, 
+..., v5.8.36] require php 
+^7.1.3 -> your php version 
+(8.2.12) does not satisfy 
+that requirement.
+    - 
+illuminate/support[v6.0.0, 
+..., v6.19.1] require php 
+^7.2 -> your php version 
+(8.2.12) does not satisfy 
+that requirement.
+    - 
+spatie/laravel-backup[6.0.0, 
+..., 6.11.1] require php 
+^7.2 -> your php version 
+(8.2.12) does not satisfy 
+that requirement.
+    - 
+illuminate/support[v7.0.0, 
+..., v7.28.4] require php 
+^7.2.5 -> your php version 
+(8.2.12) does not satisfy 
+that requirement.
+    - 
+illuminate/support[v8.0.0, 
+..., v8.11.2] require php 
+^7.3 -> your php version 
+(8.2.12) does not satisfy 
+that requirement.
+    - spatie/laravel-backup[6
+.11.2, ..., 6.12.0] require 
+php ^7.3 -> your php version 
+(8.2.12) does not satisfy 
+that requirement.
+    - 
+orchestra/testbench[v3.0.0, 
+..., v3.0.7] require 
+laravel/framework 5.0.* -> 
+found 
+laravel/framework[v5.0.0, 
+..., v5.0.35] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.1.0, 
+..., v3.1.3] require 
+laravel/framework ~5.1.0 -> 
+found 
+laravel/framework[v5.1.0, 
+..., v5.1.46] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.1.7, 
+..., v3.1.10] require 
+laravel/framework ~5.1.27 -> 
+found 
+laravel/framework[v5.1.27, 
+..., v5.1.46] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.1.4, 
+..., v3.1.6] require 
+laravel/framework ~5.1.11 -> 
+found 
+laravel/framework[v5.1.11, 
+..., v5.1.46] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.2.0 requires 
+laravel/framework ~5.2.0 -> 
+found 
+laravel/framework[v5.2.0, 
+..., v5.2.45] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.2.1, 
+..., v3.2.2] require 
+laravel/framework ~5.2.7 -> 
+found 
+laravel/framework[v5.2.7, 
+..., v5.2.45] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.2.3 requires 
+laravel/framework ~5.2.15 -> 
+found 
+laravel/framework[v5.2.15, 
+..., v5.2.45] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.2.4, 
+..., v3.2.8] require 
+laravel/framework ~5.2.28 -> 
+found 
+laravel/framework[v5.2.28, 
+..., v5.2.45] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.3.0 requires 
+laravel/framework ~5.3.0 -> 
+found 
+laravel/framework[v5.3.0, 
+..., v5.3.31] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.3.1, 
+..., v3.3.3] require 
+laravel/framework ~5.3.3 -> 
+found 
+laravel/framework[v5.3.3, 
+..., v5.3.31] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.3.4 requires 
+laravel/framework ~5.3.11 -> 
+found 
+laravel/framework[v5.3.11, 
+..., v5.3.31] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.3.5, 
+..., v3.3.7] require 
+laravel/framework ~5.3.29 -> 
+found 
+laravel/framework[v5.3.29, 
+v5.3.30, v5.3.31] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.4.0, 
+..., v3.4.5] require 
+laravel/framework ~5.4.0 -> 
+found 
+laravel/framework[v5.4.0, 
+..., v5.4.36] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.4.7, 
+..., v3.4.10] require 
+laravel/framework ~5.4.17 -> 
+found 
+laravel/framework[v5.4.17, 
+..., v5.4.36] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.4.11, 
+..., v3.4.12] require 
+laravel/framework ~5.4.36 -> 
+found 
+laravel/framework[v5.4.36] 
+but it conflicts with your 
+root composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.4.6 requires 
+laravel/framework ~5.4.15 -> 
+found 
+laravel/framework[v5.4.15, 
+..., v5.4.36] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.5.0, 
+..., v3.5.2] require 
+laravel/framework ~5.5.0 -> 
+found 
+laravel/framework[v5.5.0, 
+..., v5.5.50] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.5.3 requires 
+laravel/framework ~5.5.20 -> 
+found 
+laravel/framework[v5.5.20, 
+..., v5.5.50] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.5.4, 
+..., v3.5.6] require 
+laravel/framework ~5.5.34 -> 
+found 
+laravel/framework[v5.5.34, 
+..., v5.5.50] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.6.0 requires 
+laravel/framework ~5.6.0 -> 
+found 
+laravel/framework[v5.6.0, 
+..., v5.6.40] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.6.1, 
+..., v3.6.2] require 
+laravel/framework ~5.6.4 -> 
+found 
+laravel/framework[v5.6.4, 
+..., v5.6.40] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.6.3 requires 
+laravel/framework ~5.6.5 -> 
+found 
+laravel/framework[v5.6.5, 
+..., v5.6.40] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.6.4, 
+..., v3.6.5] require 
+laravel/framework ~5.6.13 -> 
+found 
+laravel/framework[v5.6.13, 
+..., v5.6.40] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.6.6, 
+..., v3.6.7] require 
+laravel/framework ~5.6.34 -> 
+found 
+laravel/framework[v5.6.34, 
+..., v5.6.40] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.7.0 requires 
+laravel/framework ~5.7.0 -> 
+found 
+laravel/framework[v5.7.0, 
+..., v5.7.29] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.7.1, 
+..., v3.7.5] require 
+laravel/framework ~5.7.4 -> 
+found 
+laravel/framework[v5.7.4, 
+..., v5.7.29] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.7.6 requires 
+laravel/framework ~5.7.14 -> 
+found 
+laravel/framework[v5.7.14, 
+..., v5.7.29] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.7.7, 
+..., v3.7.8] require 
+laravel/framework ~5.7.28 -> 
+found 
+laravel/framework[v5.7.28, 
+v5.7.29] but it conflicts 
+with your root composer.json 
+require (^12.0).
+    - orchestra/testbench 
+v3.8.0 requires 
+laravel/framework ~5.8.0 -> 
+found 
+laravel/framework[v5.8.0, 
+..., v5.8.38] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.8.1 requires 
+laravel/framework ~5.8.2 -> 
+found 
+laravel/framework[v5.8.2, 
+..., v5.8.38] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.8.2 requires 
+laravel/framework ~5.8.3 -> 
+found 
+laravel/framework[v5.8.3, 
+..., v5.8.38] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.8.3, 
+..., v3.8.4] require 
+laravel/framework ~5.8.19 -> 
+found 
+laravel/framework[v5.8.19, 
+..., v5.8.38] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.8.5, 
+..., v3.8.6] require 
+laravel/framework ~5.8.35 -> 
+found 
+laravel/framework[v5.8.35, 
+v5.8.36, v5.8.37, v5.8.38] 
+but it conflicts with your 
+root composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.9.0, 
+..., v3.9.1] require 
+laravel/framework ^6.0 -> 
+found 
+laravel/framework[v6.0.0, 
+..., v6.20.45] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - orchestra/testbench 
+v3.9.2 requires 
+laravel/framework ^6.2 -> 
+found 
+laravel/framework[v6.2.0, 
+..., v6.20.45] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+orchestra/testbench[v3.9.3, 
+..., v3.9.4] require 
+laravel/framework ^6.18.0 -> 
+found 
+laravel/framework[v6.18.0, 
+..., v6.20.45] but it 
+conflicts with your root 
+composer.json require 
+(^12.0).
+    - 
+spatie/laravel-backup[0.0.1, 
+1.0.0, ..., 1.2.0, 2.0.0, 
+..., 2.0.2] require 
+orchestra/testbench ~3.0 -> 
+satisfiable by 
+orchestra/testbench[v3.0.0, 
+..., v3.9.4].
+    - 
+spatie/laravel-backup[2.0.3, 
+..., 2.9.1] require 
+illuminate/support 5.* -> 
+satisfiable by 
+illuminate/support[v5.0.0, 
+..., v5.8.36].
+    - 
+spatie/laravel-backup[2.9.2, 
+..., 2.10.0] require php 
+^5.4.0|^7.0 -> your php 
+version (8.2.12) does not 
+satisfy that requirement.
+    - 
+spatie/laravel-backup[3.0.0, 
+..., 3.11.0] require php 
+^5.5|^7.0 -> your php 
+version (8.2.12) does not 
+satisfy that requirement.
+    - 
+spatie/laravel-backup[4.0.0, 
+..., 4.19.2, 5.0.0, ..., 
+5.6.5] require php ^7.0 -> 
+your php version (8.2.12) 
+does not satisfy that 
+requirement.
+    - 
+spatie/laravel-backup[5.6.6, 
+..., 5.12.1] require php 
+^7.1 -> your php version 
+(8.2.12) does not satisfy 
+that requirement.
+    - spatie/laravel-backup[6
+.13.0, ..., 6.14.4] require 
+illuminate/support 
+^6.0|^7.0|^8.0 -> 
+satisfiable by 
+illuminate/support[v6.0.0, 
+..., v6.20.44, v7.0.0, ..., 
+v7.30.6, v8.0.0, ..., 
+v8.83.27].
+    - spatie/laravel-backup[6
+.6.13, ..., 6.16.5, 7.3.0, 
+..., 7.8.0, 8.0.0, ..., 
+8.8.2, 9.0.0, ..., 9.3.6] 
+require ext-zip ^1.14.0 -> 
+it is missing from your 
+system. Install or enable 
+PHP's zip extension.
+
+      Alternatively you can 
+require one of these 
+packages that provide the 
+extension (or parts of it):
+      Keep in mind that the 
+suggestions are automated 
+and may not be valid or safe 
+to use
+      - pecl/zip A zip 
+management extension
+      - badpixxel/paddock 
+Just The Paddock Project
+
+    - 
+spatie/laravel-backup[7.0.0, 
+..., 7.2.1] require ext-zip 
+* -> it is missing from your 
+system. Install or enable 
+PHP's zip extension.
+
+      Alternatively you can 
+require one of these 
+packages that provide the 
+extension (or parts of it):
+      Keep in mind that the 
+suggestions are automated 
+and may not be valid or safe 
+to use
+      - pecl/zip A zip 
+management extension
+      - badpixxel/paddock 
+Just The Paddock Project
+
+    - 
+spatie/laravel-backup[7.3.4, 
+..., 7.6.2] require 
+ext-pcntl * -> it is missing 
+from your system. Install or 
+enable PHP's pcntl extension.
+    - spatie/laravel-backup 
+9.3.7 requires php ^8.3 -> 
+your php version (8.2.12) 
+does not satisfy that 
+requirement.
+    - Conclusion: don't 
+install laravel/framework 
+v12.2.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.3.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.4.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.4.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.5.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.6.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.7.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.7.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.7.2 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.8.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.8.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.9.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.9.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.9.2 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.10.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.10.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.10.2 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.11.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.11.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.12.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.13.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.14.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.14.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.15.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.16.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.17.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.18.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.19.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.19.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.19.2 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.19.3 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.20.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.21.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.22.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.22.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.23.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.23.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.24.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.25.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.26.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.26.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.26.2 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.26.3 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.26.4 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.27.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.27.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.28.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.28.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.29.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.30.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.30.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.31.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.31.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.32.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.32.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.32.2 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.32.3 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.32.4 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.32.5 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.33.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.34.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.35.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.35.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.36.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.36.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.37.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.38.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.38.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.39.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.40.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.40.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.40.2 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.41.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.41.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.42.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.43.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.43.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.44.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.45.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.45.1 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.45.2 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.46.0 (conflict analysis 
+result)
+    - Conclusion: don't 
+install laravel/framework 
+v12.47.0 (conflict analysis 
+result)
+    - Only one of these can 
+be installed: 
+illuminate/support[v4.0.0, 
+..., v4.2.17, v5.0.0, ..., 
+v5.8.36, v6.0.0, ..., 
+v6.20.44, v7.0.0, ..., 
+v7.30.6, v8.0.0, ..., 
+v8.83.27, v9.0.0, ..., 
+v9.52.16, v10.0.0, ..., 
+v10.49.0, v11.0.0, ..., 
+v11.47.0, v12.0.0, ..., 
+v12.47.0], 
+laravel/framework[v12.1.1, 
+..., v12.47.0]. 
+laravel/framework replaces 
+illuminate/support and thus 
+cannot coexist with it.
+
+To enable extensions, verify 
+that they are enabled in 
+your .ini files:
+    - C:\xampp\php\php.ini
+You can also run `php --ini` 
+in a terminal to see which 
+files are used by PHP in CLI 
+mode.
+Alternatively, you can run 
+Composer with `--ignore-platf
+orm-req=ext-zip --ignore-plat
+form-req=ext-pcntl` to 
+temporarily ignore these 
+required extensions.
+
+Use the option 
+--with-all-dependencies (-W) 
+to allow upgrades, 
+downgrades and removals for 
+packages currently locked to 
+specific versions.

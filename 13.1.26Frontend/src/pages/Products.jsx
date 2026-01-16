@@ -12,7 +12,10 @@ const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Filter States
-  const [category, setCategory] = useState([]);
+  const [category, setCategory] = useState(() => {
+    const cat = searchParams.get('category');
+    return cat ? [cat] : [];
+  });
   const [categories, setCategories] = useState([]); // Dynamic list
   const [brand, setBrand] = useState([]);
   const [brands, setBrands] = useState([]); // Dynamic brands list
@@ -31,16 +34,18 @@ const Products = () => {
 
   // 2. Fetch Products when Filter/Page Changes
   useEffect(() => {
-    fetchProducts();
+    let active = true;
+    fetchProducts(active);
+    return () => { active = false; };
   }, [currentPage, sortType, category, brand]);
 
-  // Sync URL Params with Category State
+  // Sync URL Params with Category State (Used for back/forward navigation)
   useEffect(() => {
     const categoryParam = searchParams.get('category');
     if (categoryParam) {
-      setCategory([categoryParam]);
+      setCategory(prev => (prev[0] === categoryParam ? prev : [categoryParam]));
     } else {
-      setCategory([]); // Clear if no param
+      setCategory(prev => (prev.length === 0 ? prev : []));
     }
   }, [searchParams]);
 
@@ -58,11 +63,10 @@ const Products = () => {
   };
 
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (active = true) => {
     try {
       setLoading(true);
 
-      // Prepare Query Params
       const params = {
         page: currentPage,
         sort: sortType !== 'relevant' ? sortType : undefined,
@@ -70,20 +74,18 @@ const Products = () => {
         brand: brand.length > 0 ? brand.join(',') : undefined
       };
 
-      // Call API (Returns normalized data)
       const { items, pagination } = await ProductApi.getProducts(params);
+
+      if (!active) return; // Ignore result if a newer request is already in flight
 
       setProducts(items);
       setFilteredProducts(items);
-
-      // Update Pagination
       setTotalPages(pagination.last_page);
-      setCurrentPage(pagination.current_page);
 
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
-      setLoading(false);
+      if (active) setLoading(false);
     }
   };
 
@@ -107,30 +109,11 @@ const Products = () => {
     });
   };
 
-  // 4. Client-Side Search & Filtering (Robust Fallback)
+  // 4. Client-Side Search Filtering (Backend handles category/brand filtering)
   useEffect(() => {
     let temp = [...products];
 
-    // Helper to safe-get category name
-    const getCatName = (p) => {
-      const c = p.category;
-      return (c?.name || c || p.category_name || "").toString().toLowerCase().trim();
-    };
-
-    // Filter by Category
-    if (category.length > 0) {
-      temp = temp.filter(item => {
-        const itemCat = getCatName(item);
-        return category.some(sel => sel.toLowerCase().trim() === itemCat);
-      });
-    }
-
-    // Filter by Brand
-    if (brand.length > 0) {
-      temp = temp.filter(item => brand.includes(item.brand));
-    }
-
-    // Filter by Search Query
+    // Filter by Search Query only (category/brand already filtered by API)
     if (searchQuery) {
       temp = temp.filter(item =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -138,7 +121,7 @@ const Products = () => {
     }
 
     setFilteredProducts(temp);
-  }, [searchQuery, products, category, brand]);
+  }, [searchQuery, products]);
 
   return (
     <div className='container-fluid px-sm-3 px-lg-5 pt-3 border-top'>
