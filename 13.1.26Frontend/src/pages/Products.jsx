@@ -195,7 +195,6 @@ const Products = () => {
           </div>
         </div>
 
-        {/* Right Side - Product Grid */}
         <div className='col-lg-10'>
 
           {/* Header: Sort & Meta */}
