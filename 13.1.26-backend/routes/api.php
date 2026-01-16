@@ -8,12 +8,14 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\ErrorReportController;
 
 /*
 |--------------------------------------------------------------------------
 | 🟢 PUBLIC ROUTES (No Login Required)
 |--------------------------------------------------------------------------
 */
+Route::post('/error-report', [ErrorReportController::class, 'report'])->middleware('throttle:5,1');
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/new-arrivals', [ProductController::class, 'getNewArrivals']);
 Route::get('/products/bestsellers', [ProductController::class, 'getBestsellers']);
@@ -90,4 +92,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/admin/customers/{id}', [AdminController::class, 'deleteCustomer']);
     Route::get('/admin/orders', [OrderController::class, 'index']);
     Route::put('/admin/orders/{id}/status', [OrderController::class, 'updateStatus']);
+    
+    // Error Logs (Production Monitoring)
+    Route::get('/admin/error-logs', [ErrorReportController::class, 'index']);
 });

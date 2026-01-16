@@ -12,15 +12,16 @@ const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Filter States
+  // Filter States
   const [category, setCategory] = useState(() => {
     const cat = searchParams.get('category');
     return cat ? [cat] : [];
   });
-  const [categories, setCategories] = useState([]); // Dynamic list
+  const [categories, setCategories] = useState([]);
   const [brand, setBrand] = useState([]);
-  const [brands, setBrands] = useState([]); // Dynamic brands list
+  const [brands, setBrands] = useState([]);
   const [sortType, setSortType] = useState('relevant');
-  const [searchQuery, setSearchQuery] = useState('');
+  const search = searchParams.get('search') || '';
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,14 +33,14 @@ const Products = () => {
     fetchBrands();
   }, []);
 
-  // 2. Fetch Products when Filter/Page Changes
+  // 2. Fetch Products when Filter/Page/Search Changes
   useEffect(() => {
     let active = true;
     fetchProducts(active);
     return () => { active = false; };
-  }, [currentPage, sortType, category, brand]);
+  }, [currentPage, sortType, category, brand, search]);
 
-  // Sync URL Params with Category State (Used for back/forward navigation)
+  // Sync URL Params with State (Used for back/forward navigation)
   useEffect(() => {
     const categoryParam = searchParams.get('category');
     if (categoryParam) {
@@ -47,6 +48,9 @@ const Products = () => {
     } else {
       setCategory(prev => (prev.length === 0 ? prev : []));
     }
+
+    const pageParam = parseInt(searchParams.get('page')) || 1;
+    if (pageParam !== currentPage) setCurrentPage(pageParam);
   }, [searchParams]);
 
   const fetchCategories = async () => {
@@ -71,7 +75,8 @@ const Products = () => {
         page: currentPage,
         sort: sortType !== 'relevant' ? sortType : undefined,
         category: category.length > 0 ? category.join(',') : undefined,
-        brand: brand.length > 0 ? brand.join(',') : undefined
+        brand: brand.length > 0 ? brand.join(',') : undefined,
+        search: search || undefined
       };
 
       const { items, pagination } = await ProductApi.getProducts(params);
@@ -109,19 +114,14 @@ const Products = () => {
     });
   };
 
-  // 4. Client-Side Search Filtering (Backend handles category/brand filtering)
-  useEffect(() => {
-    let temp = [...products];
-
-    // Filter by Search Query only (category/brand already filtered by API)
-    if (searchQuery) {
-      temp = temp.filter(item =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    setFilteredProducts(temp);
-  }, [searchQuery, products]);
+  // Update URL pagination helper
+  const handlePageChange = (page) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('page', page.toString());
+    setSearchParams(newParams);
+    setCurrentPage(page);
+    window.scrollTo(0, 0);
+  };
 
   return (
     <div className='container-fluid px-sm-3 px-lg-5 pt-3 border-top'>
@@ -237,21 +237,24 @@ const Products = () => {
               <nav aria-label="Page navigation">
                 <ul className="pagination">
                   <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                    <button className="page-link" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} aria-label="Previous">
+                    <button className="page-link text-dark" onClick={() => handlePageChange(Math.max(currentPage - 1, 1))} aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                     </button>
                   </li>
 
                   {[...Array(totalPages)].map((_, i) => (
-                    <li key={i + 1} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
-                      <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
+                    <li key={i + 1} className="page-item">
+                      <button
+                        className={`page-link ${currentPage === i + 1 ? 'bg-dark border-dark text-white' : 'text-dark border-light-subtle'}`}
+                        onClick={() => handlePageChange(i + 1)}
+                      >
                         {i + 1}
                       </button>
                     </li>
                   ))}
 
                   <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                    <button className="page-link" onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} aria-label="Next">
+                    <button className="page-link text-dark" onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))} aria-label="Next">
                       <span aria-hidden="true">&raquo;</span>
                     </button>
                   </li>

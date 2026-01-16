@@ -12,17 +12,42 @@ class ProductController extends Controller
     {
         $query = Product::query();
 
-        if ($request->has('brand')) {
+        // 1. Search Logic (Name & Description)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('description', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // 2. Filter Logic (Brands)
+        if ($request->filled('brand')) {
             $brands = explode(',', $request->brand);
             $query->whereIn('brand', $brands);
         }
 
-        if ($request->has('category')) {
+        // 3. Filter Logic (Categories)
+        if ($request->filled('category')) {
             $categories = array_map('trim', explode(',', $request->category));
             $query->whereIn('category', $categories);
         }
 
-        $products = $query->orderBy('created_at', 'desc')->get();
+        // 4. Sorting Logic
+        switch ($request->sort) {
+            case 'low-high':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'high-low':
+                $query->orderBy('price', 'desc');
+                break;
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        // 5. Pagination (Senior-grade performance)
+        $products = $query->paginate(12);
         
         return response()->json([
             'success' => true,

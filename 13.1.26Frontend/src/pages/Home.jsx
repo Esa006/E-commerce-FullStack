@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import ProductApi from "../api/Products";
 
 import ProductCard from "../components/ProductCard";
 import Swal from "sweetalert2";
@@ -10,39 +10,26 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(null);
 
-  const fetchProducts = async () => {
+  const fetchLatestProducts = async () => {
     try {
       setApiError(null);
-      const response = await axios.get("http://localhost:8000/api/products");
-
-      // API returns: { success: true, data: [...] }
-      const productData = response.data?.data || response.data;
-      setProducts(Array.isArray(productData) ? productData : []);
+      // Fetch latest products using unified API (handles pagination)
+      const { items } = await ProductApi.getProducts({ page: 1 });
+      setProducts(items);
     } catch (err) {
-      // console.error("Error fetching products:", err);
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Error fetching products. Please try again later.',
       });
-
-      if (err.response) {
-        // The request was made and the server responded with a status code
-        setApiError(`Server Error: ${err.response.status} - ${err.response.statusText}`);
-      } else if (err.request) {
-        // The request was made but no response was received
-        setApiError("Unable to connect to the server. Please ensure the backend is running on port 8000.");
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        setApiError(`Error: ${err.message}`);
-      }
+      setApiError(`Error: ${err.message}`);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchLatestProducts();
   }, []);
 
   if (loading)

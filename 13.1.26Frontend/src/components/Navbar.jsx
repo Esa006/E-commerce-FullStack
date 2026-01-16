@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { Link, useNavigate, NavLink, useLocation } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
+import SearchBar from "./SearchBar";
 
 const Navbar = () => {
   const { cartItems } = useContext(CartContext);
@@ -38,7 +39,6 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg bg-white border-bottom sticky-top py-3">
       <div className="container">
 
-        {/* 🟢 2. Brand: Bold, Uppercase, Black */}
         <Link className="navbar-brand fw-bold fs-3 text-uppercase text-black" to="/">
           Forever
         </Link>
@@ -74,6 +74,9 @@ const Navbar = () => {
 
         {/* Right Side Icons Container */}
         <div className="d-flex align-items-center gap-4">
+
+          {/* 🟢 SEARCH BAR - Global Access */}
+          <SearchBar />
 
           {/* 🟢 Wishlist Icon */}
           <Link to="/wishlist" className="position-relative text-danger text-decoration-none">

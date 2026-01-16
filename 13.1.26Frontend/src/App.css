@@ -4,13 +4,9 @@
     border-radius: 0.25rem;
 }
 
-
 .category-card-img {
     height: 380px;
 }
-
-
-
 
 /* Product Details Page */
 .product-main-img {
@@ -27,7 +23,6 @@
     min-height: 60vh;
 }
 
-
 .order-item-img {
     width: 80px;
     height: 100px;
@@ -42,7 +37,6 @@
 .shop-card-img {
     height: 250px;
 }
-
 
 .qty-input-group {
     width: 110px;
@@ -68,3 +62,16 @@
 .w-40 {
     width: 40% !important;
 }
+
+/* 🟢 CUSTOM PAGINATION STYLING (Kept for search feature)
+.custom-pagination .page-link {
+    color: #000 !important;
+    border-color: #eee !important;
+    padding: 0.6rem 1rem;
+}
+
+.custom-pagination .page-item.active .page-link {
+    background-color: #000 !important;
+    border-color: #000 !important;
+    color: #fff !important;
+} */
