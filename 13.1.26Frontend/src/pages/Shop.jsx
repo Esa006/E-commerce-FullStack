@@ -1,6 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import apiClient from "../api/apiClient";
 import axios from "axios";
 import { parseImages, getImageUrl } from "../utils/imageUtils";
 import Swal from "sweetalert2";
@@ -10,14 +8,17 @@ const Shop = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const controller = new AbortController();
+
         const fetchProducts = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/products");
-                if (response.data.success) {
-                    setProducts(response.data.data);
-                }
+                const response = await apiClient.get("/products", {
+                    signal: controller.signal
+                });
+                const data = Array.isArray(response.data) ? response.data : (response.data.data || []);
+                setProducts(data);
             } catch (error) {
-                // console.error("Error fetching products:", error);
+                if (axios.isCancel(error)) return;
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -28,6 +29,7 @@ const Shop = () => {
             }
         };
         fetchProducts();
+        return () => controller.abort();
     }, []);
 
     if (loading) return <div className="text-center mt-5"><p>Loading Shop...</p></div>;

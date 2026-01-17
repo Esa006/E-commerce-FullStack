@@ -29,6 +29,8 @@ const CancellationPolicy = React.lazy(() => import("./pages/CancellationPolicy")
 const Login = React.lazy(() => import("./auth/Login"));
 const Register = React.lazy(() => import("./auth/Register"));
 
+import ErrorBoundary from "./components/ErrorBoundary";
+
 function App() {
   const location = useLocation();
   const isNoLayout = location.pathname === '/login' || location.pathname === '/register';
@@ -38,41 +40,43 @@ function App() {
       {!isNoLayout && <Navbar />}
 
       <div className="flex-grow-1">
-        <Suspense fallback={
-          <div className="d-flex justify-content-center align-items-center loading-main">
-            <div className="spinner-border text-dark" role="status">
-              <span className="visually-hidden">Loading...</span>
+        <ErrorBoundary>
+          <Suspense fallback={
+            <div className="d-flex justify-content-center align-items-center loading-main">
+              <div className="spinner-border text-dark" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
             </div>
-          </div>
-        }>
-          <Routes>
-            {/* Customer Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/wishlist" element={<Wishlist />} />
+          }>
+            <Routes>
+              {/* Customer Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/wishlist" element={<Wishlist />} />
 
-            <Route path="/place-order" element={<Checkout />} />
-            <Route path="/order-success" element={<OrderSuccess />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/track-order" element={<TrackOrder />} />
+              <Route path="/place-order" element={<Checkout />} />
+              <Route path="/order-success" element={<OrderSuccess />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/track-order" element={<TrackOrder />} />
 
-            {/* Static Pages */}
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/returns" element={<Returns />} />
-            <Route path="/cancellations" element={<CancellationPolicy />} />
+              {/* Static Pages */}
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/returns" element={<Returns />} />
+              <Route path="/cancellations" element={<CancellationPolicy />} />
 
-            {/* Auth Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
+              {/* Auth Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/profile" element={<Profile />} />
 
 
-          </Routes>
-        </Suspense>
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
       </div>
       {!isNoLayout && <Footer />}
     </div>

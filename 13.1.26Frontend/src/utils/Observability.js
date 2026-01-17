@@ -21,10 +21,21 @@ const Observability = {
                 timestamp: new Date().toISOString()
             };
 
-            const API_BASE_URL = 'http://localhost:8000/api'; 
-            await axios.post(`${API_BASE_URL}/error-report`, payload);
-        } catch (reportingError) {
-            console.error('Failed to send error report:', reportingError);
+            const reportUrl = 'http://localhost:8000/api/error-report';
+            
+            // 🟢 CRITICAL: Don't report errors from the reporting endpoint itself
+            // to avoid infinite loops.
+            const response = await fetch(reportUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                console.error('Failed to send error report to server');
+            }
+        } catch (e) {
+            console.error('Observability failure:', e);
         }
     },
 

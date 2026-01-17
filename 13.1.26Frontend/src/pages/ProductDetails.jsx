@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
+import apiClient from "../api/apiClient";
 import axios from "axios";
 import Swal from "sweetalert2";
 import BackButton from "../components/BackButton";
@@ -33,24 +34,28 @@ const ProductDetails = () => {
 
 
   useEffect(() => {
+    const controller = new AbortController();
     const startTime = performance.now();
+
     const fetchProductData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/products/${id}`);
+        const response = await apiClient.get(`/products/${id}`, {
+          signal: controller.signal
+        });
+
         if (response.data.success) {
           const data = response.data.data;
           setProductData(data);
-          // Initialize quantity based on product's MOQ step (1, 2, or 5)
           setQuantity(data.qty_step || 1);
 
-          // 🟢 REPORT PERFORMANCE: How long did it take to load this specific product?
           const endTime = performance.now();
           const loadTime = Math.round(endTime - startTime);
           Observability.reportPerformance(`ProductDetailPage_Load_${id}`, loadTime);
         }
         setLoading(false);
       } catch (error) {
-        // Show error popup
+        if (axios.isCancel(error)) return;
+
         if (error.response && error.response.status === 404) {
           setProductNotFound(true);
         } else {
@@ -65,20 +70,22 @@ const ProductDetails = () => {
     };
 
     fetchProductData();
+    return () => controller.abort();
   }, [id]);
 
   useEffect(() => {
     if (productData && productData.image) {
+      const controller = new AbortController();
       const imgs = parseImages(productData.image);
       if (imgs.length > 0) setSelectedImage(imgs[0]);
 
-      // Fetch Related Products
       const fetchRelated = async () => {
         try {
-          const res = await axios.get("http://localhost:8000/api/products");
+          const res = await apiClient.get("/products", {
+            signal: controller.signal
+          });
           const allProducts = Array.isArray(res.data) ? res.data : (res.data.data || []);
 
-          // Helper to safely get category name
           const getCatName = (p) => p.category?.name || p.category || p.category_name || "";
           const targetCat = getCatName(productData);
 
@@ -88,10 +95,11 @@ const ProductDetails = () => {
 
           setRelatedProducts(related);
         } catch (err) {
-          // Handle error silently or via UI
+          if (axios.isCancel(err)) return;
         }
       };
       fetchRelated();
+      return () => controller.abort();
     }
   }, [productData]);
 
@@ -139,18 +147,10 @@ const ProductDetails = () => {
 
     setSubmittingReview(true);
     try {
-      const token = localStorage.getItem("ACCESS_TOKEN");
-      if (!token) {
-        Swal.fire({ icon: 'info', title: 'Login Required', text: 'Please login to submit a review.' });
-        return;
-      }
-
-      await axios.post("http://localhost:8000/api/product-review", {
+      await apiClient.post("/product-review", {
         product_id: productData.id,
         rating: reviewRating,
         review: reviewComment
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
 
       Swal.fire({ icon: 'success', title: 'Review Submitted!', text: 'Thank you for your feedback.' });

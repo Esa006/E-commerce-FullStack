@@ -1,6 +1,5 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import apiClient from "../api/apiClient";
 
 import ProductCard from "../components/ProductCard";
 import Swal from "sweetalert2";
@@ -10,37 +9,43 @@ const RelativeProduct = () => {
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(null);
 
-  const fetchProducts = async () => {
-    try {
-      setApiError(null);
-      const response = await axios.get("http://localhost:8000/api/products");
-
-      setProducts(Array.isArray(response.data) ? response.data : []);
-    } catch (err) {
-      // console.error("Error fetching products:", err);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Error fetching products. Please try again later.',
-      });
-
-      if (err.response) {
-        // The request was made and the server responded with a status code
-        setApiError(`Server Error: ${err.response.status} - ${err.response.statusText}`);
-      } else if (err.request) {
-        // The request was made but no response was received
-        setApiError("Unable to connect to the server. Please ensure the backend is running on port 8000.");
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        setApiError(`Error: ${err.message}`);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchProducts = async () => {
+      try {
+        setApiError(null);
+        // Use apiClient instead of axios
+        const response = await apiClient.get("/products", {
+          signal: controller.signal
+        });
+
+        const data = Array.isArray(response.data) ? response.data : (response.data.data || []);
+        setProducts(data);
+      } catch (err) {
+        if (axios.isCancel(err)) return; // Logic for cancelled requests
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error fetching products. Please try again later.',
+        });
+
+        if (err.response) {
+          setApiError(`Server Error: ${err.response.status} - ${err.response.statusText}`);
+        } else if (err.request) {
+          setApiError("Unable to connect to the server. Please ensure the backend is running on port 8000.");
+        } else {
+          setApiError(`Error: ${err.message}`);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchProducts();
+
+    return () => controller.abort(); // 🟢 Cleanup on unmount
   }, []);
 
   if (loading)

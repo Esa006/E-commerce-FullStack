@@ -22,12 +22,12 @@ const ProductCard = ({ product }) => {
         <i className={`bi fs-6 ${inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart text-dark'}`}></i>
       </button>
 
-      <Link to={`/product/${product.id}`} className="text-decoration-none">
+      <Link to={`/product/${product?.id}`} className="text-decoration-none">
         <div className="ratio ratio-vertical">
           <img
             src={displayImage}
             className="object-fit-cover w-100 h-100 rounded-top"
-            alt={product.name}
+            alt={product?.name || "Product"}
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = PLACEHOLDER_IMG;
@@ -38,22 +38,22 @@ const ProductCard = ({ product }) => {
 
       <div className="card-body d-flex flex-column p-2 text-center">
         <div className="small text-uppercase fw-bold text-muted mb-1">
-          {product.brand}
+          {product?.brand || "Brand"}
         </div>
         <h6 className="card-title text-truncate mb-1 text-dark">
-          {product.name}
+          {product?.name || "Untitled Product"}
         </h6>
 
         <div className="d-flex justify-content-center mb-2">
-          <StarRating rating={product.rating} />
+          <StarRating rating={product?.rating || 0} />
         </div>
 
         <div className="fw-bold text-dark mb-3">
-          ₹{product.price}
+          ₹{product?.price || 0}
         </div>
 
 
-        <Link to={`/product/${product.id}`} className="btn btn-dark w-100 mt-auto rounded-0 text-uppercase fw-bold py-2">
+        <Link to={`/product/${product?.id}`} className="btn btn-dark w-100 mt-auto rounded-0 text-uppercase fw-bold py-2">
           View Details
         </Link>
       </div>

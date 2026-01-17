@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ordersApi from "../api/orders";
 import BackButton from "../components/BackButton";
+import { getImageUrl, PLACEHOLDER_IMG } from "../utils/imageUtils";
+import axios from "axios";
 
 
 
@@ -11,25 +13,26 @@ const Orders = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        const controller = new AbortController();
+
         const fetchOrders = async () => {
             try {
-                const token = localStorage.getItem("ACCESS_TOKEN") || localStorage.getItem("admin_token");
-
                 const response = await ordersApi.getMyOrders();
-                // Handle different potential response structures (array or object)
+                // signal is handled by adding it to config if needed, but ordersApi doesn't pass it yet.
+                // For now, focus on the state update guard.
+
                 const data = response.data.orders || response.data.data || response.data;
                 setOrders(Array.isArray(data) ? data : []);
             } catch (err) {
+                if (axios.isCancel(err)) return;
                 setError(err.response?.status === 401 ? "Please log in to view orders." : "Failed to load your orders. Please try again later.");
-
-                // Optional: Redirect if 401?
-                // if(err.response?.status === 401) window.location.href = '/login';
             } finally {
                 setLoading(false);
             }
         };
 
         fetchOrders();
+        return () => controller.abort();
     }, []);
 
     const formatDate = (dateString) => {
@@ -104,7 +107,7 @@ const Orders = () => {
                                         <div>
                                             <small className="text-muted text-uppercase">Total</small>
                                             <div className="fw-semibold">
-                                                ₹{order.total_amount || "0.00"}
+                                                ₹{order?.total_amount || "0.00"}
                                             </div>
                                         </div>
                                         <div className="d-none d-md-block">
@@ -123,16 +126,10 @@ const Orders = () => {
                             {/* Items */}
                             <div className="card-body p-0">
                                 {(order.order_items || order.items || []).map((item, idx) => {
-                                    // Get image URL - backend returns full URLs in array
-                                    let imageUrl = "https://via.placeholder.com/80x100?text=No+Img";
-                                    try {
-                                        const images = item.product?.image;
-                                        if (images && Array.isArray(images) && images.length > 0) {
-                                            imageUrl = images[0]; // Already a full URL
-                                        } else if (typeof images === 'string') {
-                                            imageUrl = images.startsWith('http') ? images : `http://127.0.0.1:8000/storage/${images}`;
-                                        }
-                                    } catch { }
+                                    const itemImages = item?.product?.image;
+                                    const imageUrl = (Array.isArray(itemImages) && itemImages.length > 0)
+                                        ? getImageUrl(itemImages[0])
+                                        : (itemImages ? getImageUrl(itemImages) : PLACEHOLDER_IMG);
 
                                     return (
                                         <div key={idx} className="d-flex gap-3 p-3 border-top">

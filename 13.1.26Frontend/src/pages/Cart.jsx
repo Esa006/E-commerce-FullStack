@@ -77,13 +77,13 @@ const Cart = () => {
                   />
 
                   <div>
-                    <h6 className="fs-6 fw-bold mb-1">{item.name || item.product?.name}</h6>
+                    <h6 className="fs-6 fw-bold mb-1">{item?.name || item?.product?.name || "Untitled Product"}</h6>
                     {isOutOfStock ? (
                       <p><span className="badge bg-danger">SoldOut</span></p>
                     ) : (
                       <div className="d-flex align-items-center gap-2 small text-muted">
-                        <span>₹{item.price || item.product?.price}</span>
-                        <span className="px-2 py-1 border bg-light">{item.size}</span>
+                        <span>₹{item?.price || item?.product?.price || 0}</span>
+                        <span className="px-2 py-1 border bg-light">{item?.size || "N/A"}</span>
                       </div>
                     )}
                     {!isOutOfStock && availableStock <= 5 && availableStock > 0 && (
@@ -98,17 +98,12 @@ const Cart = () => {
                     <span className="text-danger fw-bold small">Unavailable</span>
                   ) : (
                     <>
-                      {/* 🟢 CHANGE 2: Use 'small text-muted' instead of 10px */}
-                      <div className="text-muted small">
-                        Max: {availableStock}
-                      </div>
-
                       <input
-                        onChange={(e) => handleQuantityChange(item.id, item.size, e.target.value, item)}
+                        onChange={(e) => handleQuantityChange(item?.id, item?.size, e.target.value, item)}
                         type="number"
                         min={1}
                         max={availableStock}
-                        value={item.quantity}
+                        value={item?.quantity || 1}
                         className="form-control d-inline-block text-center cart-quantity-input"
                       />
                     </>
