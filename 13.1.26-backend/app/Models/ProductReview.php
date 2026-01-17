@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Product;
-use App\Models\Order;
 
 class ProductReview extends Model
 {
+    use CrudTrait;
     protected $fillable = [
         'user_id',
         'product_id',

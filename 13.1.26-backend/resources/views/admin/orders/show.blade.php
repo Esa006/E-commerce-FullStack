@@ -87,16 +87,16 @@
 										<div class="font-weight-bold">{{ $item->product->name ?? 'Deleted Product' }}</div>
 										<small class="text-muted">ID: {{ $item->product_id }}</small>
 									</td>
-									<td class="text-center">${{ number_format($item->price, 2) }}</td>
+									<td class="text-center">₹{{ number_format($item->price, 2) }}</td>
 									<td class="text-center">{{ $item->quantity }}</td>
-									<td class="text-right">${{ number_format($item->price * $item->quantity, 2) }}</td>
+									<td class="text-right">₹{{ number_format($item->price * $item->quantity, 2) }}</td>
 								</tr>
 								@endforeach
 							</tbody>
 							<tfoot>
 								<tr>
 									<td colspan="4" class="text-right font-weight-bold">Total Amount:</td>
-									<td class="text-right font-weight-bold">${{ number_format($entry->total_amount, 2) }}</td>
+									<td class="text-right font-weight-bold">₹{{ number_format($entry->total_amount, 2) }}</td>
 								</tr>
 							</tfoot>
 						</table>

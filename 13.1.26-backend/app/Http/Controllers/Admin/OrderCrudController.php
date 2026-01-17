@@ -57,8 +57,27 @@ class OrderCrudController extends CrudController
 
         CRUD::column('order_number')->type('text');
         CRUD::column('email')->type('email');
-        CRUD::column('total_amount')->type('number')->prefix('$');
-        CRUD::column('status')->type('text');
+        CRUD::column('total_amount')->type('number')->prefix('₹');
+        
+        CRUD::column('status')
+            ->type('select_from_array')
+            ->options([
+                'pending' => 'Pending',
+                'confirmed' => 'Confirmed',
+                'shipped' => 'Shipped',
+                'delivered' => 'Delivered',
+                'cancelled' => 'Cancelled',
+            ])
+            ->wrapper([
+                'element' => 'span',
+                'class' => function ($crud, $column, $entry, $related_key) {
+                    if ($entry->status == 'delivered') return 'badge badge-success';
+                    if ($entry->status == 'cancelled') return 'badge badge-danger';
+                    if ($entry->status == 'pending') return 'badge badge-warning';
+                    return 'badge badge-info';
+                },
+            ]);
+
         CRUD::column('created_at')->type('datetime');
     }
 
@@ -71,12 +90,31 @@ class OrderCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(OrderRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+        
+        CRUD::field('user_id')->type('number')->label('User ID (Optional)');
+        CRUD::field('order_number')->type('text')->attributes(['readonly' => 'readonly']);
+        CRUD::field('email')->type('email');
+        CRUD::field('total_amount')->type('number')->prefix('₹');
+        
+        CRUD::field('status')
+            ->type('select_from_array')
+            ->options([
+                'pending' => 'Pending',
+                'confirmed' => 'Confirmed',
+                'shipped' => 'Shipped',
+                'delivered' => 'Delivered',
+                'cancelled' => 'Cancelled',
+            ])
+            ->allows_null(false)
+            ->default('pending');
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        CRUD::field('payment_method')->type('text');
+        CRUD::field('address')->type('text');
+        CRUD::field('city')->type('text');
+        CRUD::field('state')->type('text');
+        CRUD::field('zip_code')->type('text');
+        CRUD::field('country')->type('text');
+        CRUD::field('phone')->type('text');
     }
 
     /**

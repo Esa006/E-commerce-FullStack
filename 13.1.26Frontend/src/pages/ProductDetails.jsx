@@ -121,7 +121,7 @@ const ProductDetails = () => {
         icon: "warning",
         title: "Stock Limit",
         text: `We only have ${productData.stock} units available.`,
-        confirmButtonColor: "#000"
+        confirmButtonColor: "btn-btn-dark"
       });
     }
   };
@@ -148,7 +148,7 @@ const ProductDetails = () => {
       await axios.post("http://localhost:8000/api/product-review", {
         product_id: productData.id,
         rating: reviewRating,
-        comment: reviewComment
+        review: reviewComment
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });

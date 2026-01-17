@@ -18,34 +18,58 @@ class ProductReviewController extends Controller
     public function store(Request $request)
     {
         // 1. Validate Input
+        // 🟢 SMART: Make order_id optional, we will try to find it
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'order_id' => 'required|exists:orders,id',
+            'order_id' => 'nullable|exists:orders,id',
             'rating' => 'required|integer|min:1|max:5',
             'review' => 'nullable|string|max:1000',
+            'comment' => 'nullable|string|max:1000', // Fallback from React
         ]);
 
         $user = Auth::user();
+        $reviewContent = $request->review ?? $request->comment;
+        $orderId = $request->order_id;
 
-        // 2. Security Checks
-        
-        // A. Verify Order Ownership
-        $order = Order::where('id', $request->order_id)
+        // 2. Security & Verification Checks
+
+        // A. If order_id is missing, find the latest delivered order for this product
+        if (!$orderId) {
+            $latestOrder = Order::where('user_id', $user->id)
+                ->where('status', 'delivered')
+                ->whereHas('orderItems', function($q) use ($request) {
+                    $q->where('product_id', $request->product_id);
+                })
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if (!$latestOrder) {
+                return response()->json([
+                    'message' => 'Verified Purchase Required: You can only review products you have bought and which have been delivered.'
+                ], 403);
+            }
+
+            $orderId = $latestOrder->id;
+        }
+
+        // B. Verify Order Ownership and Status (Double check if provided)
+        $order = Order::where('id', $orderId)
             ->where('user_id', $user->id)
-            ->with('orderItems')
             ->first();
 
         if (!$order) {
             return response()->json(['message' => 'Unauthorized or Order not found.'], 403);
         }
 
-        // B. Verify Order is Delivered
         if ($order->status !== 'delivered') {
             return response()->json(['message' => 'You can only rate delivered items.'], 400);
         }
 
         // C. Verify Product was purchased in this Order
-        $purchased = $order->orderItems->contains('product_id', $request->product_id);
+        $purchased = DB::table('order_items')
+            ->where('order_id', $orderId)
+            ->where('product_id', $request->product_id)
+            ->exists();
 
         if (!$purchased) {
             return response()->json(['message' => 'This product is not in your order.'], 400);
@@ -54,7 +78,7 @@ class ProductReviewController extends Controller
         // D. Verify Unique Review (One review per product per order)
         $exists = ProductReview::where('user_id', $user->id)
             ->where('product_id', $request->product_id)
-            ->where('order_id', $request->order_id)
+            ->where('order_id', $orderId)
             ->exists();
 
         if ($exists) {
@@ -63,14 +87,14 @@ class ProductReviewController extends Controller
 
         // 3. Save Review & Update Aggregates Atomically
         try {
-            DB::transaction(function () use ($request, $user) {
+            DB::transaction(function () use ($request, $user, $orderId, $reviewContent) {
                 // Create Review
                 ProductReview::create([
                     'user_id' => $user->id,
                     'product_id' => $request->product_id,
-                    'order_id' => $request->order_id,
+                    'order_id' => $orderId,
                     'rating' => $request->rating,
-                    'review' => $request->review,
+                    'review' => $reviewContent,
                 ]);
 
                 // Recalculate Aggregates
@@ -81,7 +105,8 @@ class ProductReviewController extends Controller
                 // Update Product
                 Product::where('id', $productId)->update([
                     'rating_avg' => round($avg, 1),
-                    'rating_count' => $count
+                    'rating_count' => $count,
+                    'rating' => (int) round($avg) // 🟢 Support legacy integer rating column
                 ]);
             });
 

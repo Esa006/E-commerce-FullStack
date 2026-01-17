@@ -12,9 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            // Using default 0 so we don't need nullable checks everywhere
-            $table->float('rating_avg')->default(0)->after('rating');
-            $table->integer('rating_count')->default(0)->after('rating_avg');
+            if (!Schema::hasColumn('products', 'rating_avg')) {
+                $table->float('rating_avg')->default(0)->after('rating');
+            }
+            if (!Schema::hasColumn('products', 'rating_count')) {
+                $table->integer('rating_count')->default(0)->after('rating_avg');
+            }
         });
     }
 

@@ -59,7 +59,7 @@ class ProductCrudController extends CrudController
         CRUD::column('brand')->type('text');
         CRUD::column('category')->type('text');
         CRUD::column('subCategory')->type('text');
-        CRUD::column('price')->type('number')->prefix('$');
+        CRUD::column('price')->type('number')->prefix('₹');
         CRUD::column('stock')->type('number');
         CRUD::column('bestseller')->type('boolean');
     }
@@ -78,7 +78,7 @@ class ProductCrudController extends CrudController
         CRUD::field('name');
         CRUD::field('brand');
         CRUD::field('description');
-        CRUD::field('price')->type('number')->prefix('$');
+        CRUD::field('price')->type('number')->prefix('₹');
         CRUD::field('category');
         CRUD::field('subCategory');
         CRUD::field('sizes');
@@ -134,7 +134,7 @@ class ProductCrudController extends CrudController
         CRUD::column('name')->type('text');
         CRUD::column('brand')->type('text');
         CRUD::column('description')->type('text');
-        CRUD::column('price')->type('number')->prefix('$');
+        CRUD::column('price')->type('number')->prefix('₹');
         CRUD::column('category')->type('text');
         CRUD::column('subCategory')->type('text');
         CRUD::column('sizes')->type('text');
