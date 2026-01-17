@@ -39,29 +39,29 @@ class ProductCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
-
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
         CRUD::column('image')
             ->type('closure')
             ->label('Image')
             ->function(function ($entry) {
                 if (!$entry->image)
                     return '';
-                // The image field is cast to array in model, so it's already an array here
                 $images = $entry->image;
                 $firstImage = is_array($images) ? ($images[0] ?? null) : $images;
 
                 if ($firstImage) {
-                    $url = \Illuminate\Support\Facades\Storage::disk('public')->url($firstImage);
-                    return '<img src="' . $url . '" style="height: 50px; width: auto;"/>';
+                    return '<img src="' . $firstImage . '" style="height: 50px; width: auto; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"/>';
                 }
                 return '';
             })
             ->escaped(false);
+
+        CRUD::column('name')->type('text');
+        CRUD::column('brand')->type('text');
+        CRUD::column('category')->type('text');
+        CRUD::column('subCategory')->type('text');
+        CRUD::column('price')->type('number')->prefix('$');
+        CRUD::column('stock')->type('number');
+        CRUD::column('bestseller')->type('boolean');
     }
 
     /**
@@ -103,6 +103,24 @@ class ProductCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+
+        // 🟢 Show current images preview in Update form
+        $entry = $this->crud->getCurrentEntry();
+        if ($entry && !empty($entry->image)) {
+            $images = $entry->image;
+            if (is_array($images)) {
+                $html = '<div style="margin-bottom: 15px;"><label>Current Images:</label><div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 5px;">';
+                foreach ($images as $img) {
+                    $html .= '<img src="' . $img . '" style="height: 80px; width: auto; border-radius: 4px; border: 1px solid #ddd;"/>';
+                }
+                $html .= '</div></div>';
+
+                CRUD::field('current_images_preview')
+                    ->type('custom_html')
+                    ->value($html)
+                    ->makeFirst();
+            }
+        }
     }
 
     /**
@@ -113,28 +131,32 @@ class ProductCrudController extends CrudController
      */
     protected function setupShowOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        CRUD::column('name')->type('text');
+        CRUD::column('brand')->type('text');
+        CRUD::column('description')->type('text');
+        CRUD::column('price')->type('number')->prefix('$');
+        CRUD::column('category')->type('text');
+        CRUD::column('subCategory')->type('text');
+        CRUD::column('sizes')->type('text');
+        CRUD::column('stock')->type('number');
+        CRUD::column('rating')->type('number');
+        CRUD::column('bestseller')->type('boolean');
+        CRUD::column('date')->type('date');
+        CRUD::column('product_details')->type('json');
 
         CRUD::column('image')
             ->type('closure')
             ->label('Product Images')
             ->function(function ($entry) {
-                if (!$entry->image)
-                    return 'No images';
-
+                if (!$entry->image) return 'No images';
                 $images = $entry->image;
-                // Ensure it's an array
-                if (!is_array($images)) {
-                    $images = json_decode($images, true) ?? [$images];
-                }
-
+                if (!is_array($images)) return $images;
+                
                 $html = '<div style="display: flex; gap: 10px; flex-wrap: wrap;">';
                 foreach ($images as $img) {
-                    $url = \Illuminate\Support\Facades\Storage::disk('public')->url($img);
-                    $html .= '<img src="' . $url . '" style="height: 100px; width: auto; border-radius: 4px; border: 1px solid #ddd;"/>';
+                    $html .= '<img src="' . $img . '" style="height: 100px; width: auto; border-radius: 4px; border: 1px solid #ddd;"/>';
                 }
                 $html .= '</div>';
-
                 return $html;
             })
             ->escaped(false);

@@ -41,7 +41,14 @@ class CategoryCrudController extends CrudController
     {
         CRUD::column('name');
         CRUD::column('slug');
-        CRUD::column('image')->type('image')->prefix('storage/');
+        CRUD::column('image')
+            ->type('closure')
+            ->label('Image')
+            ->function(function ($entry) {
+                if (!$entry->image) return '';
+                return '<img src="'. $entry->image .'" style="height: 50px; width: auto; border-radius: 4px;"/>';
+            })
+            ->escaped(false);
     }
 
     /**
@@ -61,5 +68,19 @@ class CategoryCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function setupShowOperation()
+    {
+        CRUD::column('name');
+        CRUD::column('slug');
+        CRUD::column('image')
+            ->type('closure')
+            ->label('Image')
+            ->function(function ($entry) {
+                if (!$entry->image) return '';
+                return '<img src="'. $entry->image .'" style="height: 100px; width: auto; border-radius: 4px;"/>';
+            })
+            ->escaped(false);
     }
 }

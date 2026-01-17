@@ -15,20 +15,28 @@ const Observability = {
                 message: errorData.message || 'Unknown Error',
                 stack: errorData.stack || null,
                 component: errorData.component || 'Global',
+                vitals: errorData.vitals || null,
                 url: window.location.href,
                 userAgent: navigator.userAgent,
                 timestamp: new Date().toISOString()
             };
 
-            // In production, we use a dedicated endpoint
-            // We use a relative path to ensure it hits the current API domain
             const API_BASE_URL = 'http://localhost:8000/api'; 
-            
             await axios.post(`${API_BASE_URL}/error-report`, payload);
         } catch (reportingError) {
-            // Silently fail if reporting itself fails to avoid infinite loops
             console.error('Failed to send error report:', reportingError);
         }
+    },
+
+    /**
+     * Report performance metrics (like page load time)
+     */
+    reportPerformance: async (name, value, unit = 'ms') => {
+        return Observability.reportError({
+            message: `Performance Benchmark: ${name} = ${value}${unit}`,
+            component: 'Performance Tracker',
+            vitals: { name, value, unit }
+        });
     },
 
     /**

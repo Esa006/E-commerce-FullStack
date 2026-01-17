@@ -39,12 +39,27 @@ class OrderCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        CRUD::column('image')
+            ->type('closure')
+            ->label('Product')
+            ->function(function ($entry) {
+                $item = $entry->orderItems()->first();
+                if ($item && $item->product && !empty($item->product->image)) {
+                    $images = $item->product->image;
+                    $firstImage = is_array($images) ? ($images[0] ?? null) : $images;
+                    if ($firstImage) {
+                        return '<img src="' . $firstImage . '" style="height: 45px; width: auto; border-radius: 4px;"/>';
+                    }
+                }
+                return '-';
+            })
+            ->escaped(false);
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        CRUD::column('order_number')->type('text');
+        CRUD::column('email')->type('email');
+        CRUD::column('total_amount')->type('number')->prefix('$');
+        CRUD::column('status')->type('text');
+        CRUD::column('created_at')->type('datetime');
     }
 
     /**

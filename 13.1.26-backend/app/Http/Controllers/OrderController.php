@@ -41,57 +41,66 @@ class OrderController extends Controller
 
         try {
             // 2. Start Transaction
-            // The closure automatically receives $request
             $order = DB::transaction(function () use ($request, $orderEmail) {
+                // Initialize server-side total
+                $totalAmount = 0;
+                $processedItems = [];
+
+                // Pre-process items to calculate total and check stock
+                foreach ($request->cart_items as $item) {
+                    $product = Product::lockForUpdate()->find($item['product_id']);
+
+                    if (!$product) {
+                        throw new Exception("Product ID {$item['product_id']} not found.");
+                    }
+
+                    if ($product->stock < $item['quantity']) {
+                        throw new Exception("SORRY! '{$product->name}' is out of stock!");
+                    }
+
+                    // 🟢 SECURE LOGIC: Use Database Price, not Request Price
+                    $itemPrice = $product->price;
+                    $totalAmount += ($itemPrice * $item['quantity']);
+
+                    $processedItems[] = [
+                        'product' => $product,
+                        'quantity' => $item['quantity'],
+                        'price' => $itemPrice
+                    ];
+                }
 
                 // A. Create Order Record
                 $newOrder = Order::create([
-                    'user_id' => Auth::id(), // Nullable for guests
-                    'email' => $orderEmail,  // 🟢 Snapshot Email
-                    'order_number' => 'ORD-' . strtoupper(Str::random(10)), // 🟢 Auto-generate Order ID
-                    'address' => $request->address, // Line 1
+                    'user_id' => Auth::id(),
+                    'email' => $orderEmail,
+                    'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+                    'address' => $request->address,
                     'address_line2' => $request->address_line2,
                     'city' => $request->city,
                     'state' => $request->state,
                     'zip_code' => $request->zip_code,
                     'country' => $request->country,
                     'phone' => $request->phone,
-                    'total_amount' => $request->total_amount,
+                    'total_amount' => $totalAmount, // 🟢 Recalculated Total
                     'payment_method' => $request->payment_method,
                     'status' => 'pending',
                 ]);
 
-                // B. Process Each Item
-                foreach ($request->cart_items as $item) {
+                // B. Save items and update stock
+                foreach ($processedItems as $pItem) {
+                    $product = $pItem['product'];
+                    
+                    // Decrease Stock
+                    $product->stock = $product->stock - $pItem['quantity'];
+                    $product->save();
 
-                    // C. Find & Lock the Product
-                    // We use lockForUpdate() to prevent race conditions (The "Monday Man" Logic)
-                    $product = Product::lockForUpdate()->find($item['product_id']);
-
-                    if (!$product) {
-                        throw new Exception("Product not found.");
-                    }
-
-                    // D. Stock Check Logic
-                    if ($product->stock >= $item['quantity']) {
-
-                        // Decrease Stock
-                        $product->stock = $product->stock - $item['quantity'];
-                        $product->save();
-
-                        // Create Order Item
-                        OrderItem::create([
-                            'order_id' => $newOrder->id,
-                            'product_id' => $product->id,
-                            'quantity' => $item['quantity'],
-                            'price' => $item['price'],
-                        ]);
-
-                    } else {
-                        // E. STOP! Rollback Trigger
-                        // If stock is insufficient, we throw an exception to rollback the transaction
-                        throw new Exception("SORRY! '{$product->name}' is out of stock!");
-                    }
+                    // Create Order Item
+                    OrderItem::create([
+                        'order_id' => $newOrder->id,
+                        'product_id' => $product->id,
+                        'quantity' => $pItem['quantity'],
+                        'price' => $pItem['price'], // 🟢 Database-sourced price
+                    ]);
                 }
 
                 return $newOrder->load('orderItems.product');
@@ -163,10 +172,10 @@ class OrderController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:confirmed,shipped,out_for_delivery,delivered'
+            'status' => 'required|in:confirmed,shipped,out_for_delivery,delivered,cancelled'
         ]);
 
-        $order = Order::find($id);
+        $order = Order::with('orderItems.product')->find($id);
 
         if (!$order) {
             return response()->json(['success' => false, 'message' => 'Order not found'], 404);
@@ -174,9 +183,9 @@ class OrderController extends Controller
 
         // VALID STATE TRANSITIONS
         $allowedTransitions = [
-            'pending' => ['confirmed'],
-            'confirmed' => ['shipped'],
-            'shipped' => ['out_for_delivery'],
+            'pending' => ['confirmed', 'cancelled'],
+            'confirmed' => ['shipped', 'cancelled'],
+            'shipped' => ['out_for_delivery', 'cancelled'],
             'out_for_delivery' => ['delivered'],
         ];
 
@@ -186,29 +195,40 @@ class OrderController extends Controller
         ) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid order status transition'
+                'message' => "Invalid transition from {$order->status} to {$request->status}"
             ], 422);
         }
 
-        // APPLY STATUS + METADATA
-        $order->status = $request->status;
+        DB::transaction(function () use ($request, $order) {
+            // 🟢 STOCK RESTORATION LOGIC
+            if ($request->status === 'cancelled') {
+                foreach ($order->orderItems as $item) {
+                    if ($item->product) {
+                        $item->product->increment('stock', $item->quantity);
+                    }
+                }
+            }
 
-        if ($request->status === 'confirmed') {
-            $order->confirmed_at = now();
-        }
+            // APPLY STATUS + METADATA
+            $order->status = $request->status;
 
-        if ($request->status === 'shipped') {
-            $order->tracking_number = $order->tracking_number
-                ?? 'TRK-' . strtoupper(Str::random(10));
-            $order->shipped_at = now();
-            $order->expected_delivery_date = now()->addDays(4);
-        }
+            if ($request->status === 'confirmed') {
+                $order->confirmed_at = now();
+            }
 
-        if ($request->status === 'delivered') {
-            $order->delivered_at = now();
-        }
+            if ($request->status === 'shipped') {
+                $order->tracking_number = $order->tracking_number
+                    ?? 'TRK-' . strtoupper(Str::random(10));
+                $order->shipped_at = now();
+                $order->expected_delivery_date = now()->addDays(4);
+            }
 
-        $order->save();
+            if ($request->status === 'delivered') {
+                $order->delivered_at = now();
+            }
+
+            $order->save();
+        });
 
         return response()->json([
             'success' => true,

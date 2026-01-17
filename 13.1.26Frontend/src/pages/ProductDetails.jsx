@@ -7,6 +7,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import BackButton from "../components/BackButton";
 import { parseImages, getImageUrl, PLACEHOLDER_IMG } from "../utils/imageUtils";
+import Observability from "../utils/Observability";
 
 import StarRating from "../components/StarRating";
 import ProductCard from "../components/ProductCard";
@@ -32,6 +33,7 @@ const ProductDetails = () => {
 
 
   useEffect(() => {
+    const startTime = performance.now();
     const fetchProductData = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/api/products/${id}`);
@@ -40,6 +42,11 @@ const ProductDetails = () => {
           setProductData(data);
           // Initialize quantity based on product's MOQ step (1, 2, or 5)
           setQuantity(data.qty_step || 1);
+
+          // 🟢 REPORT PERFORMANCE: How long did it take to load this specific product?
+          const endTime = performance.now();
+          const loadTime = Math.round(endTime - startTime);
+          Observability.reportPerformance(`ProductDetailPage_Load_${id}`, loadTime);
         }
         setLoading(false);
       } catch (error) {
@@ -57,7 +64,7 @@ const ProductDetails = () => {
       }
     };
 
-
+    fetchProductData();
   }, [id]);
 
   useEffect(() => {

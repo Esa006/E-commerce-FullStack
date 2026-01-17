@@ -78,21 +78,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders/{id}', [OrderController::class, 'showOrderItems']);
     Route::get('/orders/{id}/items', [OrderController::class, 'showOrderItems']);
 
-    // Products Management
-    Route::post('/products', [ProductController::class, 'store']);
-    Route::put('/products/{id}', [ProductController::class, 'update']);
-    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+    // Admin-only Routes
+    Route::middleware('admin')->group(function () {
+        // Products Management (Admin)
+        Route::post('/products', [ProductController::class, 'store']);
+        Route::put('/products/{id}', [ProductController::class, 'update']);
+        Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+        Route::put('/admin/products/{id}/stock', [ProductController::class, 'updateStock']);
 
-    // MOVED INSIDE (Secure)
-    Route::put('/admin/products/{id}/stock', [ProductController::class, 'updateStock']);
-
-    // Admin - Customers & Orders
-    Route::put('/admin/customers/{id}', [AdminController::class, 'updateRole']);
-    Route::get('/admin/customers', [AdminController::class, 'getCustomers']);
-    Route::delete('/admin/customers/{id}', [AdminController::class, 'deleteCustomer']);
-    Route::get('/admin/orders', [OrderController::class, 'index']);
-    Route::put('/admin/orders/{id}/status', [OrderController::class, 'updateStatus']);
-    
-    // Error Logs (Production Monitoring)
-    Route::get('/admin/error-logs', [ErrorReportController::class, 'index']);
+        // Admin - Customers & Orders
+        Route::put('/admin/customers/{id}', [AdminController::class, 'updateRole']);
+        Route::get('/admin/customers', [AdminController::class, 'getCustomers']);
+        Route::delete('/admin/customers/{id}', [AdminController::class, 'deleteCustomer']);
+        Route::get('/admin/orders', [OrderController::class, 'index']);
+        Route::put('/admin/orders/{id}/status', [OrderController::class, 'updateStatus']);
+        
+        // Error Logs (Production Monitoring)
+        Route::get('/admin/error-logs', [ErrorReportController::class, 'index']);
+    });
 });

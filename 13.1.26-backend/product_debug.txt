@@ -1,0 +1,75 @@
+Array
+(
+    [id] => 1
+    [name] => Women Round Neck Cotton Top
+    [brand] => H&M
+    [description] => Premium Women Round Neck Cotton Top for high quality comfort. Made from the finest materials to ensure durability and style.
+    [price] => 100
+    [stock] => 6
+    [image] => Array
+        (
+            [0] => http://127.0.0.1:8000/storage/products/p_img1.png
+        )
+
+    [category] => Women
+    [subCategory] => Topwear
+    [sizes] => ["S","M","L"]
+    [bestseller] => 
+    [date] => 2026-01-13T00:00:00.000000Z
+    [created_at] => 2026-01-12T19:20:32.000000Z
+    [updated_at] => 2026-01-16T11:06:20.000000Z
+    [rating] => 1
+    [product_details] => Array
+        (
+            [0] => Array
+                (
+                    [key] => Primary Color
+                    [value] => Maroon
+                )
+
+            [1] => Array
+                (
+                    [key] => Package Contains
+                    [value] => 1 Piece
+                )
+
+            [2] => Array
+                (
+                    [key] => Fabric
+                    [value] => Linen
+                )
+
+            [3] => Array
+                (
+                    [key] => Wash Care
+                    [value] => Machine wash cold, Do not bleach, Tumble dry low
+                )
+
+            [4] => Array
+                (
+                    [key] => Fit
+                    [value] => Slim Fit
+                )
+
+            [5] => Array
+                (
+                    [key] => Sleeve Length
+                    [value] => Half Sleeve
+                )
+
+            [6] => Array
+                (
+                    [key] => Neck Type
+                    [value] => Round Neck
+                )
+
+            [7] => Array
+                (
+                    [key] => Pattern
+                    [value] => Printed
+                )
+
+        )
+
+    [stock_status] => in_stock
+)

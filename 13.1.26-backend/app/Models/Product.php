@@ -96,13 +96,14 @@ class Product extends Model
                 return $img;
             }
 
-            // If path already includes 'products/', use it as-is
+            // If path already includes 'products/', use it
             if (str_starts_with($img, 'products/')) {
                 return asset('storage/' . $img);
             }
 
-            // For images stored directly in storage/app/public (like p_img1.png)
-            return asset('storage/' . $img);
+            // Fallback: check if it exists in products/ or directly in storage/
+            // Many files are in public/storage/products/
+            return asset('storage/products/' . $img);
         }, $images);
     }
 

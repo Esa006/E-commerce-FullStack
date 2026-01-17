@@ -11,6 +11,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasRoles, Notifiable, \Backpack\CRUD\app\Models\Traits\CrudTrait;
 
+    const ROLE_ADMIN = 'admin';
+    const ROLE_CUSTOMER = 'customer';
+
     protected $fillable = [
         'name',
         'email',

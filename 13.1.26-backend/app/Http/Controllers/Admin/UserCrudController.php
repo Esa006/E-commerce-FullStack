@@ -33,11 +33,11 @@ class UserCrudController extends CrudController
 
     protected function setupListOperation()
     {
-        CRUD::column('name');
-        CRUD::column('email');
-        CRUD::column('role');
-        CRUD::column('phone');
-        CRUD::column('address');
+        CRUD::column('name')->type('text');
+        CRUD::column('email')->type('email');
+        CRUD::column('role')->type('text');
+        CRUD::column('phone')->type('text');
+        CRUD::column('address')->type('text');
     }
 
     protected function setupCreateOperation()
@@ -61,5 +61,19 @@ class UserCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function setupShowOperation()
+    {
+        CRUD::column('name');
+        CRUD::column('email');
+        CRUD::column('role');
+        CRUD::column('phone');
+        CRUD::column('address')->type('text');
+        CRUD::column('address_line2')->type('text');
+        CRUD::column('city');
+        CRUD::column('state');
+        CRUD::column('zip_code');
+        CRUD::column('country');
     }
 }

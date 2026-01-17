@@ -59,9 +59,21 @@ class ErrorLogCrudController extends CrudController
             ->label('Performance')
             ->type('closure')
             ->function(function($entry) {
-                if (!$entry->vitals || !isset($entry->vitals['LCP'])) return '-';
-                $lcp = number_format($entry->vitals['LCP'], 2);
-                return '<span class="badge badge-info">LCP: '.$lcp.'s</span>';
+                if (!$entry->vitals) return '-';
+                
+                // Handle LCP specifically (Legacy/Default)
+                if (isset($entry->vitals['LCP'])) {
+                    $lcp = number_format($entry->vitals['LCP'], 2);
+                    return '<span class="badge badge-info">LCP: '.$lcp.'s</span>';
+                }
+
+                // Handle Generic Metrics (New)
+                if (isset($entry->vitals['name']) && isset($entry->vitals['value'])) {
+                    $unit = $entry->vitals['unit'] ?? 'ms';
+                    return '<span class="badge badge-warning">'.$entry->vitals['name'].': '.$entry->vitals['value'].$unit.'</span>';
+                }
+
+                return '<span class="badge badge-secondary">Data Attached</span>';
             })
             ->escaped(false);
             

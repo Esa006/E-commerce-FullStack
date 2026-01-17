@@ -22,6 +22,19 @@ class Category extends Model
         });
     }
 
+    public function getImageAttribute($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        if (str_starts_with($value, 'http')) {
+            return $value;
+        }
+
+        return asset('storage/' . $value);
+    }
+
     public function setImageAttribute($value)
     {
         $attribute_name = "image";
