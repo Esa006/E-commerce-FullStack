@@ -42,6 +42,7 @@ const ProductDetails = () => {
         const response = await apiClient.get(`/products/${id}`, {
           signal: controller.signal
         });
+        console.log(response.data);
 
         if (response.data.success) {
           const data = response.data.data;
@@ -293,14 +294,6 @@ const ProductDetails = () => {
                   Swal.fire({ icon: "info", title: "Select a size" });
                 } else {
                   addToCart(productData, size, quantity);
-                  Swal.fire({
-                    icon: "success",
-                    title: "Added to cart",
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000
-                  });
                 }
               }}
               className="btn btn-dark  w-40 py-3 fw-bold text-uppercase rounded-0"

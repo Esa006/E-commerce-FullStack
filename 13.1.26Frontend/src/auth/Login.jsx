@@ -3,11 +3,14 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import AuthApi from "../api/auth";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 
 
 export default function Login() {
     const navigate = useNavigate();
+    const { syncGuestCart } = useContext(CartContext);
 
     // State
     const [email, setEmail] = useState('');
@@ -27,6 +30,9 @@ export default function Login() {
                 // 🟢 CLEAR STALE ADMIN TOKEN: Prevents conflicts in axiosClient
                 localStorage.removeItem('admin_token');
                 localStorage.setItem('ACCESS_TOKEN', response.data.token);
+
+                // 🟢 SYNC CART: Merge guest items into backend
+                await syncGuestCart();
 
                 Swal.fire({
                     icon: 'success',

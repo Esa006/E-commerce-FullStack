@@ -112,7 +112,7 @@ const Orders = () => {
                                         </div>
                                         <div className="d-none d-md-block">
                                             <small className="text-muted text-uppercase">Order ID</small>
-                                            <div className="fw-semibold">#{order.id}</div>
+                                            <div className="fw-semibold">{order.order_number || `#${order.id}`}</div>
                                         </div>
                                     </div>
 

@@ -8,6 +8,12 @@ const Profile = () => {
   const [form, setForm] = useState({
     name: "",
     phone: "",
+    address: "",
+    address_line2: "",
+    city: "",
+    state: "",
+    zip_code: "",
+    country: "",
   });
 
   useEffect(() => {
@@ -21,6 +27,12 @@ const Profile = () => {
         setForm({
           name: response.data.name || "",
           phone: response.data.phone || "",
+          address: response.data.address || "",
+          address_line2: response.data.address_line2 || "",
+          city: response.data.city || "",
+          state: response.data.state || "",
+          zip_code: response.data.zip_code || "",
+          country: response.data.country || "",
         });
       }
     } catch (error) {
@@ -38,7 +50,7 @@ const Profile = () => {
       Swal.fire({
         icon: "success",
         title: "Profile Updated",
-        text: "Your personal information has been saved.",
+        text: "Your personal and delivery information has been saved.",
         timer: 2000,
         showConfirmButton: false
       });
@@ -64,58 +76,65 @@ const Profile = () => {
           {/* Profile Card */}
           <div className="card border-0 shadow-sm mb-4">
             <div className="card-body p-4">
-
               <h4 className="fw-bold mb-4 border-bottom pb-2">Your Profile</h4>
 
-              <div className="mb-4">
-                <h6 className="text-muted fw-semibold mb-3">Personal Information</h6>
-
+              {/* Personal Info */}
+              <div className="mb-4 pt-1">
+                <h6 className="text-muted fw-bold text-uppercase mb-3 small">Personal Information</h6>
                 <div className="row g-3">
                   <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">Full Name</label>
-                    <input
-                      name="name"
-                      type="text"
-                      className="form-control"
-                      value={form.name}
-                      onChange={handleChange}
-                      placeholder="John Doe"
-                    />
+                    <label className="form-label small fw-bold text-muted">Full Name</label>
+                    <input name="name" type="text" className="form-control" value={form.name} onChange={handleChange} placeholder="John Doe" />
                   </div>
-
                   <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">Phone Number</label>
-                    <input
-                      name="phone"
-                      type="tel"
-                      className="form-control"
-                      value={form.phone}
-                      onChange={handleChange}
-                      placeholder="+1 234 567 890"
-                    />
+                    <label className="form-label small fw-bold text-muted">Phone Number</label>
+                    <input name="phone" type="tel" className="form-control" value={form.phone} onChange={handleChange} placeholder="+91 00000 00000" />
                   </div>
-                </div>
-
-                <div className="d-flex flex-column flex-md-row justify-content-md-end mt-4 gap-2">
-                  <button
-                    className="btn btn-warning px-4 fw-semibold"
-                    onClick={saveProfile}
-                  >
-                    Save Personal Info
-                  </button>
                 </div>
               </div>
 
+              {/* Delivery Info */}
+              <div className="mb-4 pt-3 border-top">
+                <h6 className="text-muted fw-bold text-uppercase mb-3 small">Default Delivery Address</h6>
+                <div className="row g-3">
+                  <div className="col-12">
+                    <label className="form-label small fw-bold text-muted">Street Address</label>
+                    <input name="address" type="text" className="form-control mb-2" value={form.address} onChange={handleChange} placeholder="House No, Street Name" />
+                    <input name="address_line2" type="text" className="form-control" value={form.address_line2} onChange={handleChange} placeholder="Apartment, Landmark (Optional)" />
+                  </div>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label small fw-bold text-muted">City</label>
+                    <input name="city" type="text" className="form-control" value={form.city} onChange={handleChange} placeholder="Mumbai" />
+                  </div>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label small fw-bold text-muted">State</label>
+                    <input name="state" type="text" className="form-control" value={form.state} onChange={handleChange} placeholder="Maharashtra" />
+                  </div>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label small fw-bold text-muted">Zip Code</label>
+                    <input name="zip_code" type="text" className="form-control" value={form.zip_code} onChange={handleChange} placeholder="400001" />
+                  </div>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label small fw-bold text-muted">Country</label>
+                    <input name="country" type="text" className="form-control" value={form.country} onChange={handleChange} placeholder="India" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="d-grid mt-4">
+                <button className="btn btn-dark py-2 fw-bold text-uppercase" onClick={saveProfile}>
+                  Save Profile Details
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Address Book */}
+          {/* Address Book Card */}
           <div className="card border-0 shadow-sm">
             <div className="card-body p-4">
-              <h6 className="text-muted fw-semibold mb-3 border-bottom pb-2">
-                Address Book
+              <h6 className="text-muted fw-bold text-uppercase mb-3 small border-bottom pb-2">
+                Order History Address Book
               </h6>
-
               <AddressList />
             </div>
           </div>

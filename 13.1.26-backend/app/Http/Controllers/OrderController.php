@@ -69,9 +69,14 @@ class OrderController extends Controller
                     ];
                 }
 
+                // 🟢 Add standard shipping fee (matching frontend)
+                $totalAmount += 10;
+
                 // A. Create Order Record
                 $newOrder = Order::create([
                     'user_id' => Auth::id(),
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
                     'email' => $orderEmail,
                     'order_number' => 'ORD-' . strtoupper(Str::random(10)),
                     'address' => $request->address,
@@ -101,6 +106,11 @@ class OrderController extends Controller
                         'quantity' => $pItem['quantity'],
                         'price' => $pItem['price'], // 🟢 Database-sourced price
                     ]);
+                }
+
+                // 🟢 CLEAR CART: Remove items from database after order success
+                if (Auth::check()) {
+                    \App\Models\Cart::where('user_id', Auth::id())->delete();
                 }
 
                 return $newOrder->load('orderItems.product');

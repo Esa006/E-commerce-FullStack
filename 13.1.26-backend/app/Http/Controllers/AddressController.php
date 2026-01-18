@@ -65,11 +65,8 @@ class AddressController extends Controller
             ]);
         }
 
-        // Return re-indexed values
-        return $addresses->values()->map(function ($addr, $index) {
-             $addr['id'] = $index + 1; // Simplify IDs for frontend
-             return $addr;
-        });
+        // Return values
+        return $addresses->values();
     }
 
     public function index(Request $request)
@@ -182,11 +179,41 @@ class AddressController extends Controller
 
     public function destroy($id)
     {
-        // Address deletion is not fully supported as addresses are derived from Order history.
-        // Returning success to prevent frontend crash.
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        // 🟢 Case 1: Profile Address
+        if ($id === 'profile') {
+            $user->update([
+                'address' => null,
+                'address_line2' => null,
+                'city' => null,
+                'state' => null,
+                'zip_code' => null,
+                'country' => null,
+                'phone' => null,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Profile address cleared successfully.'
+            ]);
+        }
+
+        // 🔴 Case 2: Historical Order Address
+        if (str_starts_with($id, 'ord_')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Historical address cannot be deleted. These records are kept for order tracking and tax records.'
+            ], 403);
+        }
+
         return response()->json([
-            'success' => true, 
-            'message' => 'Address removed from view.'
-        ]);
+            'success' => false,
+            'message' => 'Invalid address ID.'
+        ], 400);
     }
 }

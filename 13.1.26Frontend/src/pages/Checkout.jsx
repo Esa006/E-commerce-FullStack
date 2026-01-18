@@ -74,24 +74,43 @@ const Checkout = () => {
       }
     };
     fetchAddresses();
+
+    // 🟢 Fetch User Profile for Initial Hydration (Email/Name)
+    const fetchProfile = async () => {
+      try {
+        const res = await api.get("/user");
+        const userData = res.data;
+        if (userData) {
+          setFormData(prev => ({
+            ...prev,
+            email: userData.email || prev.email,
+            firstName: userData.name?.split(" ")[0] || prev.firstName,
+            lastName: userData.name?.split(" ").slice(1).join(" ") || prev.lastName,
+          }));
+        }
+      } catch (err) {
+        console.error("Profile fetch failed", err);
+      }
+    };
+    fetchProfile();
   }, []);
 
   const selectAddress = (addr) => {
     setSelectedAddressId(addr.id);
-    // Split full name if possible
-    const nameParts = (addr.full_name || "").split(" ");
+    // Split name if possible (Backend sends 'name')
+    const nameParts = (addr.name || addr.full_name || "").split(" ");
     const fName = nameParts[0] || "";
     const lName = nameParts.slice(1).join(" ") || "";
 
     setFormData({
       firstName: fName,
       lastName: lName,
-      email: addr.email || "", // Assuming address might not have email, keep what's there or empty
-      address: addr.address_line1 || "",
+      email: addr.email || formData.email || "",
+      address: addr.address || addr.address_line1 || "",
       address2: addr.address_line2 || "",
       phone: addr.phone || "",
       city: addr.city || "",
-      district: addr.state || "", // Using state as district/region fallback
+      district: addr.state || "",
       state: addr.state || "",
       zip_code: addr.zip_code || "",
       country: addr.country || "India"

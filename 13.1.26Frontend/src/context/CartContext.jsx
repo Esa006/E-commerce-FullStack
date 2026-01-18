@@ -1,126 +1,267 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 import Swal from "sweetalert2";
+import CartApi from "../api/CartApi";
 
 export const CartContext = createContext(null);
 
 const CartProvider = ({ children }) => {
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // 1. Initialize state from LocalStorage to fix the "Empty Cart" refresh issue
-  const [cartItems, setCartItems] = useState(() => {
+  // Helper to check authentication status
+  const isAuthenticated = () => !!localStorage.getItem("ACCESS_TOKEN");
+
+  /**
+   * 1. INITIAL HYDRATION
+   * Loads from LocalStorage if guest, or API if authenticated.
+   */
+  const hydrateCart = useCallback(async () => {
+    setLoading(true);
     try {
-      const savedCart = localStorage.getItem("cartItems");
-      return savedCart ? JSON.parse(savedCart) : [];
+      if (isAuthenticated()) {
+        const response = await CartApi.getCart();
+        // Server returns items with nested product: { id, quantity, size, product: { name, price, stock, ... } }
+        // We flatten or adapt if needed, but keeping backend structure is safer
+        const backendItems = response.data.map(item => ({
+          cart_id: item.id, // ID of the cart record
+          id: item.product.id, // ID of the product
+          name: item.product.name,
+          price: item.product.price,
+          image: item.product.image,
+          stock: item.product.stock,
+          quantity: item.quantity,
+          size: item.size
+        }));
+        setCartItems(backendItems);
+      } else {
+        const savedCart = localStorage.getItem("cartItems");
+        setCartItems(savedCart ? JSON.parse(savedCart) : []);
+      }
     } catch (error) {
-      console.error("Error loading cart:", error);
-      return [];
+      console.error("Cart hydration failed:", error);
+    } finally {
+      setLoading(false);
     }
-  });
+  }, []);
 
-  // 2. Save to LocalStorage whenever cartItems changes
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    hydrateCart();
+  }, [hydrateCart]);
+
+  /**
+   * 2. GUEST PERSISTENCE
+   * Only sync LocalStorage for guest users.
+   */
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
   }, [cartItems]);
 
-  // 3. Add To Cart Function (Reconstructed to include Stock Check)
-  const addToCart = (product, size, quantity = 1) => {
-    let cartData = [...cartItems];
+  /**
+   * 3. SYNC GUEST CART -> AUTH
+   */
+  const syncGuestCart = async () => {
+    if (!isAuthenticated()) return;
 
-    // Check if item with this ID and Size already exists
-    const existingItemIndex = cartData.findIndex(item => item.id === product.id && item.size === size);
+    const guestItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+    if (guestItems.length === 0) return;
 
-    if (existingItemIndex > -1) {
-      // Item exists: Check if adding more exceeds stock
-      const currentQty = cartData[existingItemIndex].quantity;
-      if (currentQty + quantity > product.stock) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Stock Limit Reached',
-          text: `You already have ${currentQty} in cart. Only ${product.stock} available.`,
-          confirmButtonColor: '#000'
+    try {
+      const formattedItems = guestItems.map(item => ({
+        product_id: item.id,
+        quantity: item.quantity,
+        size: item.size
+      }));
+
+      await CartApi.syncCart(formattedItems);
+      localStorage.removeItem("cartItems"); // Clear guest storage after sync
+      await hydrateCart(); // Re-hydrate from server truth
+    } catch (error) {
+      console.error("Failed to sync cart:", error);
+    }
+  };
+
+  /**
+   * 4. ADD TO CART
+   */
+  const addToCart = async (product, size, quantity = 1) => {
+    if (isAuthenticated()) {
+      try {
+        const response = await CartApi.addToCart({
+          product_id: product.id,
+          size,
+          quantity
         });
-        return;
-      }
-      cartData[existingItemIndex].quantity += quantity;
-    } else {
-      // New Item: Check initial stock
-      if (quantity > product.stock) {
+
+        // Use backend response to hydrate state (Source of Truth)
+        if (response.data.cart) {
+          const updatedItems = response.data.cart.map(item => ({
+            cart_id: item.id,
+            id: item.product.id,
+            name: item.product.name,
+            price: item.product.price,
+            image: item.product.image,
+            stock: item.product.stock,
+            quantity: item.quantity,
+            size: item.size
+          }));
+          setCartItems(updatedItems);
+        }
+
+        Swal.fire({
+          toast: true,
+          icon: 'success',
+          title: 'Added to cart',
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      } catch (error) {
         Swal.fire({
           icon: 'error',
-          title: 'Insufficient Stock',
-          text: `Only ${product.stock} units available.`,
-          confirmButtonColor: '#000'
+          title: 'Oops...',
+          text: error.response?.data?.message || 'Failed to add item',
         });
-        return;
       }
-      cartData.push({ ...product, size, quantity });
-    }
+    } else {
+      // Guest Logic
+      let cartData = [...cartItems];
+      const existingIndex = cartData.findIndex(item => item.id === product.id && item.size === size);
 
-    setCartItems(cartData);
-
-    // Optional: Success Toast
-    Swal.fire({
-      toast: true,
-      icon: 'success',
-      title: 'Item added',
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 1500
-    });
-  };
-
-  // 4. Update Quantity (With Stock Validation)
-  const updateQuantity = (itemId, size, quantity) => {
-    let cartData = [...cartItems];
-    const item = cartData.find((item) => item.id === itemId && item.size === size);
-
-    if (item) {
-      if (quantity > item.stock) {
-        Swal.fire({
-          title: 'Limit Reached',
-          text: `Only ${item.stock} items available in stock.`,
-          icon: 'warning',
-          confirmButtonColor: '#000'
-        });
-        item.quantity = item.stock;
-      } else if (quantity < 1) {
-        // Do nothing or remove (usually keeping at 1 is safer here)
-        item.quantity = 1;
+      if (existingIndex > -1) {
+        const currentQty = cartData[existingIndex].quantity;
+        if (currentQty + quantity > product.stock) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Stock Limit',
+            text: `Only ${product.stock} available.`,
+          });
+          return;
+        }
+        cartData[existingIndex].quantity += quantity;
       } else {
-        item.quantity = quantity;
+        if (quantity > product.stock) {
+          Swal.fire({ icon: 'error', title: 'Insufficient Stock' });
+          return;
+        }
+        cartData.push({ ...product, size, quantity });
       }
       setCartItems(cartData);
+
+      Swal.fire({
+        toast: true,
+        icon: 'success',
+        title: 'Item added (Guest)',
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
-  // 5. Remove Item
-  const removeFromCart = (itemId, size) => {
-    setCartItems(cartItems.filter((item) => !(item.id === itemId && item.size === size)));
-  };
+  /**
+   * 5. UPDATE QUANTITY
+   */
+  const updateQuantity = async (itemId, size, quantity) => {
+    if (isAuthenticated()) {
+      try {
+        const item = cartItems.find(i => i.id === itemId && i.size === size);
+        if (!item) return;
 
-  // 6. Get Total Amount (Safe Calculation)
-  const getTotalAmount = () => {
-    let total = 0;
-    cartItems.forEach((item) => {
-      if (item.price && item.quantity) {
-        total += Number(item.price) * Number(item.quantity);
+        const response = await CartApi.updateQuantity(item.cart_id, quantity);
+
+        if (response.data.cart) {
+          const updatedItems = response.data.cart.map(item => ({
+            cart_id: item.id,
+            id: item.product.id,
+            name: item.product.name,
+            price: item.product.price,
+            image: item.product.image,
+            stock: item.product.stock,
+            quantity: item.quantity,
+            size: item.size
+          }));
+          setCartItems(updatedItems);
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Update failed',
+          text: error.response?.data?.message || 'Could not update quantity',
+        });
       }
-    });
-    return total;
+    } else {
+      // Guest Logic
+      const updatedCart = cartItems.map(item => {
+        if (item.id === itemId && item.size === size) {
+          const finalQty = Math.min(quantity, item.stock);
+          if (quantity > item.stock) {
+            Swal.fire({ icon: 'warning', title: 'Limit Reached', text: `Only ${item.stock} in stock` });
+          }
+          return { ...item, quantity: Math.max(1, finalQty) };
+        }
+        return item;
+      });
+      setCartItems(updatedCart);
+    }
   };
 
-  // 7. Clear Cart
+  /**
+   * 6. REMOVE ITEM
+   */
+  const removeFromCart = async (itemId, size) => {
+    if (isAuthenticated()) {
+      try {
+        const item = cartItems.find(i => i.id === itemId && i.size === size);
+        if (!item) return;
+
+        const response = await CartApi.removeFromCart(item.cart_id);
+
+        if (response.data.cart) {
+          const updatedItems = response.data.cart.map(item => ({
+            cart_id: item.id,
+            id: item.product.id,
+            name: item.product.name,
+            price: item.product.price,
+            image: item.product.image,
+            stock: item.product.stock,
+            quantity: item.quantity,
+            size: item.size
+          }));
+          setCartItems(updatedItems);
+        }
+      } catch (error) {
+        console.error("Removal failed:", error);
+      }
+    } else {
+      setCartItems(cartItems.filter((item) => !(item.id === itemId && item.size === size)));
+    }
+  };
+
+  /**
+   * 7. UTILS
+   */
+  const getTotalAmount = () => {
+    return cartItems.reduce((acc, item) => acc + (Number(item.price) * item.quantity), 0);
+  };
+
   const clearCart = () => {
     setCartItems([]);
     localStorage.removeItem("cartItems");
+    // Note: Backend clear should be handled via API if needed (e.g. after order)
   };
 
   const value = {
     cartItems,
+    loading,
     addToCart,
     updateQuantity,
     removeFromCart,
     getTotalAmount,
-    clearCart
+    clearCart,
+    syncGuestCart,
+    hydrateCart
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

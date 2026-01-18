@@ -65,8 +65,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Cart
     Route::prefix('cart')->group(function () {
-        Route::post('/', [CartController::class, 'index']);
+        Route::get('/', [CartController::class, 'index']); // Changed from POST to GET
         Route::post('/', [CartController::class, 'addToCart']);
+        Route::post('/sync', [CartController::class, 'sync']); // Added sync endpoint
         Route::put('/{id}', [CartController::class, 'updateQuantity']);
         Route::delete('/{id}', [CartController::class, 'removeFromCart']);
     });

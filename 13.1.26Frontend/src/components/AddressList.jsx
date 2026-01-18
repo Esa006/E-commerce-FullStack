@@ -91,10 +91,11 @@ const AddressList = () => {
                 });
 
             } catch (err) {
+                const msg = err.response?.data?.message || "Failed to delete address";
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to delete address'
+                    title: 'Restricted Action',
+                    text: msg
                 });
             }
         }
