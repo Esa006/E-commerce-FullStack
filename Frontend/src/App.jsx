@@ -28,12 +28,14 @@ const CancellationPolicy = React.lazy(() => import("./pages/CancellationPolicy")
 // Auth
 const Login = React.lazy(() => import("./auth/Login"));
 const Register = React.lazy(() => import("./auth/Register"));
+const ForgotPassword = React.lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = React.lazy(() => import("./pages/ResetPassword"));
 
 import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
   const location = useLocation();
-  const isNoLayout = location.pathname === '/login' || location.pathname === '/register';
+  const isNoLayout = ['/login', '/register', '/forgot-password', '/reset-password'].includes(location.pathname);
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -71,6 +73,8 @@ function App() {
               {/* Auth Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/profile" element={<Profile />} />
 
 

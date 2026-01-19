@@ -107,6 +107,28 @@ const ProductApi = {
     // 7. Delete Product (Admin)
     delete: (id) => {
         return axiosClient.delete(`/products/${id}`);
+    },
+
+    // 8. Get New Arrivals (Specialized Endpoint)
+    getNewArrivals: async () => {
+        try {
+            const response = await axiosClient.get('/products/new-arrivals');
+            return response.data.success ? response.data.products : [];
+        } catch (error) {
+            console.error("New Arrivals API error:", error);
+            return [];
+        }
+    },
+
+    // 9. Get Bestsellers (Specialized Endpoint)
+    getBestsellers: async () => {
+        try {
+            const response = await axiosClient.get('/products/bestsellers');
+            return response.data.success ? response.data.products : [];
+        } catch (error) {
+            console.error("Bestsellers API error:", error);
+            return [];
+        }
     }
 };
 

@@ -1,5 +1,12 @@
 <?php
 
+// Fix for cacert.pem issue on Windows
+$cacertPath = realpath(__DIR__ . '/../cacert.pem');
+if ($cacertPath) {
+    ini_set('curl.cainfo', $cacertPath);
+    ini_set('openssl.cafile', $cacertPath);
+}
+
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 

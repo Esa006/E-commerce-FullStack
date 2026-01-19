@@ -36,4 +36,14 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\BackpackResetPasswordNotification($token));
+    }
 }

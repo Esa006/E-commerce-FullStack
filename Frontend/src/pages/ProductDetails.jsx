@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import BackButton from "../components/BackButton";
 import { parseImages, getImageUrl, PLACEHOLDER_IMG } from "../utils/imageUtils";
 import Observability from "../utils/Observability";
-
+import ProductApi from "../api/Products";
 import StarRating from "../components/StarRating";
 import ProductCard from "../components/ProductCard";
 
@@ -82,25 +82,27 @@ const ProductDetails = () => {
 
       const fetchRelated = async () => {
         try {
-          const res = await apiClient.get("/products", {
-            signal: controller.signal
+          // Use the ProductApi for consistency
+          const targetCat = productData.category?.name || productData.category || "";
+
+          if (!targetCat) return;
+
+          const { items } = await ProductApi.getProducts({
+            category: targetCat,
+            per_page: 8
           });
-          const allProducts = Array.isArray(res.data) ? res.data : (res.data.data || []);
 
-          const getCatName = (p) => p.category?.name || p.category || p.category_name || "";
-          const targetCat = getCatName(productData);
-
-          const related = allProducts
-            .filter(p => getCatName(p) === targetCat && p.id !== productData.id)
+          // Filter out the current product and limit to 4
+          const related = items
+            .filter(p => p.id !== productData.id)
             .slice(0, 4);
 
           setRelatedProducts(related);
         } catch (err) {
-          if (axios.isCancel(err)) return;
+          console.error("Error fetching related products:", err);
         }
       };
       fetchRelated();
-      return () => controller.abort();
     }
   }, [productData]);
 

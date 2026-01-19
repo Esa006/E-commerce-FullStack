@@ -93,6 +93,9 @@ export default function Login() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
+                            <div className="text-end mt-2">
+                                <Link to="/forgot-password" size="sm" className="text-muted small text-decoration-none">Forgot Password?</Link>
+                            </div>
                         </div>
 
                         {/* Submit Button */}

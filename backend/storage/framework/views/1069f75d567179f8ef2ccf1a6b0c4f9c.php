@@ -1,3 +1,0 @@
-<button class="navbar-toggler collapsed p-0" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-menu" aria-controls="mobile-menu" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-</button><?php /**PATH C:\Users\Admin\Downloads\E-commerce-FullStack\13.1.26-backend\vendor/backpack/theme-tabler/resources/views/layouts/partials/mobile_toggle_btn.blade.php ENDPATH**/ ?>

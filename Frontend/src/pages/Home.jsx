@@ -6,16 +6,22 @@ import ProductCard from "../components/ProductCard";
 import Swal from "sweetalert2";
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
+  const [newArrivals, setNewArrivals] = useState([]);
+  const [bestsellers, setBestsellers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(null);
 
-  const fetchLatestProducts = async () => {
+  const fetchHomeData = async () => {
     try {
       setApiError(null);
-      // Fetch latest products using unified API (handles pagination)
-      const { items } = await ProductApi.getProducts({ page: 1 });
-      setProducts(items);
+      // Fetch both New Arrivals and Bestsellers in parallel
+      const [arrivalsData, bestsellersData] = await Promise.all([
+        ProductApi.getNewArrivals(),
+        ProductApi.getBestsellers()
+      ]);
+
+      setNewArrivals(arrivalsData);
+      setBestsellers(bestsellersData);
     } catch (err) {
       Swal.fire({
         icon: 'error',
@@ -29,7 +35,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchLatestProducts();
+    fetchHomeData();
   }, []);
 
   if (loading)
@@ -93,24 +99,44 @@ const Home = () => {
 
 
 
-        <div className="text-center mb-5">
-          <h2 className="section-title">Latest Products</h2>
-          <p className="text-muted">Discover our newest arrivals.</p>
+        {/* Bestseller Section */}
+        <div className="text-center mb-5 mt-5">
+          <h2 className="section-title text-uppercase">Best Sellers</h2>
+          <p className="text-muted">Explore our most popular items loved by everyone.</p>
         </div>
-        <div className="row">
-          {products.length > 0 ? (
-            products.slice(0, 8).map((item) => (
+        <div className="row mb-5">
+          {bestsellers.length > 0 ? (
+            bestsellers.slice(0, 4).map((item) => (
               <div key={item.id} className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4">
                 <ProductCard product={item} />
               </div>
             ))
           ) : (
-            <div className="col-12 text-center">
-              <p>No products found.</p>
+            <div className="col-12 text-center text-muted">
+              <p>Check back soon for our top picks!</p>
             </div>
           )}
         </div>
-      </div >
+
+        {/* New Arrivals Section */}
+        <div className="text-center mb-5 pt-4">
+          <h2 className="section-title text-uppercase">Latest Products</h2>
+          <p className="text-muted">Discover our newest arrivals.</p>
+        </div>
+        <div className="row">
+          {newArrivals.length > 0 ? (
+            newArrivals.slice(0, 8).map((item) => (
+              <div key={item.id} className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4">
+                <ProductCard product={item} />
+              </div>
+            ))
+          ) : (
+            <div className="col-12 text-center text-muted">
+              <p>No new products found at the moment.</p>
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 };
