@@ -46,8 +46,9 @@ class ProductController extends Controller
                 break;
         }
 
-        // 5. Pagination (Senior-grade performance)
-        $products = $query->paginate(12);
+        // 5. Pagination (Dynamic per_page with max limit)
+        $perPage = min((int) $request->input('per_page', 12), 60); // Default 12, max 60
+        $products = $query->paginate($perPage);
         
         return response()->json([
             'success' => true,
@@ -114,7 +115,6 @@ class ProductController extends Controller
             'products' => $products
         ]);
     }
-
     /**
      * Get bestsellers
      */

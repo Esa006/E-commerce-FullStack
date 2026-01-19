@@ -93,22 +93,22 @@ const Home = () => {
 
 
 
-
-        <div className="section-title" >
+        <div className="text-center mb-5">
           <h2 className="section-title">Latest Products</h2>
-          <div className="row">
-            {products.length > 0 ? (
-              products.slice(0, 8).map((item) => (
-                <div key={item.id} className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4">
-                  <ProductCard product={item} />
-                </div>
-              ))
-            ) : (
-              <div className="col-12 text-center">
-                <p>No products found.</p>
+          <p className="text-muted">Discover our newest arrivals.</p>
+        </div>
+        <div className="row">
+          {products.length > 0 ? (
+            products.slice(0, 8).map((item) => (
+              <div key={item.id} className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4">
+                <ProductCard product={item} />
               </div>
-            )}
-          </div>
+            ))
+          ) : (
+            <div className="col-12 text-center">
+              <p>No products found.</p>
+            </div>
+          )}
         </div>
       </div >
     </>

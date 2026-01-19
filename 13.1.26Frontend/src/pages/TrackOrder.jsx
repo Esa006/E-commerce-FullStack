@@ -3,6 +3,7 @@ import ordersApi from "../api/orders";
 import Swal from "sweetalert2";
 import { FaCheckCircle, FaBox, FaTruck, FaHome } from "react-icons/fa";
 import BackButton from "../components/BackButton";
+import { parseImages, getImageUrl } from "../utils/imageUtils";
 
 
 const TrackOrder = () => {
@@ -213,6 +214,10 @@ const TrackOrder = () => {
 
                                     <div className="row g-3">
                                         <div className="col-md-6">
+                                            <p className="mb-1 small text-muted text-uppercase">Customer Name</p>
+                                            <p className="mb-0 fw-bold">{orderData.full_name || orderData.customer_name || "N/A"}</p>
+                                        </div>
+                                        <div className="col-md-6">
                                             <p className="mb-1 small text-muted text-uppercase">Order Number</p>
                                             <p className="mb-0 fw-bold">{orderData.order_number || `#${orderData.id}`}</p>
                                         </div>
@@ -261,72 +266,84 @@ const TrackOrder = () => {
                                         )}
 
                                         <p className="mb-0 mt-2">
-                                            <span className="text-muted">Phone:</span> {orderData.phone}
+                                            <span className="text-muted">Phone:</span> {orderData.phone || orderData.address?.phone || orderData.user?.phone || 'N/A'}
                                         </p>
                                         <p className="mb-0">
-                                            <span className="text-muted">Email:</span> {orderData.email}
+                                            <span className="text-muted">Email:</span> {orderData.email || orderData.address?.email || orderData.user?.email || 'N/A'}
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Order Items */}
+                            {/* Order Items Table */}
                             <div className="card shadow-sm border-0">
                                 <div className="card-body p-4">
                                     <h5 className="fw-bold mb-4">Order Items</h5>
 
-                                    {orderData.items && orderData.items.map((item, idx) => {
-                                        let imageUrl = "https://via.placeholder.com/80x100?text=No+Img";
-                                        try {
-                                            const rawImg = item.product?.image || item.image;
-                                            if (rawImg) {
-                                                if (typeof rawImg === 'string' && rawImg.startsWith('[')) {
-                                                    // It's likely a JSON array string
-                                                    const parsed = JSON.parse(rawImg);
-                                                    const imgPath = Array.isArray(parsed) ? parsed[0] : parsed;
-                                                    imageUrl = `http://127.0.0.1:8000/storage/${imgPath}`;
-                                                } else if (typeof rawImg === 'string') {
-                                                    // It's a plain string path
-                                                    imageUrl = `http://127.0.0.1:8000/storage/${rawImg}`;
-                                                }
-                                            }
-                                        } catch (e) {
-                                            console.error("Image parsing error, using raw:", e);
-                                            // Fallback: try using raw if parse failed but it's a string
-                                            const rawImg = item.product?.image || item.image;
-                                            if (typeof rawImg === 'string') {
-                                                imageUrl = `http://127.0.0.1:8000/storage/${rawImg}`;
-                                            }
-                                        }
+                                    <div className="table-responsive">
+                                        <table className="table table-borderless align-middle">
+                                            <thead className="bg-light">
+                                                <tr className="text-uppercase small text-muted">
+                                                    <th className="py-3 ps-3" style={{ minWidth: '80px' }}>Image</th>
+                                                    <th className="py-3" style={{ minWidth: '200px' }}>Product</th>
+                                                    <th className="py-3 text-center">Size</th>
+                                                    <th className="py-3 text-center">Qty</th>
+                                                    <th className="py-3 text-end">Price</th>
+                                                    <th className="py-3 text-end pe-3">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {orderData.items && orderData.items.map((item, idx) => {
+                                                    // Use shared utilities for robust image parsing
+                                                    const rawImg = item.product?.image || item.image;
+                                                    const images = parseImages(rawImg);
+                                                    const imageUrl = images.length > 0 ? getImageUrl(images[0]) : "https://via.placeholder.com/80x100?text=No+Img";
 
-                                        return (
-                                            <div key={idx} className={`d-flex gap-3 align-items-start ${idx !== orderData.items.length - 1 ? 'border-bottom pb-3 mb-3' : ''}`}>
-                                                <img
-                                                    src={imageUrl}
-                                                    alt="product"
-                                                    className="rounded border object-fit-cover order-item-img"
-                                                    onError={(e) => {
-                                                        e.target.src = "https://via.placeholder.com/80x100?text=Error";
-                                                    }}
-                                                />
-                                                <div className="flex-grow-1">
-                                                    <h6 className="mb-1 fw-bold">
-                                                        {item.product_name || item.product?.name || "Product Name"}
-                                                    </h6>
-                                                    <p className="mb-1 text-muted small">
-                                                        Size: {item.size || "N/A"} | Qty: {item.quantity}
-                                                    </p>
-                                                    <p className="mb-0 fw-semibold text-dark">₹{item.price}</p>
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-
-                                    <div className="mt-4 pt-3 border-top">
-                                        <div className="d-flex justify-content-between">
-                                            <span className="fw-bold fs-5">Total</span>
-                                            <span className="fw-bold fs-5 text-dark">₹{orderData.total_amount || (orderData.items ? orderData.items.reduce((acc, item) => acc + (parseFloat(item.price) * item.quantity), 0).toFixed(2) : '0.00')}</span>
-                                        </div>
+                                                    return (
+                                                        <tr key={idx} className="border-bottom">
+                                                            <td className="ps-3 py-3">
+                                                                <img
+                                                                    src={imageUrl}
+                                                                    alt="product"
+                                                                    className="rounded border object-fit-cover"
+                                                                    style={{ width: "60px", height: "80px" }}
+                                                                    onError={(e) => {
+                                                                        e.target.src = "https://via.placeholder.com/60x80?text=Error";
+                                                                    }}
+                                                                />
+                                                            </td>
+                                                            <td className="py-3">
+                                                                <p className="mb-0 fw-bold text-dark">
+                                                                    {item.product_name || item.product?.name || "Product Name"}
+                                                                </p>
+                                                            </td>
+                                                            <td className="py-3 text-center">
+                                                                <span className="badge bg-light text-dark border px-3">
+                                                                    {item.size || "N/A"}
+                                                                </span>
+                                                            </td>
+                                                            <td className="py-3 text-center">
+                                                                {item.quantity}
+                                                            </td>
+                                                            <td className="py-3 text-end">
+                                                                ₹{parseFloat(item.price).toFixed(2)}
+                                                            </td>
+                                                            <td className="py-3 text-end pe-3 fw-bold">
+                                                                ₹{(parseFloat(item.price) * item.quantity).toFixed(2)}
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colSpan="5" className="text-end pt-4 pb-0 fw-bold fs-5">Total Amount</td>
+                                                    <td className="text-end pt-4 pb-0 fw-bold fs-5 pe-3 text-primary">
+                                                        ₹{orderData.total_amount || (orderData.items ? orderData.items.reduce((acc, item) => acc + (parseFloat(item.price) * item.quantity), 0).toFixed(2) : '0.00')}
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
                                     </div>
                                 </div>
                             </div>

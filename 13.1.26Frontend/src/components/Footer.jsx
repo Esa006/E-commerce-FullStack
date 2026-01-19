@@ -75,7 +75,7 @@ const Footer = () => {
                         </div>
                     </div>
                     <div className='text-center text-md-end'>
-                        Copyright © 2024 Forever. All Rights Reserved.
+                        Copyright © 2026 Forever. All Rights Reserved.
                     </div>
                 </div>
             </div>

@@ -5,13 +5,11 @@ import ProductCard from '../components/ProductCard';
 import { useSearchParams } from 'react-router-dom';
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [products, setProducts] = useState([]); // Products from API
   const [loading, setLoading] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Filter States
   // Filter States
   const [category, setCategory] = useState(() => {
     const cat = searchParams.get('category');
@@ -26,27 +24,30 @@ const Products = () => {
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
-  // 1. Initial Data Fetch (Brands & Categories)
+  // 1. Initial Metadata Fetch (Categories & Brands)
   useEffect(() => {
     fetchCategories();
     fetchBrands();
   }, []);
 
-  // 2. Fetch Products when Filter/Page/Search Changes
+  // 2. Fetch Products whenever filters/page/search change
   useEffect(() => {
-    let active = true;
-    fetchProducts(active);
-    return () => { active = false; };
-  }, [currentPage, sortType, category, brand, search]);
+    fetchProducts();
+  }, [category, brand, search, sortType, currentPage]);
 
-  // Sync URL Params with State (Used for back/forward navigation)
+  // Sync URL Params (Back/Forward Navigation Support)
   useEffect(() => {
     const categoryParam = searchParams.get('category');
     if (categoryParam) {
-      setCategory(prev => (prev[0] === categoryParam ? prev : [categoryParam]));
+      // Only update if different to avoid infinite loops if complex
+      if (!category.includes(categoryParam)) setCategory([categoryParam]);
     } else {
-      setCategory(prev => (prev.length === 0 ? prev : []));
+      if (category.length > 0 && !searchParams.has('category_cleared')) {
+        // Optional: Logic to clear category if URL param Removed.
+        // For now, simpler to leave unless explicit navigation.
+      }
     }
 
     const pageParam = parseInt(searchParams.get('page')) || 1;
@@ -66,42 +67,46 @@ const Products = () => {
     setBrands(brands);
   };
 
-
-  const fetchProducts = async (active = true) => {
+  // --- 🟢 SERVER-SIDE SEARCH & FILTER ---
+  const fetchProducts = async () => {
     try {
       setLoading(true);
 
       const params = {
         page: currentPage,
-        sort: sortType !== 'relevant' ? sortType : undefined,
-        category: category.length > 0 ? category.join(',') : undefined,
-        brand: brand.length > 0 ? brand.join(',') : undefined,
-        search: search || undefined
+        search: search,
+        sort: sortType,
+        category: category.join(','), // Server expects comma-separated
+        brand: brand.join(','),       // Server expects comma-separated
+        per_page: 12                  // Request 12 per page
       };
 
+      // Call API
       const { items, pagination } = await ProductApi.getProducts(params);
 
-      if (!active) return; // Ignore result if a newer request is already in flight
-
       setProducts(items);
-      setFilteredProducts(items);
       setTotalPages(pagination.last_page);
+      setTotalItems(pagination.total);
 
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
-      if (active) setLoading(false);
+      setLoading(false);
     }
   };
-
 
   // 3. Toggle Category Filter
   const toggleCategory = (e) => {
     const value = e.target.value;
     setCategory(prev => {
       // Reset page to 1 on filter change
-      setCurrentPage(1);
-      return prev.includes(value) ? prev.filter(c => c !== value) : [...prev, value];
+      if (currentPage !== 1) setCurrentPage(1);
+
+      const newCats = prev.includes(value) ? prev.filter(c => c !== value) : [...prev, value];
+
+      // Update URL to reflect primary category if single, or remove if empty
+      // This is a UI nicety, not core logic
+      return newCats;
     });
   };
 
@@ -109,7 +114,7 @@ const Products = () => {
   const toggleBrand = (e) => {
     const value = e.target.value;
     setBrand(prev => {
-      setCurrentPage(1);
+      if (currentPage !== 1) setCurrentPage(1);
       return prev.includes(value) ? prev.filter(b => b !== value) : [...prev, value];
     });
   };
@@ -199,11 +204,14 @@ const Products = () => {
 
           {/* Header: Sort & Meta */}
           <div className='d-flex justify-content-between align-items-center mb-4'>
-            <p className='mb-0 small fw-bold text-muted'>Showing {filteredProducts.length} products</p>
+            <p className='mb-0 small fw-bold text-muted'>
+              {loading ? 'Searching...' : `Showing ${products.length} of ${totalItems} products`}
+            </p>
 
             <select
               className='form-select form-select-sm w-auto border-secondary'
               onChange={(e) => setSortType(e.target.value)}
+              value={sortType}
             >
               <option value="relevant">Sort by: Relevant</option>
               <option value="low-high">Sort by: Low to High</option>
@@ -216,9 +224,10 @@ const Products = () => {
             {loading ? (
               <div className='col-12 text-center py-5'>
                 <div className="spinner-border text-secondary" role="status"></div>
+                <p className="mt-2 text-muted">Loading products...</p>
               </div>
-            ) : filteredProducts.length > 0 ? (
-              filteredProducts.map((item) => (
+            ) : products.length > 0 ? (
+              products.map((item) => (
                 <div key={item.id} className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                   <ProductCard product={item} />
                 </div>

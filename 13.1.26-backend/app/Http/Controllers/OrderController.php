@@ -65,7 +65,8 @@ class OrderController extends Controller
                     $processedItems[] = [
                         'product' => $product,
                         'quantity' => $item['quantity'],
-                        'price' => $itemPrice
+                        'price' => $itemPrice,
+                        'size' => $item['size'] ?? null, // 🟢 Save Size (Nullable)
                     ];
                 }
 
@@ -105,6 +106,7 @@ class OrderController extends Controller
                         'product_id' => $product->id,
                         'quantity' => $pItem['quantity'],
                         'price' => $pItem['price'], // 🟢 Database-sourced price
+                        'size' => $pItem['size'], // 🟢 Save Size
                     ]);
                 }
 
@@ -264,11 +266,14 @@ class OrderController extends Controller
 
         return response()->json([
             'order_number' => $order->order_number,
+            'email' => $order->email,
+            'phone' => $order->phone, // 🟢 Added for missing contact info
             'status' => $order->status,
             'tracking_number' => $order->tracking_number,
             'expected_delivery_date' => $order->expected_delivery_date,
             'total_amount' => $order->total_amount,
             'created_at' => $order->created_at,
+            'full_name' => trim($order->first_name . ' ' . $order->last_name), // 🟢 Added Name
             'address' => [
                 'line1' => $order->address,
                 'line2' => $order->address_line2,

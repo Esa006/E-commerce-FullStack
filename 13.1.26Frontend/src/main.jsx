@@ -4,10 +4,9 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import CartProvider from "./context/CartContext";
 import WishlistProvider from "./context/WishlistContext";
-import "./index.css";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "./index.css";
 
 import Observability from "./utils/Observability";
 import ErrorBoundary from "./components/ErrorBoundary";

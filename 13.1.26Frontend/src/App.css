@@ -1,9 +1,3 @@
-/* Admin hover effect */
-.hover-effect:hover {
-    background-color: rgba(var(--bs-white-rgb), 0.1);
-    border-radius: 0.25rem;
-}
-
 .category-card-img {
     height: 380px;
 }
@@ -62,16 +56,3 @@
 .w-40 {
     width: 40% !important;
 }
-
-/* 🟢 CUSTOM PAGINATION STYLING (Kept for search feature)
-.custom-pagination .page-link {
-    color: #000 !important;
-    border-color: #eee !important;
-    padding: 0.6rem 1rem;
-}
-
-.custom-pagination .page-item.active .page-link {
-    background-color: #000 !important;
-    border-color: #000 !important;
-    color: #fff !important;
-} */
