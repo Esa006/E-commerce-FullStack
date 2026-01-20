@@ -195,7 +195,7 @@ const Checkout = () => {
   };
 
   return (
-    <div className="container mt-5 pt-5 mb-5">
+    <div className="container mt-5  mb-5">
       <BackButton to="/cart" label="Back to Cart" />
 
       <form onSubmit={onSubmitHandler} className="d-flex flex-column flex-lg-row justify-content-lg-between gap-4">
@@ -213,7 +213,7 @@ const Checkout = () => {
                 <option value="new">-- Use a New Address --</option>
                 {savedAddresses.map(addr => (
                   <option key={addr.id} value={addr.id}>
-                    {addr.full_name} - {addr.address_line1}, {addr.city} {addr.is_default ? "(Default)" : ""}
+                    {(addr.name || addr.full_name)} - {(addr.address || addr.address_line1)}, {addr.city} {addr.is_default ? "(Default)" : ""}
                   </option>
                 ))}
               </select>
@@ -227,7 +227,6 @@ const Checkout = () => {
           <div className="d-flex flex-column gap-3">
             <div className="d-flex flex-column flex-sm-row gap-3">
               <input required name="firstName" value={formData.firstName} onChange={onChangeHandler} className="form-control flex-fill" placeholder="First Name" />
-              <input required name="lastName" value={formData.lastName} onChange={onChangeHandler} className="form-control flex-fill" placeholder="Last Name" />
             </div>
             <input required name="email" value={formData.email} onChange={onChangeHandler} className="form-control" placeholder="Email Address" />
             <input required name="address" value={formData.address} onChange={onChangeHandler} className="form-control" placeholder="Street Address" />

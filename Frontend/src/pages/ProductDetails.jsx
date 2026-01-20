@@ -169,22 +169,21 @@ const ProductDetails = () => {
 
   return (
     <div className="container-fluid px-3 px-md-4 px-lg-5 py-5">
-      {/* Breadcrumbs */}
-      <nav aria-label="breadcrumb" className="mb-4 px-5">
-        <ol className="breadcrumb d-flex justify-content-start px-5">
-          <li className="breadcrumb-item"><Link to="/" className="text-decoration-none text-muted">Home</Link></li>
-          <li className="breadcrumb-item">
-            <Link to={`/products?category=${productData.category?.name || productData.category || 'All'}`} className="text-decoration-none text-muted">
-              {productData.category?.name || productData.category || productData.category_name || 'Shop'}
-            </Link>
-          </li>
-          <li className="breadcrumb-item active text-dark" aria-current="page">{productData.name}</li>
-        </ol>
-      </nav>
-
-      <div className="row g-5">
+      <div className="row g-1">
         {/* Left Column: Image Gallery */}
         <div className="col-12 col-md-6">
+          {/* Breadcrumbs */}
+          <nav aria-label="breadcrumb" className="mb-4 ">
+            <ol className="breadcrumb d-flex justify-content-center ">
+              <li className="breadcrumb-item"><Link to="/" className="text-decoration-none text-muted">Home</Link></li>
+              <li className="breadcrumb-item">
+                <Link to={`/products?category=${productData.category?.name || productData.category || 'All'}`} className="text-decoration-none text-muted">
+                  {productData.category?.name || productData.category || productData.category_name || 'Shop'}
+                </Link>
+              </li>
+              <li className="breadcrumb-item active text-dark" aria-current="page">{productData.name}</li>
+            </ol>
+          </nav>
           <div className="mb-3 text-center">
             <img
               src={selectedImage ? getImageUrl(selectedImage) : PLACEHOLDER_IMG}
@@ -406,22 +405,24 @@ const ProductDetails = () => {
         </div>
       </div>
 
-
-      {/* Related Products Section */}
-      {
-        relatedProducts.length > 0 && (
-          <div className="mt-5 pt-5 text-center">
-            <h3 className="fw-bold mb-4">You May Also Like</h3>
-            <div className="row justify-content-center">
-              {relatedProducts.map(product => (
-                <div key={product.id} className="col-6 col-md-4 col-lg-3 col-xl-3 mb-4">
-                  <ProductCard product={product} />
-                </div>
-              ))}
+      <div>
+        {/* Related Products Section */}
+        {
+          relatedProducts.length > 0 && (
+            <div className="mt-5 pt-5 text-center">
+              <h3 className="fw-bold mb-4">You May Also Like</h3>
+              <div className="row justify-content-center">
+                {relatedProducts.map(product => (
+                  <div key={product.id} className="col-6 col-md-4 col-lg-3 col-xl-3 mb-4">
+                    <ProductCard product={product} />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )
-      }
+          )
+        }
+      </div>
+
 
     </div >
 

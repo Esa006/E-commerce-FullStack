@@ -27,6 +27,7 @@ const ProductCard = ({ product }) => {
           <img
             src={displayImage}
             className="object-fit-cover w-100 h-100 rounded-top"
+            loading="lazy"
             alt={product?.name || "Product"}
             onError={(e) => {
               e.target.onerror = null;

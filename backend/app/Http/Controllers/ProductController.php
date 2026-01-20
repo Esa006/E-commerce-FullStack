@@ -47,7 +47,7 @@ class ProductController extends Controller
         }
 
         // 5. Pagination (Dynamic per_page with max limit)
-        $perPage = min((int) $request->input('per_page', 12), 60); // Default 12, max 60
+        $perPage = min((int) $request->input('per_page',10), 60); // Default 12, max 60
         $products = $query->paginate($perPage);
         
         return response()->json([

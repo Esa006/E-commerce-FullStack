@@ -13,10 +13,10 @@
 export const parseImages = (data) => {
     try {
         if (!data) return [];
-        
+
         // If it's already an array, return it
         if (Array.isArray(data)) return data;
-        
+
         // If it's a string, attempt to parse it
         if (typeof data === "string") {
             // Check if it looks like a JSON array
@@ -29,14 +29,14 @@ export const parseImages = (data) => {
                 } catch (e) {
                     // Fallback execution if JSON parse fails but it looks like an array
                     // Regex to strip [ ] and " 
-                     return data.replace(/[\[\]"]/g, '').split(',').map(s => s.trim()).filter(s => s !== ""); 
+                    return data.replace(/[\[\]"]/g, '').split(',').map(s => s.trim()).filter(s => s !== "");
                 }
             }
-            
+
             // It's a plain string, likely a single image path
             return [data];
         }
-        
+
         return [data];
     } catch (e) {
         console.error("Error parsing images:", e);

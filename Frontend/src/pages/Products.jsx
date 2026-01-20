@@ -129,13 +129,15 @@ const Products = () => {
   };
 
   return (
-    <div className='container-fluid px-sm-3 px-lg-5 pt-3 border-top'>
+    <div className='container-fluid   border-top'>
 
 
       {/* Title */}
       <div className='py-4 text-center'>
-        <h2 className='fs-2 fw-normal'>
-          <span className='text-muted fw-bold'>ALL</span> COLLECTIONS
+        <h2 className='fs-2 fw-normal text-uppercase'>
+          <span className='text-muted fw-bold'>
+            {category.length === 1 ? category[0].toUpperCase() : 'ALL'}
+          </span> Collection
         </h2>
         <p className='w-lg-75 mx-auto text-muted'>
           Browse our latest collection of premium products.
@@ -148,7 +150,7 @@ const Products = () => {
 
           {/* Mobile Filter Toggle */}
           <div className='d-flex align-items-center justify-content-between mb-3 d-lg-none'>
-            <p className='fs-5 fw-bold my-2'>FILTERS</p>
+            <p className='fs-5 fw-bold my-2'>Fliter</p>
             <button
               className='btn btn-outline-dark btn-sm'
               onClick={() => setShowFilter(!showFilter)}
@@ -219,10 +221,9 @@ const Products = () => {
             </select>
           </div>
 
-          {/* Grid */}
           <div className='row g-4'>
             {loading ? (
-              <div className='col-12 text-center py-5'>
+              <div className='col-12 text-center py-5' style={{ minHeight: '600px' }}>
                 <div className="spinner-border text-secondary" role="status"></div>
                 <p className="mt-2 text-muted">Loading products...</p>
               </div>
@@ -241,12 +242,17 @@ const Products = () => {
           </div>
 
           {/* Pagination Controls */}
-          {totalPages > 1 && (
+          {!loading && products.length > 0 && totalPages > 1 && (
             <div className='d-flex justify-content-center mt-5'>
               <nav aria-label="Page navigation">
                 <ul className="pagination">
-                  <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                    <button className="page-link text-dark" onClick={() => handlePageChange(Math.max(currentPage - 1, 1))} aria-label="Previous">
+                  <li className={`page-item ${currentPage === 1 || loading ? 'disabled' : ''}`}>
+                    <button
+                      className="page-link text-dark"
+                      onClick={() => !loading && handlePageChange(Math.max(currentPage - 1, 1))}
+                      aria-label="Previous"
+                      disabled={loading}
+                    >
                       <span aria-hidden="true">&laquo;</span>
                     </button>
                   </li>
@@ -255,15 +261,21 @@ const Products = () => {
                     <li key={i + 1} className="page-item">
                       <button
                         className={`page-link ${currentPage === i + 1 ? 'bg-dark border-dark text-white' : 'text-dark border-light-subtle'}`}
-                        onClick={() => handlePageChange(i + 1)}
+                        onClick={() => !loading && handlePageChange(i + 1)}
+                        disabled={loading}
                       >
                         {i + 1}
                       </button>
                     </li>
                   ))}
 
-                  <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                    <button className="page-link text-dark" onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))} aria-label="Next">
+                  <li className={`page-item ${currentPage === totalPages || loading ? 'disabled' : ''}`}>
+                    <button
+                      className="page-link text-dark"
+                      onClick={() => !loading && handlePageChange(Math.min(currentPage + 1, totalPages))}
+                      aria-label="Next"
+                      disabled={loading}
+                    >
                       <span aria-hidden="true">&raquo;</span>
                     </button>
                   </li>
