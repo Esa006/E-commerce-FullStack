@@ -57,4 +57,64 @@
     width: 40% !important;
 }
 
-*/
+/* Utility for breadcrumb truncation */
+.mw-400 {
+    max-width: 400px;
+}
+
+/* Utility to disable textarea resize */
+.resize-none {
+    resize: none;
+}
+
+/* Sidebar min-width */
+.min-w-240 {
+    min-width: 240px;
+}
+
+/* Min-height for loading/empty states */
+.min-h-600 {
+    min-height: 600px;
+}
+
+/* Product Card Wrapper for responsive sizing in flex/grid */
+/* Min-widths for responsive cards */
+.min-w-250 {
+    min-width: 250px;
+}
+
+/* Flex grow utilities with 0 basis for equal columns */
+.flex-2-0 {
+    flex: 2 0 0% !important;
+}
+
+.flex-1-0 {
+    flex: 1 0 0% !important;
+}
+
+/* Search Bar Input Styling */
+.search-input {
+    width: 240px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+/* Cursor Utilities */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-default {
+    cursor: default;
+}
+
+/* Footer Column Styling */
+.footer-col {
+    width: 25%;
+    min-width: 250px;
+}
+
+/* Utilities */
+.flex-basis-50 {
+    flex-basis: 50%;
+}

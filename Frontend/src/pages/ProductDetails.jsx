@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
@@ -33,46 +33,33 @@ const ProductDetails = () => {
   const [submittingReview, setSubmittingReview] = useState(false);
 
 
+  const fetchProductData = useCallback(async (signal) => {
+    try {
+      setLoading(true);
+      const response = await apiClient.get(`/products/${id}`, { signal });
+      if (response.data.success) {
+        setProductData(response.data.data);
+        setQuantity(response.data.data.qty_step || 1);
+
+        // Performance marking
+        const loadTime = Math.round(performance.now());
+        Observability.reportPerformance(`ProductDetailPage_Load_${id}`, loadTime);
+      }
+      setLoading(false);
+    } catch (error) {
+      if (axios.isCancel(error)) return;
+      if (error.response && error.response.status === 404) {
+        setProductNotFound(true);
+      }
+      setLoading(false);
+    }
+  }, [id]);
+
   useEffect(() => {
     const controller = new AbortController();
-    const startTime = performance.now();
-
-    const fetchProductData = async () => {
-      try {
-        const response = await apiClient.get(`/products/${id}`, {
-          signal: controller.signal
-        });
-        console.log(response.data);
-
-        if (response.data.success) {
-          const data = response.data.data;
-          setProductData(data);
-          setQuantity(data.qty_step || 1);
-
-          const endTime = performance.now();
-          const loadTime = Math.round(endTime - startTime);
-          Observability.reportPerformance(`ProductDetailPage_Load_${id}`, loadTime);
-        }
-        setLoading(false);
-      } catch (error) {
-        if (axios.isCancel(error)) return;
-
-        if (error.response && error.response.status === 404) {
-          setProductNotFound(true);
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to load product. Please try again later.',
-          });
-        }
-        setLoading(false);
-      }
-    };
-
-    fetchProductData();
+    fetchProductData(controller.signal);
     return () => controller.abort();
-  }, [id]);
+  }, [fetchProductData]);
 
   useEffect(() => {
     if (productData && productData.image) {
@@ -159,6 +146,8 @@ const ProductDetails = () => {
       Swal.fire({ icon: 'success', title: 'Review Submitted!', text: 'Thank you for your feedback.' });
       setReviewRating(0);
       setReviewComment("");
+      // Refresh data to show new review and updated rating
+      fetchProductData();
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to submit review.";
       Swal.fire({ icon: 'error', title: 'Review Failed', text: msg });
@@ -168,23 +157,24 @@ const ProductDetails = () => {
   };
 
   return (
-    <div className="container-fluid px-3 px-md-4 px-lg-5 py-5">
+    <div className="container py-5">
+      {/* Main Content Flex Container */}
       <div className="row g-1">
         {/* Left Column: Image Gallery */}
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-5">
           {/* Breadcrumbs */}
-          <nav aria-label="breadcrumb" className="mb-4 ">
-            <ol className="breadcrumb d-flex justify-content-center ">
+          <nav aria-label="breadcrumb" className="mb-4">
+            <ol className="breadcrumb d-flex justify-content-start align-items-center flex-nowrap small mb-0">
               <li className="breadcrumb-item"><Link to="/" className="text-decoration-none text-muted">Home</Link></li>
               <li className="breadcrumb-item">
                 <Link to={`/products?category=${productData.category?.name || productData.category || 'All'}`} className="text-decoration-none text-muted">
                   {productData.category?.name || productData.category || productData.category_name || 'Shop'}
                 </Link>
               </li>
-              <li className="breadcrumb-item active text-dark" aria-current="page">{productData.name}</li>
+              <li className="breadcrumb-item active text-dark text-truncate mw-400" aria-current="page">{productData.name}</li>
             </ol>
           </nav>
-          <div className="mb-3 text-center">
+          <div className="mb-3 text-start">
             <img
               src={selectedImage ? getImageUrl(selectedImage) : PLACEHOLDER_IMG}
               className="img-fluid product-main-img object-fit-contain"
@@ -194,7 +184,7 @@ const ProductDetails = () => {
           </div>
 
           {images.length > 1 && (
-            <div className="d-flex gap-2 justify-content-center flex-wrap mt-3">
+            <div className="d-flex gap-2 justify-content-start flex-wrap mt-3">
               {images.map((img, i) => (
                 <div key={i} className="col-3 col-sm-2">
                   <button
@@ -214,7 +204,7 @@ const ProductDetails = () => {
         </div>
 
         {/* Right Column: Product Details */}
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-5">
 
           <div className="small text-muted text-uppercase fw-bold mb-1">{productData.brand}</div>
           <h1 className="display-6 fw-bold mb-2">{productData.name}</h1>
@@ -311,12 +301,7 @@ const ProductDetails = () => {
             </button>
           </div>
 
-          <div className="mt-4 pt-3 border-top">
-            <div className="d-flex gap-4 small text-muted">
-              <span><i className="bi bi-truck me-2"></i>Free Shipping</span>
-              <span><i className="bi bi-arrow-return-left me-2"></i>Easy Returns</span>
-            </div>
-          </div>
+
 
           {/* --- 🟢 PRODUCT SPECIFICATIONS --- */}
           {productData.product_details && productData.product_details.length > 0 && (
@@ -324,7 +309,7 @@ const ProductDetails = () => {
               <h6 className="fw-bold text-uppercase mb-3">Product Specifications</h6>
               <table className="table table-bordered table-sm small mb-0">
                 <tbody>
-                  {/* Handle array of {key, value} objects */}
+
                   {Array.isArray(productData.product_details) ? (
                     productData.product_details.map((item, index) => (
                       <tr key={index}>
@@ -379,13 +364,12 @@ const ProductDetails = () => {
                 <div className="mb-4">
                   <label className="form-label text-muted small mb-2">Write a Review</label>
                   <textarea
-                    className="form-control rounded-0 border-secondary-subtle"
+                    className="form-control rounded-0 border-secondary-subtle resize-none"
                     rows="3"
                     placeholder="What did you like or dislike?"
                     value={reviewComment}
                     onChange={(e) => setReviewComment(e.target.value)}
                     required
-                    style={{ resize: 'none' }}
                   ></textarea>
                 </div>
 
@@ -401,27 +385,57 @@ const ProductDetails = () => {
               </form>
             </div>
 
+            {/* --- REVIEWS LIST --- */}
+            <div className="mt-5">
+              <h5 className="fw-bold mb-4">Customer Reviews ({productData.reviews ? productData.reviews.length : 0})</h5>
+              {productData.reviews && productData.reviews.length > 0 ? (
+                <div className="d-flex flex-column gap-4">
+                  {productData.reviews.map((review) => (
+                    <div key={review.id} className="border-bottom pb-4">
+                      <div className="d-flex justify-content-between align-items-center mb-2">
+                        <div className="d-flex align-items-center gap-2">
+                          <div className="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
+                            {review.user?.name?.charAt(0).toUpperCase() || 'U'}
+                          </div>
+                          <div>
+                            <h6 className="fw-bold mb-0 text-dark small">{review.user?.name || "Anonymous"}</h6>
+                            <small className="text-muted" style={{ fontSize: '0.75rem' }}>
+                              {new Date(review.created_at).toLocaleDateString()}
+                            </small>
+                          </div>
+                        </div>
+                        <StarRating rating={review.rating} />
+                      </div>
+                      <p className="text-muted small mb-0">{review.review || review.comment}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center text-muted py-4 bg-light rounded">
+                  <p className="mb-0">No reviews yet. Be the first to review this product!</p>
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
       </div>
 
-      <div>
-        {/* Related Products Section */}
-        {
-          relatedProducts.length > 0 && (
-            <div className="mt-5 pt-5 text-center">
-              <h3 className="fw-bold mb-4">You May Also Like</h3>
-              <div className="row justify-content-center">
-                {relatedProducts.map(product => (
-                  <div key={product.id} className="col-6 col-md-4 col-lg-3 col-xl-3 mb-4">
-                    <ProductCard product={product} />
-                  </div>
-                ))}
-              </div>
+      {/* Related Products Section */}
+      {
+        relatedProducts.length > 0 && (
+          <div className="mt-5 pt-5 text-center">
+            <h3 className="fw-bold mb-4">You May Also Like</h3>
+            <div className="row justify-content-center">
+              {relatedProducts.map(product => (
+                <div key={product.id} className="col-6 col-md-4 col-lg-3 col-xl-3 mb-4">
+                  <ProductCard product={product} />
+                </div>
+              ))}
             </div>
-          )
-        }
-      </div>
+          </div>
+        )
+      }
 
 
     </div >
