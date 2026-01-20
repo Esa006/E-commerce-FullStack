@@ -79,24 +79,20 @@ const Navbar = () => {
           <SearchBar />
 
           {/* 🟢 Wishlist Icon */}
-          <Link to="/wishlist" className="position-relative text-danger text-decoration-none">
+          <Link to="/wishlist" className="position-relative text-danger text-decoration-none d-inline-block">
             <i className="bi bi-heart fs-4"></i>
             {wishlistCount > 0 && (
-              <span
-                className="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-black text-white"
-              >
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded bg-black text-white small">
                 {wishlistCount}
               </span>
             )}
           </Link>
 
           {/* 🟢 3. Cart Icon & Badge */}
-          <Link to="/cart" className="position-relative text-black text-decoration-none">
+          <Link to="/cart" className="position-relative text-black text-decoration-none d-inline-block">
             <i className="bi bi-bag fs-4"></i>
             {totalItems > 0 && (
-              <span
-                className="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-black text-white"
-              >
+              <span className="position-absolute top-0 start-100 translate-middle badge  bg-black text-white small">
                 {totalItems}
               </span>
             )}
