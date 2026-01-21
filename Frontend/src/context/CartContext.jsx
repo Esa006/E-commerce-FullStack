@@ -22,16 +22,18 @@ const CartProvider = ({ children }) => {
         const response = await CartApi.getCart();
         // Server returns items with nested product: { id, quantity, size, product: { name, price, stock, ... } }
         // We flatten or adapt if needed, but keeping backend structure is safer
-        const backendItems = response.data.map(item => ({
-          cart_id: item.id, // ID of the cart record
-          id: item.product.id, // ID of the product
-          name: item.product.name,
-          price: item.product.price,
-          image: item.product.image,
-          stock: item.product.stock,
-          quantity: item.quantity,
-          size: item.size
-        }));
+        const backendItems = response.data
+          .filter(item => item.product) // 🔴 Safety Filter: Ignore items without product data
+          .map(item => ({
+            cart_id: item.id, // ID of the cart record
+            id: item.product.id, // ID of the product
+            name: item.product.name,
+            price: item.product.price,
+            image: item.product.image,
+            stock: item.product.stock,
+            quantity: item.quantity,
+            size: item.size
+          }));
         setCartItems(backendItems);
       } else {
         const savedCart = localStorage.getItem("cartItems");
@@ -185,6 +187,21 @@ const CartProvider = ({ children }) => {
           setCartItems(updatedItems);
         }
       } catch (error) {
+        // 🟢 Robust handling: If backend fixed the cart (e.g. removed invalid item), sync state
+        if (error.response?.status === 404 && error.response?.data?.cart) {
+          const updatedItems = error.response.data.cart.map(item => ({
+            cart_id: item.id,
+            id: item.product.id,
+            name: item.product.name,
+            price: item.product.price,
+            image: item.product.image,
+            stock: item.product.stock,
+            quantity: item.quantity,
+            size: item.size
+          }));
+          setCartItems(updatedItems);
+        }
+
         Swal.fire({
           icon: 'warning',
           title: 'Update failed',

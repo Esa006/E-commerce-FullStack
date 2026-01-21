@@ -136,7 +136,27 @@ class ProductController extends Controller
         $product = Product::find($id);
         if (!$product)
             return response()->json(['success' => false], 404);
-        return response()->json(['success' => true, 'data' => $product]);
+
+        $canReview = false;
+        // Check if user is authenticated via Sanctum
+        $user = auth('sanctum')->user();
+        
+        if ($user) {
+            // Check if user has a delivered order for this product
+            $hasDeliveredOrder = \App\Models\Order::where('user_id', $user->id)
+                ->where('status', 'delivered')
+                ->whereHas('orderItems', function ($query) use ($id) {
+                    $query->where('product_id', $id);
+                })
+                ->exists();
+            
+            $canReview = $hasDeliveredOrder;
+        }
+
+        $productData = $product->toArray();
+        $productData['can_review'] = $canReview;
+
+        return response()->json(['success' => true, 'data' => $productData]);
     }
 
     public function store(Request $request)

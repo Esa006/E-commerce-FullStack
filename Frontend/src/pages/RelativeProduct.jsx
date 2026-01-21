@@ -63,7 +63,8 @@ const RelativeProduct = () => {
   return (
     <>
 
-      <div className="container-fluid px-3 px-md-4 px-lg-5 py-5">
+
+      <div className="container py-5">
         <h2 className="text-center fw-bold mb-5">Latest Products</h2>
 
         <div className="row g-3 justify-content-center">
@@ -71,7 +72,7 @@ const RelativeProduct = () => {
             products.slice(0, 20).map((item) => (
               <div
                 key={item.id}
-                className="col-6 col-md-4 col-lg-3 col-xl-3"
+                className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3"
               >
                 <ProductCard product={item} />
               </div>

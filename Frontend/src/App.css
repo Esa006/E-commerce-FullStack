@@ -1,20 +1,47 @@
-/* .category-card-img {
+/* 🎨 THEME SETTINGS: Change color HERE to update ALL buttons */
+:root {
+    --brand-primary: #1b1a1a;
+    --brand-hover: #000000;
+
+    --bs-primary: var(--brand-primary);
+    --bs-primary-rgb: 27, 26, 26;
+
+    --bs-dark: var(--brand-primary);
+    --bs-dark-rgb: 27, 26, 26;
+
+    --bs-link-color: var(--brand-primary);
+    --bs-link-hover-color: var(--brand-hover);
+}
+
+.btn-dark {
+    --bs-btn-bg: var(--brand-primary);
+    --bs-btn-border-color: var(--brand-primary);
+    --bs-btn-hover-bg: var(--brand-hover);
+    --bs-btn-hover-border-color: var(--brand-hover);
+    --bs-btn-color: #ffffff;
+}
+
+/* Global Styles & Utilities */
+
+/* Product Cards */
+.category-card-img {
     height: 380px;
 }
 
-/* Product Details Page */
 .product-main-img {
     max-height: 400px;
 }
 
-/* Cart Page */
 .cart-quantity-input {
     max-width: 60px;
 }
 
-/* Orders Page */
-.loading-container {
+.order-loading-container {
     min-height: 60vh;
+}
+
+.product-loading-area {
+    min-height: 600px;
 }
 
 .order-item-img {
@@ -27,7 +54,6 @@
     max-width: 400px;
 }
 
-/* Shop Page */
 .shop-card-img {
     height: 250px;
 }
@@ -36,25 +62,23 @@
     width: 110px;
 }
 
-/* Override default Bootstrap flex behavior to prevent shrinking/growing issues */
-.qty-input-group .form-control {
-    flex: 0 0 auto !important;
-    width: 40px !important;
-}
-
-/* Custom Ratio 125% (Product Portrait) */
 .ratio-vertical {
-    --bs-aspect-ratio: 125%;
+    --bs-aspect-ratio: 100%;
 }
 
-/* App.jsx main loader */
 .loading-main {
     min-height: 60vh;
 }
 
-/* Custom Width for Action Buttons */
+/* Utilities */
 .w-40 {
     width: 40% !important;
 }
 
-*/
+.text-spacing-1 {
+    letter-spacing: 1px;
+}
+
+.tracking-widest {
+    letter-spacing: 0.25em;
+}

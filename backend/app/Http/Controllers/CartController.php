@@ -14,7 +14,19 @@ class CartController extends Controller
      * Get the current user's cart with product details.
      */
     public function index() {
-        return response()->json($this->getCartState());
+        $cartItems = Cart::with('product')->where('user_id', Auth::id())->get();
+        
+        // Clean up items where product no longer exists
+        $cleaned = false;
+        foreach ($cartItems as $key => $item) {
+            if (!$item->product) {
+                $item->delete();
+                unset($cartItems[$key]); // Remove from current collection
+                $cleaned = true;
+            }
+        }
+        
+        return response()->json($cleaned ? $cartItems->values() : $cartItems);
     }
 
     /**
@@ -61,7 +73,20 @@ class CartController extends Controller
     public function updateQuantity(Request $request, $id) {
         $request->validate(['quantity' => 'required|integer|min:1']);
         
-        $cart = Cart::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $cart = Cart::where('id', $id)->where('user_id', Auth::id())->first();
+
+        if (!$cart) {
+            return response()->json(['message' => 'Cart item not found'], 404);
+        }
+        
+        // Safety Check: If product was deleted but cart item remains
+        if (!$cart->product) {
+            $cart->delete();
+            return response()->json([
+                'message' => 'Product no longer available (removed from cart)',
+                'cart' => $this->getCartState()
+            ], 404); 
+        }
         
         if ($cart->product->stock < $request->quantity) {
             return response()->json([

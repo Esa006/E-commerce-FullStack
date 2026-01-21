@@ -223,7 +223,7 @@ const Products = () => {
 
           <div className='row g-4'>
             {loading ? (
-              <div className='col-12 text-center py-5' style={{ minHeight: '600px' }}>
+              <div className='col-12 text-center py-5 product-loading-area'>
                 <div className="spinner-border text-secondary" role="status"></div>
                 <p className="mt-2 text-muted">Loading products...</p>
               </div>
@@ -260,7 +260,7 @@ const Products = () => {
                   {[...Array(totalPages)].map((_, i) => (
                     <li key={i + 1} className="page-item">
                       <button
-                        className={`page-link ${currentPage === i + 1 ? 'bg-dark border-dark text-white' : 'text-dark border-light-subtle'}`}
+                        className={`page-link ${currentPage === i + 1 ? 'active bg-primary border-primary text-white' : 'text-dark border-light-subtle'}`}
                         onClick={() => !loading && handlePageChange(i + 1)}
                         disabled={loading}
                       >

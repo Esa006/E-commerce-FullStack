@@ -79,7 +79,7 @@ class ProductSeeder extends Seeder
                 'subCategory' => $p['sub'],
                 'sizes' => json_encode(['S', 'M', 'L']),
                 'bestseller' => false,
-                'rating' => rand(1, 5)
+                'rating' => 0
             ]);
         }
     }

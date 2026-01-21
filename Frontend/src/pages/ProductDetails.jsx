@@ -33,45 +33,33 @@ const ProductDetails = () => {
   const [submittingReview, setSubmittingReview] = useState(false);
 
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const startTime = performance.now();
+  const fetchProductData = async () => {
+    try {
+      const response = await apiClient.get(`/products/${id}`);
+      if (response.data.success) {
+        setProductData(response.data.data);
+        setQuantity(response.data.data.qty_step || 1);
 
-    const fetchProductData = async () => {
-      try {
-        const response = await apiClient.get(`/products/${id}`, {
-          signal: controller.signal
-        });
-        console.log(response.data);
-
-        if (response.data.success) {
-          const data = response.data.data;
-          setProductData(data);
-          setQuantity(data.qty_step || 1);
-
-          const endTime = performance.now();
-          const loadTime = Math.round(endTime - startTime);
-          Observability.reportPerformance(`ProductDetailPage_Load_${id}`, loadTime);
-        }
-        setLoading(false);
-      } catch (error) {
-        if (axios.isCancel(error)) return;
-
-        if (error.response && error.response.status === 404) {
-          setProductNotFound(true);
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to load product. Please try again later.',
-          });
-        }
-        setLoading(false);
+        // Report performance (optional, kept from original)
+        Observability.reportPerformance(`ProductDetailPage_Load_${id}`, 0);
       }
-    };
+      setLoading(false);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setProductNotFound(true);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load product.',
+        });
+      }
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchProductData();
-    return () => controller.abort();
   }, [id]);
 
   useEffect(() => {
@@ -159,6 +147,9 @@ const ProductDetails = () => {
       Swal.fire({ icon: 'success', title: 'Review Submitted!', text: 'Thank you for your feedback.' });
       setReviewRating(0);
       setReviewComment("");
+
+      // 🟢 REFRESH PRODUCT DATA TO SHOW NEW RATING
+      fetchProductData();
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to submit review.";
       Swal.fire({ icon: 'error', title: 'Review Failed', text: msg });
@@ -168,7 +159,7 @@ const ProductDetails = () => {
   };
 
   return (
-    <div className="container-fluid px-3 px-md-4 px-lg-5 py-5">
+    <div className="container py-5">
       <div className="row g-1">
         {/* Left Column: Image Gallery */}
         <div className="col-12 col-md-6">
@@ -221,7 +212,7 @@ const ProductDetails = () => {
 
           {/* Rating */}
           <div className="mb-3">
-            <StarRating rating={productData.rating} />
+            <StarRating rating={productData.rating} reviews={productData.rating_count} />
           </div>
 
           <div className="d-flex align-items-center gap-3 mb-4">
@@ -297,7 +288,7 @@ const ProductDetails = () => {
                   addToCart(productData, size, quantity);
                 }
               }}
-              className="btn btn-dark  w-40 py-3 fw-bold text-uppercase rounded-0"
+              className="btn btn-dark w-50 py-3 fw-bold text-uppercase rounded-0"
             >
               {productData.stock >= step ? "Add to Cart" : "Sold Out"}
             </button>
@@ -311,13 +302,6 @@ const ProductDetails = () => {
             </button>
           </div>
 
-          <div className="mt-4 pt-3 border-top">
-            <div className="d-flex gap-4 small text-muted">
-              <span><i className="bi bi-truck me-2"></i>Free Shipping</span>
-              <span><i className="bi bi-arrow-return-left me-2"></i>Easy Returns</span>
-            </div>
-          </div>
-
           {/* --- 🟢 PRODUCT SPECIFICATIONS --- */}
           {productData.product_details && productData.product_details.length > 0 && (
             <div className="mt-4 pt-4 border-top">
@@ -328,7 +312,7 @@ const ProductDetails = () => {
                   {Array.isArray(productData.product_details) ? (
                     productData.product_details.map((item, index) => (
                       <tr key={index}>
-                        <td className="bg-light fw-semibold text-muted w-40 px-3 py-2">{item.key}</td>
+                        <td className="bg-light fw-semibold text-muted px-3 py-2" style={{ width: '30%' }}>{item.key}</td>
                         <td className="px-3 py-2">{item.value}</td>
                       </tr>
                     ))
@@ -336,7 +320,7 @@ const ProductDetails = () => {
                     /* Fallback for plain object format */
                     Object.entries(productData.product_details).map(([key, value]) => (
                       <tr key={key}>
-                        <td className="bg-light fw-semibold text-muted w-40 px-3 py-2">{key}</td>
+                        <td className="bg-light fw-semibold text-muted px-3 py-2" style={{ width: '30%' }}>{key}</td>
                         <td className="px-3 py-2">{String(value)}</td>
                       </tr>
                     ))
@@ -349,7 +333,6 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* --- 🟢 REVIEW SECTION (Ajio Style) --- */}
       <div className="mt-5 pt-5 border-top">
         <div className="row justify-content-center">
           <div className="col-lg-8">
@@ -361,45 +344,56 @@ const ProductDetails = () => {
                   {productData.rating?.toFixed(1) || "0.0"} <i className="bi bi-star-fill fs-6"></i>
                 </div>
                 <div className="text-muted small">
-                  Based on Verified Purchases
+                  {productData.rating_count || 0} Reviews
                 </div>
               </div>
             </div>
 
-            <div className="p-4 border rounded-1">
-              <h6 className="fw-bold text-uppercase mb-4">Rate this product</h6>
-              <form onSubmit={submitReview}>
-                <div className="mb-4">
-                  <label className="form-label text-muted small mb-2 d-block">Your Rating</label>
-                  <div className="fs-3">
-                    <StarRating rating={reviewRating} onRatingChange={setReviewRating} />
+            {/* Review Form - Only for verified buyers with Delivered status */}
+            {productData.can_review ? (
+              <div className="p-4 border rounded-1">
+                <h6 className="fw-bold text-uppercase mb-4">Rate this product</h6>
+                <form onSubmit={submitReview}>
+                  <div className="mb-4">
+                    <label className="form-label text-muted small mb-2 d-block">Your Rating</label>
+                    <div className="fs-3">
+                      <StarRating rating={reviewRating} onRatingChange={setReviewRating} />
+                    </div>
                   </div>
-                </div>
 
-                <div className="mb-4">
-                  <label className="form-label text-muted small mb-2">Write a Review</label>
-                  <textarea
-                    className="form-control rounded-0 border-secondary-subtle"
-                    rows="3"
-                    placeholder="What did you like or dislike?"
-                    value={reviewComment}
-                    onChange={(e) => setReviewComment(e.target.value)}
-                    required
-                    style={{ resize: 'none' }}
-                  ></textarea>
-                </div>
+                  <div className="mb-4">
+                    <label className="form-label text-muted small mb-2">Write a Review</label>
+                    <textarea
+                      className="form-control rounded-0 border-secondary-subtle"
+                      rows="3"
+                      placeholder="What did you like or dislike?"
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
+                      required
+                      style={{ resize: 'none' }}
+                    ></textarea>
+                  </div>
 
-                <div className="text-end">
-                  <button
-                    type="submit"
-                    className="btn btn-dark rounded-0 px-5 text-uppercase fw-bold text-spacing-1"
-                    disabled={submittingReview}
-                  >
-                    {submittingReview ? "Submitting..." : "Submit Review"}
-                  </button>
-                </div>
-              </form>
-            </div>
+                  <div className="text-end">
+                    <button
+                      type="submit"
+                      className="btn btn-dark rounded-0 px-5 text-uppercase fw-bold text-spacing-1"
+                      disabled={submittingReview}
+                    >
+                      {submittingReview ? "Submitting..." : "Submit Review"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            ) : (
+              <div className="p-4 border rounded-1 bg-light text-center">
+                <i className="bi bi-lock fs-4 text-muted mb-2"></i>
+                <h6 className="fw-bold text-uppercase mb-2 text-muted">Review Locked</h6>
+                <p className="text-muted small mb-0">
+                  Only customers who have purchased and received this product can write a review.
+                </p>
+              </div>
+            )}
 
           </div>
         </div>
@@ -413,7 +407,7 @@ const ProductDetails = () => {
               <h3 className="fw-bold mb-4">You May Also Like</h3>
               <div className="row justify-content-center">
                 {relatedProducts.map(product => (
-                  <div key={product.id} className="col-6 col-md-4 col-lg-3 col-xl-3 mb-4">
+                  <div key={product.id} className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4">
                     <ProductCard product={product} />
                   </div>
                 ))}
