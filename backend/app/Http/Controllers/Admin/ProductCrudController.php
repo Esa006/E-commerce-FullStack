@@ -83,7 +83,14 @@ class ProductCrudController extends CrudController
         CRUD::field('subCategory');
         CRUD::field('sizes');
         CRUD::field('date');
-        CRUD::field('stock')->type('number');
+        CRUD::field('stock')->type('number')->label('Total Stock');
+        CRUD::field('size_stock')
+            ->type('table')
+            ->label('Stock Per Size')
+            ->columns([
+                'size' => 'Size',
+                'qty' => 'Quantity'
+            ]);
         CRUD::field('rating')->type('number')->attributes(['min' => 0, 'max' => 5]);
         CRUD::field('bestseller')->type('checkbox');
 

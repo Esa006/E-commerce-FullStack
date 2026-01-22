@@ -103,8 +103,12 @@ export default function OrderSuccess() {
         const statusOrder = ["pending", "processing", "shipped", "delivered"];
 
         let currentStatus = status?.toLowerCase() || "pending";
-        // Handle variations if backend sends different strings
-        if (currentStatus === 'placed') currentStatus = 'pending';
+
+        // Robust normalization
+        if (['pending', 'ordered', 'placed'].includes(currentStatus)) currentStatus = 'pending';
+        else if (['processing', 'confirmed', 'confirm'].includes(currentStatus)) currentStatus = 'processing';
+        else if (['shipped', 'out_for_delivery', 'dispatch'].includes(currentStatus)) currentStatus = 'shipped';
+        else if (['delivered', 'done', 'completed'].includes(currentStatus)) currentStatus = 'delivered';
 
         const idx = statusOrder.indexOf(currentStatus);
 
@@ -215,12 +219,12 @@ export default function OrderSuccess() {
                                             <img
                                                 src={displayImage}
                                                 className="img-fluid rounded object-fit-cover w-100 h-100 border"
-                                                alt={item.product_name || "Product"}
+                                                alt={item.product?.name || item.product_name || "Product"}
                                                 onError={(e) => e.target.src = PLACEHOLDER_IMG}
                                             />
                                         </div>
                                         <div className="flex-grow-1">
-                                            <h6 className="fw-bold mb-1">{item.product_name || item.name || "Product Name"}</h6>
+                                            <h6 className="fw-bold mb-1">{item.product?.name || item.product_name || item.name || "Product Name"}</h6>
                                             <div className="text-muted small">
                                                 {item.size && <span className="me-3">Size: {item.size}</span>}
                                                 <span>Qty: {item.quantity}</span>
@@ -300,7 +304,13 @@ export default function OrderSuccess() {
 
                     {/* ACTIONS */}
                     <div className="d-grid gap-2">
-                        <Link to="/orders" className="btn btn-primary py-2">View All Orders</Link>
+                        <button
+                            onClick={() => navigate('/track-order', { state: { orderNumber: orderData.order_number || orderData.id, email: orderData.email } })}
+                            className="btn btn-info text-white py-2 fw-bold"
+                        >
+                            <FaTruck className="me-2" /> Track Order Status
+                        </button>
+                        <Link to="/orders" className="btn btn-custom-primary py-2">View All Orders</Link>
                         <Link to="/" className="btn btn-outline-dark py-2">Continue Shopping</Link>
                     </div>
 

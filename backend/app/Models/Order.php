@@ -25,6 +25,7 @@ class Order extends Model
         'user_id',
         'order_number',
         'total_amount',
+        'shipping_fee',
         'address',
         'address_line2',
         'city',

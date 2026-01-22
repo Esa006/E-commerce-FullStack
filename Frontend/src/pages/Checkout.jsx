@@ -11,7 +11,7 @@ import BackButton from "../components/BackButton";
 // ... existing imports
 
 const Checkout = () => {
-  const { cartItems, getTotalAmount, clearCart } = useContext(CartContext);
+  const { cartItems, getTotalAmount, clearCart, loading: cartLoading } = useContext(CartContext);
   const navigate = useNavigate();
 
   const [method, setMethod] = useState("cod");
@@ -19,6 +19,19 @@ const Checkout = () => {
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState("new");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 🟢 Effect: Redirect if Cart is Empty (and not loading, and not currently submitting order)
+  useEffect(() => {
+    if (!isSubmitting && !cartLoading && cartItems.length === 0) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Cart is Empty',
+        text: 'Please add items to your cart first.',
+        timer: 1500,
+        showConfirmButton: false
+      }).then(() => navigate('/cart'));
+    }
+  }, [cartItems, cartLoading, navigate, isSubmitting]);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -44,7 +57,7 @@ const Checkout = () => {
         text: "Please login to place an order.",
         confirmButtonText: "Login",
         customClass: {
-          confirmButton: "btn btn-primary py-2 px-4"
+          confirmButton: "btn btn-custom-primary py-2 px-4"
         },
         buttonsStyling: false
       }).then(() => {
@@ -138,6 +151,19 @@ const Checkout = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+
+    // 🟢 Safeguard: Empty Cart
+    if (cartItems.length === 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Cart is Empty',
+        text: 'You cannot place an empty order.',
+        timer: 1500,
+        showConfirmButton: false
+      }).then(() => navigate('/cart'));
+      return;
+    }
+
     if (isSubmitting) return;
 
     setIsSubmitting(true);
@@ -278,7 +304,7 @@ const Checkout = () => {
 
             <button
               type="submit"
-              className="btn btn-primary w-100 mt-3 py-2 fw-bold text-uppercase"
+              className="btn btn-custom-primary w-100 mt-3 py-2 fw-bold text-uppercase"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Processing..." : "Place Order"}

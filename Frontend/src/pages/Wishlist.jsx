@@ -20,7 +20,7 @@ const Wishlist = () => {
         text: "Please login to view your wishlist.",
         confirmButtonText: "Login",
         customClass: {
-          confirmButton: "btn btn-primary "
+          confirmButton: "btn btn-custom-primary "
         },
         buttonsStyling: false
       }).then(() => {
@@ -51,7 +51,7 @@ const Wishlist = () => {
         ) : (
           <div className="text-center py-5">
             <h4 className="text-muted mb-3">Your wishlist is empty.</h4>
-            <a href="/products" className="btn btn-primary">
+            <a href="/products" className="btn btn-custom-primary">
               Continue Shopping
             </a>
           </div>

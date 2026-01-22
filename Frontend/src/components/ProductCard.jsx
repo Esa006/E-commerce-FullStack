@@ -69,7 +69,7 @@ const ProductCard = ({ product }) => {
 
         <Link
           to={`/product/${product?.id}`}
-          className={`btn w-100 mt-auto rounded-0 text-uppercase fw-bold py-2 ${isOutOfStock ? 'btn-secondary disabled' : 'btn-primary'}`}
+          className={`btn w-100 mt-auto rounded-0 text-uppercase fw-bold py-2 ${isOutOfStock ? 'btn-secondary disabled' : 'btn-custom-primary'}`}
           style={{ pointerEvents: isOutOfStock ? 'none' : 'auto' }} // Optional: prevent clicking button if strictly disabled
         >
           {isOutOfStock ? "Sold Out" : "View Details"}

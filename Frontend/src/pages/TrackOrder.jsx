@@ -1,36 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import ordersApi from "../api/orders";
 import Swal from "sweetalert2";
 import { FaCheckCircle, FaBox, FaTruck, FaHome } from "react-icons/fa";
 import BackButton from "../components/BackButton";
 import { parseImages, getImageUrl } from "../utils/imageUtils";
 
-
 const TrackOrder = () => {
+    const location = useLocation();
     const [orderNumber, setOrderNumber] = useState("");
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [orderData, setOrderData] = useState(null);
     const [searched, setSearched] = useState(false);
 
-    const handleTrackOrder = async (e) => {
-        e.preventDefault();
-
-        if (!orderNumber || !email) {
-            Swal.fire({
-                icon: "warning",
-                title: "Missing Information",
-                text: "Please enter both Order Number and Email Address."
-            });
-            return;
-        }
-
+    const fetchOrder = async (num, mail) => {
         setLoading(true);
         setSearched(false);
         setOrderData(null);
-
         try {
-            const response = await ordersApi.trackOrder(orderNumber, email);
+            const response = await ordersApi.trackOrder(num, mail);
             if (response.data) {
                 setOrderData(response.data.order || response.data);
                 setSearched(true);
@@ -47,6 +36,23 @@ const TrackOrder = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    useEffect(() => {
+        if (location.state?.orderNumber && location.state?.email) {
+            setOrderNumber(location.state.orderNumber);
+            setEmail(location.state.email);
+            fetchOrder(location.state.orderNumber, location.state.email);
+        }
+    }, [location.state]);
+
+    const handleTrackOrder = async (e) => {
+        e.preventDefault();
+        if (!orderNumber || !email) {
+            Swal.fire({ icon: "warning", title: "Missing Information", text: "Please enter both Order Number and Email Address." });
+            return;
+        }
+        fetchOrder(orderNumber, email);
     };
 
     const getStatusBadge = (status) => {
@@ -71,13 +77,17 @@ const TrackOrder = () => {
         ];
 
         const s = status ? status.toLowerCase() : "";
+        console.log("DEBUG: Status received from backend:", status); // 🟢 DEBUG 
+        console.log("DEBUG: Lowercase status:", s); // 🟢 DEBUG
         let activeIndex = -1;
 
-        if (s === 'pending') activeIndex = 0;
-        else if (s === 'processing') activeIndex = 1;
-        else if (s === 'shipped' || s === 'out_for_delivery') activeIndex = 2;
-        else if (s === 'delivered') activeIndex = 3;
-        else if (s === 'cancelled') activeIndex = -1; // Or handle differently
+        // Robust matching
+        if (['pending', 'ordered', 'placed'].includes(s)) activeIndex = 0;
+        else if (['processing', 'confirmed', 'confirm'].includes(s)) activeIndex = 1;
+        else if (['shipped', 'out_for_delivery', 'dispatch'].includes(s)) activeIndex = 2;
+        else if (['delivered', 'done', 'completed'].includes(s)) activeIndex = 3;
+        else if (s === 'cancelled') activeIndex = -1;
+        // End robust matching
 
         return steps.map((step, index) => ({
             ...step,
@@ -134,7 +144,7 @@ const TrackOrder = () => {
                                     <div className="col-md-2 d-flex align-items-end">
                                         <button
                                             type="submit"
-                                            className="btn btn-primary w-100 fw-bold"
+                                            className="btn btn-custom-primary w-100 fw-bold"
                                             disabled={loading}
                                         >
                                             {loading ? (
@@ -302,7 +312,7 @@ const TrackOrder = () => {
                                                     return (
                                                         <tr key={idx} className="border-bottom">
                                                             <td className="ps-3 py-3">
-                                                                <di className="">
+                                                                <div className="" style={{ width: '60px', height: '80px' }}>
                                                                     <img
                                                                         src={imageUrl}
                                                                         alt="product"

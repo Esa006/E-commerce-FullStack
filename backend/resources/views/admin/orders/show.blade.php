@@ -45,7 +45,7 @@
 					<div class="row mb-4">
 						<div class="col-sm-6">
 							<h5 class="text-muted mb-3">Customer Details</h5>
-							<p class="mb-1"><strong>Name:</strong> {{ $entry->name }}</p>
+							<p class="mb-1"><strong>Name:</strong> {{ $entry->first_name }} {{ $entry->last_name }}</p>
 							<p class="mb-1"><strong>Email:</strong> {{ $entry->email }}</p>
 							<p class="mb-1"><strong>Phone:</strong> {{ $entry->phone }}</p>
 						</div>
@@ -68,6 +68,7 @@
 									<th style="width: 80px;">Image</th>
 									<th>Product</th>
 									<th class="text-center">Price</th>
+									<th class="text-center">Size</th>
 									<th class="text-center">Qty</th>
 									<th class="text-right">Total</th>
 								</tr>
@@ -78,22 +79,31 @@
 									<td class="text-center">
 										@php
 											// Product image logic based on Product model accessor
-											$images = $item->product->image ?? []; // Accessor returns array of URLs
-											$imgUrl = count($images) > 0 ? $images[0] : 'https://placehold.co/50x50?text=No+Img';
+											$product = $item->product;
+											$images = optional($product)->image ?? []; // Accessor returns array of URLs
+											$imgUrl = (is_array($images) && count($images) > 0) ? $images[0] : 'https://placehold.co/50x50?text=No+Img';
 										@endphp
-										<img src="{{ $imgUrl }}" alt="Product Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+										<div>
+											<img src="{{ $imgUrl }}" alt="Product Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+										</div>
 									</td>
 									<td>
-										<div class="font-weight-bold">{{ $item->product->name ?? 'Deleted Product' }}</div>
+										<div class="font-weight-bold">{{ optional($product)->name ?? 'Deleted Product' }}</div>
 										<small class="text-muted">ID: {{ $item->product_id }}</small>
 									</td>
 									<td class="text-center">₹{{ number_format($item->price, 2) }}</td>
+									<td class="text-center">{{ $item->size ?? '-' }}</td>
 									<td class="text-center">{{ $item->quantity }}</td>
 									<td class="text-right">₹{{ number_format($item->price * $item->quantity, 2) }}</td>
 								</tr>
 								@endforeach
 							</tbody>
 							<tfoot>
+								<tr>
+									<td colspan="4" class="text-right">Shipping Fee:</td>
+									<td class="text-right">₹{{ number_format($entry->shipping_fee ?? 0, 2) }}</td>
+								</tr>
+
 								<tr>
 									<td colspan="4" class="text-right font-weight-bold">Total Amount:</td>
 									<td class="text-right font-weight-bold">₹{{ number_format($entry->total_amount, 2) }}</td>

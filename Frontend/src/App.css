@@ -1,9 +1,86 @@
 :root {
+    --primary-color: #000000;
+    --primary-hover: #333333;
+    --secondary-color: #ffffff;
+    --secondary-hover: #f0f0f0;
+    --page-bg: #ffffff;
+    --text-main: #121212;
+    --text-light: #6c757d;
+    --border-color: #e5e5e5;
+    --danger-color: #dc3545;
+    /* Bootstrap danger red match */
     --bs-primary: #000000;
     --bs-primary-rgb: 0, 0, 0;
     --navbar-bg: #ffffff;
     --navbar-text: #555555;
+    --bs-secondary: #ffffff;
+
 }
+
+
+body {
+    background-color: var(--page-bg);
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+
+}
+
+.btn-custom-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-custom-primary:hover,
+.btn-custom-primary:focus,
+.btn-custom-primary:active {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: #ffffff;
+}
+
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: #000000;
+    color: #000000;
+    font-weight: 500;
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+}
+
+
+.text-primary {
+    color: var(--primary-color);
+}
+
+.text-main {
+    color: var(--text-main);
+}
+
+.bg-danger-custom {
+    background-color: var(--danger-color);
+    color: #ffffff;
+}
+
+.bg-primary {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+
+.card {
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+
+}
+
 
 .bg-navbar-theme {
     background-color: var(--navbar-bg);
@@ -11,13 +88,6 @@
 
 .text-navbar-theme {
     color: var(--navbar-text);
-}
-
-.btn-primary {
-    --bs-btn-bg: var(--bs-primary);
-    --bs-btn-border-color: var(--bs-primary);
-    --bs-btn-hover-bg: #000000;
-    --bs-btn-hover-border-color: #000000;
 }
 
 
@@ -30,14 +100,24 @@
     height: auto;
 }
 
-.cart-quantity-input {
-    max-width: 60px;
-}
-
 .product-detail-img {
     width: 300px;
 }
 
+.order-item-img {
+    width: 80px;
+    height: 100px;
+}
+
+.cart-quantity-input {
+    max-width: 60px;
+}
+
+.qty-input-group {
+    width: 110px;
+}
+
+/* Loading Containers */
 .order-loading-container {
     min-height: 60vh;
 }
@@ -46,32 +126,21 @@
     min-height: 600px;
 }
 
-.order-item-img {
-    width: 80px;
-    height: 100px;
-
+.order-success-loading {
+    min-height: 60vh;
 }
 
+/* Login Card */
 .login-card {
     width: 100%;
     max-width: 400px;
 }
 
-
-
-.qty-input-group {
-    width: 110px;
-}
-
-
+/* Text Utilities */
 .text-spacing-1 {
     letter-spacing: 1px;
 }
 
 .tracking-widest {
     letter-spacing: 0.25em;
-}
-
-.order-success-loading {
-    min-height: 60vh;
 }

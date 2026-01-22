@@ -5,6 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ProductSize;
 class Product extends Model
 {
     use CrudTrait;
@@ -25,7 +26,8 @@ class Product extends Model
         'rating',
         'rating_avg',
         'rating_count',
-        'product_details'
+        'product_details',
+        'size_stock' // 🟢 Added
     ];
 
     protected $casts = [
@@ -37,7 +39,8 @@ class Product extends Model
         'rating' => 'integer',
         'rating_avg' => 'float',
         'rating_count' => 'integer',
-        'product_details' => 'array'
+        'product_details' => 'array',
+        'size_stock' => 'array' // 🟢 Added
     ];
 
     public function setImageAttribute($value)
@@ -65,12 +68,28 @@ class Product extends Model
     // 🟢 NEW: Append stock status for React API
     protected $appends = ['stock_status'];
 
+
+    // 1. Add this relationship - RENAMED to avoid collision with 'sizes' column
+    public function sizeVariants()
+    {
+        return $this->hasMany(ProductSize::class);
+    }
+
     public function getStockStatusAttribute()
     {
-        if ($this->stock <= 0)
-            return 'out_of_stock';
-        if ($this->isLowStock())
-            return 'low_stock';
+        // 🟢 SMART CHECK: Calculate total stock from the sizes table
+        // Use loaded relationship to avoid N+1 if eager loaded
+        $totalStock = $this->sizeVariants->sum('stock');
+        
+        // If no sizes in DB (legacy/not migrated yet), fallback to global stock
+        if ($this->sizeVariants->isEmpty()) {
+             if ($this->stock <= 0) return 'out_of_stock';
+             if ($this->isLowStock()) return 'low_stock';
+             return 'in_stock';
+        }
+
+        if ($totalStock <= 0) return 'out_of_stock';
+        if ($totalStock <= 5) return 'low_stock';
         return 'in_stock';
     }
 

@@ -122,7 +122,7 @@ const Cart = () => {
         ) : (
           <div className="text-center py-5">
             <h5>Your cart is empty!</h5>
-            <Link to="/" className="btn btn-primary mt-3">Go to Collection</Link>
+            <Link to="/" className="btn btn-custom-primary mt-3">Go to Collection</Link>
           </div>
         )}
       </div>
@@ -148,7 +148,7 @@ const Cart = () => {
               <hr />
               <div className="mt-4">
                 <button
-                  className={`btn w-100 py-2 fw-bold text-uppercase ${hasOutOfStockItems ? 'btn-secondary' : 'btn-primary'}`}
+                  className={`btn w-100 py-2 fw-bold text-uppercase ${hasOutOfStockItems ? 'btn-secondary' : 'btn-custom-primary'}`}
                   onClick={handleCheckout}
                   disabled={hasOutOfStockItems}
                   title={hasOutOfStockItems ? "Please remove sold out items before proceeding" : ""}

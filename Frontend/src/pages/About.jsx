@@ -16,7 +16,7 @@ const About = () => {
             <img
               src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop"
               alt="About Us"
-              className="img-fluid rounded shadow-sm"
+              className="img-fluid rounded shadow-sm h-100 w-100"
             />
           </div>
           <div className="col-md-6">
