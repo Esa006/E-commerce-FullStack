@@ -47,7 +47,7 @@ const Returns = () => {
 
                         <div className="bg-light p-4 rounded text-center">
                             <p className="mb-0 fw-bold">Still have questions?</p>
-                            <a href="/contact" className="btn btn-dark mt-3">Contact Support</a>
+                            <a href="/contact" className="btn btn-primary mt-3">Contact Support</a>
                         </div>
                     </div>
                 </div>

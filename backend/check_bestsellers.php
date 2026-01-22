@@ -16,7 +16,8 @@ if ($count === 0) {
         echo "ID: {$s->id} | Name: {$s->name} | Bestseller: " . ($s->bestseller ? 'TRUE' : 'FALSE') . " (Raw: " . var_export($s->getAttributes()['bestseller'], true) . ")\n";
     }
 } else {
-    $bestsellers = \App\Models\Product::where('bestseller', true)->limit(5)->get(['id', 'name']);
+    $bestsellers = \App\Models\Product::where('bestseller', true)->limit(1
+    )->get(['id', 'name']);
     foreach($bestsellers as $b) {
         echo "ID: {$b->id} | Name: {$b->name}\n";
     }

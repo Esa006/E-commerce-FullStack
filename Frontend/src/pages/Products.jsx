@@ -129,9 +129,7 @@ const Products = () => {
   };
 
   return (
-    <div className='container-fluid   border-top'>
-
-
+    <div className='container  border-top'>
       {/* Title */}
       <div className='py-4 text-center'>
         <h2 className='fs-2 fw-normal text-uppercase'>

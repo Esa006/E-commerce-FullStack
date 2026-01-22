@@ -87,7 +87,7 @@ const Orders = () => {
             {orders.length === 0 && !error ? (
                 <div className="card border-0 bg-light text-center p-4">
                     <h6 className="text-muted mb-2">You haven't placed any orders yet.</h6>
-                    <Link to="/" className="btn btn-dark btn-sm px-3 py-1 mx-auto">Start Shopping</Link>
+                    <Link to="/" className="btn btn-primary btn-sm px-3 py-1 mx-auto">Start Shopping</Link>
                 </div>
             ) : (
                 <div className="d-flex flex-column gap-4">

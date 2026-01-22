@@ -100,7 +100,7 @@ const ProductDetails = () => {
     <div className="container text-center mt-5 pt-5">
       <h2 className="display-4 text-secondary">Product Not Found</h2>
       <p className="lead text-muted">The product you are looking for might have been removed or the link is invalid.</p>
-      <Link to="/products" className="btn btn-dark mt-3">Browse All Products</Link>
+      <Link to="/products" className="btn btn-primary mt-3">Browse All Products</Link>
     </div>
   );
 
@@ -120,7 +120,7 @@ const ProductDetails = () => {
         icon: "warning",
         title: "Stock Limit",
         text: `We only have ${productData.stock} units available.`,
-        confirmButtonColor: "btn-btn-dark"
+        confirmButtonColor: "btn-btn-primary"
       });
     }
   };
@@ -160,12 +160,12 @@ const ProductDetails = () => {
 
   return (
     <div className="container py-5">
-      <div className="row g-1">
+      <div className="row g-5">
         {/* Left Column: Image Gallery */}
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-5">
           {/* Breadcrumbs */}
           <nav aria-label="breadcrumb" className="mb-4 ">
-            <ol className="breadcrumb d-flex justify-content-center ">
+            <ol className="breadcrumb d-flex">
               <li className="breadcrumb-item"><Link to="/" className="text-decoration-none text-muted">Home</Link></li>
               <li className="breadcrumb-item">
                 <Link to={`/products?category=${productData.category?.name || productData.category || 'All'}`} className="text-decoration-none text-muted">
@@ -175,7 +175,7 @@ const ProductDetails = () => {
               <li className="breadcrumb-item active text-dark" aria-current="page">{productData.name}</li>
             </ol>
           </nav>
-          <div className="mb-3 text-center">
+          <div className="mb-3 text-center product-detail">
             <img
               src={selectedImage ? getImageUrl(selectedImage) : PLACEHOLDER_IMG}
               className="img-fluid product-main-img object-fit-contain"
@@ -190,7 +190,7 @@ const ProductDetails = () => {
                 <div key={i} className="col-3 col-sm-2">
                   <button
                     onClick={() => setSelectedImage(img)}
-                    className={`btn p-1 w-100 border-2 ratio ratio-1x1 ${selectedImage === img ? "border-dark" : "border"}`}
+                    className={`btn p-1 w-100 border-2 ratio ratio-1x1 ${selectedImage === img ? "border-primary" : "border"}`}
                   >
                     <img
                       src={getImageUrl(img)}
@@ -205,7 +205,7 @@ const ProductDetails = () => {
         </div>
 
         {/* Right Column: Product Details */}
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-7">
 
           <div className="small text-muted text-uppercase fw-bold mb-1">{productData.brand}</div>
           <h1 className="display-6 fw-bold mb-2">{productData.name}</h1>
@@ -246,7 +246,7 @@ const ProductDetails = () => {
                   <button
                     key={i}
                     onClick={() => setSize(s)}
-                    className={`btn h-100 px-4 py-2 ${size === s ? "btn-dark" : "btn-outline-dark"}`}
+                    className={`btn h-100 px-4 py-2 ${size === s ? "btn-primary" : "btn-outline-primary"}`}
                   >
                     {s}
                   </button>
@@ -260,16 +260,16 @@ const ProductDetails = () => {
             <span className="d-block small fw-bold text-uppercase text-muted mb-2">Quantity</span>
             <div className="d-flex align-items-center">
               <div className="input-group qty-input-group">
-                <button className="btn btn-outline-dark rounded-0 px-2" type="button" onClick={handleDecrease}>
+                <button className="btn btn-outline-primary rounded-0 px-2" type="button" onClick={handleDecrease}>
                   <i className="bi bi-dash"></i>
                 </button>
                 <input
                   type="text"
-                  className="form-control text-center border-dark border-start-0 border-end-0 rounded-0"
+                  className="form-control text-center border-primary border-start-0 border-end-0 rounded-0"
                   value={quantity}
                   readOnly
                 />
-                <button className="btn btn-outline-dark rounded-0 px-2" type="button" onClick={handleIncrease}>
+                <button className="btn btn-outline-primary rounded-0 px-2" type="button" onClick={handleIncrease}>
                   <i className="bi bi-plus"></i>
                 </button>
               </div>
@@ -288,14 +288,14 @@ const ProductDetails = () => {
                   addToCart(productData, size, quantity);
                 }
               }}
-              className="btn btn-dark w-50 py-3 fw-bold text-uppercase rounded-0"
+              className="btn btn-primary w-50 py-3 fw-bold text-uppercase rounded-0"
             >
               {productData.stock >= step ? "Add to Cart" : "Sold Out"}
             </button>
 
             <button
               onClick={() => toggleWishlist(productData)}
-              className={`btn border rounded-0 px-3 ${isInWishlist(productData.id) ? "btn-danger border-danger" : "btn-outline-dark"}`}
+              className={`btn border rounded-0 px-3 ${isInWishlist(productData.id) ? "btn-danger border-danger" : "btn-outline-primary"}`}
               title="Add to Wishlist"
             >
               <i className={`fs-5 bi ${isInWishlist(productData.id) ? "bi-heart-fill text-white" : "bi-heart"}`}></i>
@@ -377,7 +377,7 @@ const ProductDetails = () => {
                   <div className="text-end">
                     <button
                       type="submit"
-                      className="btn btn-dark rounded-0 px-5 text-uppercase fw-bold text-spacing-1"
+                      className="btn btn-primary rounded-0 px-5 text-uppercase fw-bold text-spacing-1"
                       disabled={submittingReview}
                     >
                       {submittingReview ? "Submitting..." : "Submit Review"}

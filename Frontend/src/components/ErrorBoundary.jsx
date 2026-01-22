@@ -34,7 +34,7 @@ class ErrorBoundary extends React.Component {
                         <p className="text-muted">An unexpected error occurred. Don't worry, our team has been notified.</p>
                         <div className="mt-4">
                             <button
-                                className="btn btn-dark px-4 py-2 fw-bold text-uppercase"
+                                className="btn btn-primary px-4 py-2 fw-bold text-uppercase"
                                 onClick={() => window.location.reload()}
                             >
                                 Reload Page

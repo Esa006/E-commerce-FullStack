@@ -122,7 +122,7 @@ const Profile = () => {
               </div>
 
               <div className="d-grid mt-4">
-                <button className="btn btn-dark py-2 fw-bold text-uppercase" onClick={saveProfile}>
+                <button className="btn btn-primary py-2 fw-bold text-uppercase" onClick={saveProfile}>
                   Save Profile Details
                 </button>
               </div>

@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import ProductApi from "../api/Products";
 
 import ProductCard from "../components/ProductCard";
 import Swal from "sweetalert2";
 
 const Home = () => {
+  const [searchParams] = useSearchParams(); // Hook moved to top
   const [newArrivals, setNewArrivals] = useState([]);
   const [bestsellers, setBestsellers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(null);
+
+  const searchTerm = searchParams.get("search")?.toLowerCase() || "";
+
+  // Helper to filter products
+  const filterProducts = (products) => {
+    if (!searchTerm) return products;
+    return products.filter((p) =>
+      p.name?.toLowerCase().includes(searchTerm)
+    );
+  };
 
   const fetchHomeData = async () => {
     try {
@@ -38,6 +49,9 @@ const Home = () => {
     fetchHomeData();
   }, []);
 
+  const filteredBestsellers = filterProducts(bestsellers);
+  const filteredNewArrivals = filterProducts(newArrivals);
+
   if (loading)
     return <div className="text-center mt-5 loader"><p>Loading Products...</p></div>;
 
@@ -52,8 +66,6 @@ const Home = () => {
 
   return (
     <>
-
-
       {/* Category Section */}
       <div className="container py-5">
         <div className="text-center mb-5">
@@ -64,7 +76,9 @@ const Home = () => {
           {/* Men */}
           <div className="col-md-4">
             <div className="card text-white border-0 shadow-sm overflow-hidden category-card position-relative">
-              <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600" className="card-img object-fit-cover category-card-img" alt="Men" />
+              <div>
+                <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600" className="card-img object-fit-cover category-card-img" alt="Men" />
+              </div>
               <div className="card-img-overlay d-flex flex-column justify-content-end p-4 category-card-overlay">
                 <h3 className="card-title fw-bold">Men</h3>
                 <Link to="/products?category=Men" className="btn btn-light btn-sm fw-bold w-auto px-4 stretched-link">Shop Now</Link>
@@ -75,7 +89,9 @@ const Home = () => {
           {/* Women */}
           <div className="col-md-4">
             <div className="card text-white border-0 shadow-sm overflow-hidden category-card position-relative">
-              <img src="https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=600" className="card-img object-fit-cover category-card-img" alt="Women" />
+              <div>
+                <img src="https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=600" className="card-img object-fit-cover category-card-img" alt="Women" />
+              </div>
               <div className="card-img-overlay d-flex flex-column justify-content-end p-4 category-card-overlay">
                 <h3 className="card-title fw-bold">Women</h3>
                 <Link to="/products?category=Women" className="btn btn-light btn-sm fw-bold w-auto px-4 stretched-link">Shop Now</Link>
@@ -96,24 +112,21 @@ const Home = () => {
 
         </div>
 
-
-
-
         {/* Bestseller Section */}
         <div className="text-center mb-5 mt-5">
           <h2 className="section-title text-uppercase">Best Sellers</h2>
           <p className="text-muted">Explore our most popular items loved by everyone.</p>
         </div>
         <div className="row mb-5">
-          {bestsellers.length > 0 ? (
-            bestsellers.slice(0, 4).map((item) => (
+          {filteredBestsellers.length > 0 ? (
+            filteredBestsellers.slice(0, 5).map((item) => (
               <div key={item.id} className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4">
                 <ProductCard product={item} />
               </div>
             ))
           ) : (
             <div className="col-12 text-center text-muted">
-              <p>Check back soon for our top picks!</p>
+              {searchTerm ? <p>No bestsellers match your search.</p> : <p>Check back soon for our top picks!</p>}
             </div>
           )}
         </div>
@@ -124,15 +137,15 @@ const Home = () => {
           <p className="text-muted">Discover our newest arrivals.</p>
         </div>
         <div className="row">
-          {newArrivals.length > 0 ? (
-            newArrivals.slice(0, 8).map((item) => (
+          {filteredNewArrivals.length > 0 ? (
+            filteredNewArrivals.slice(0, 8).map((item) => (
               <div key={item.id} className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4">
                 <ProductCard product={item} />
               </div>
             ))
           ) : (
             <div className="col-12 text-center text-muted">
-              <p>No new products found at the moment.</p>
+              {searchTerm ? <p>No new products match your search.</p> : <p>No new products found at the moment.</p>}
             </div>
           )}
         </div>

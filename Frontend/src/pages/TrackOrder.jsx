@@ -134,7 +134,7 @@ const TrackOrder = () => {
                                     <div className="col-md-2 d-flex align-items-end">
                                         <button
                                             type="submit"
-                                            className="btn btn-dark w-100 fw-bold"
+                                            className="btn btn-primary w-100 fw-bold"
                                             disabled={loading}
                                         >
                                             {loading ? (
@@ -302,15 +302,16 @@ const TrackOrder = () => {
                                                     return (
                                                         <tr key={idx} className="border-bottom">
                                                             <td className="ps-3 py-3">
-                                                                <img
-                                                                    src={imageUrl}
-                                                                    alt="product"
-                                                                    className="rounded border object-fit-cover"
-                                                                    style={{ width: "60px", height: "80px" }}
-                                                                    onError={(e) => {
-                                                                        e.target.src = "https://via.placeholder.com/60x80?text=Error";
-                                                                    }}
-                                                                />
+                                                                <di className="">
+                                                                    <img
+                                                                        src={imageUrl}
+                                                                        alt="product"
+                                                                        className="rounded border object-fit-cover w-100 h-100"
+                                                                        onError={(e) => {
+                                                                            e.target.src = "https://via.placeholder.com/60x80?text=Error";
+                                                                        }}
+                                                                    />
+                                                                </div>
                                                             </td>
                                                             <td className="py-3">
                                                                 <p className="mb-0 fw-bold text-dark">

@@ -44,7 +44,7 @@ const Checkout = () => {
         text: "Please login to place an order.",
         confirmButtonText: "Login",
         customClass: {
-          confirmButton: "btn btn-dark py-2 px-4"
+          confirmButton: "btn btn-primary py-2 px-4"
         },
         buttonsStyling: false
       }).then(() => {
@@ -278,7 +278,7 @@ const Checkout = () => {
 
             <button
               type="submit"
-              className="btn btn-dark w-100 mt-3 py-2 fw-bold text-uppercase"
+              className="btn btn-primary w-100 mt-3 py-2 fw-bold text-uppercase"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Processing..." : "Place Order"}

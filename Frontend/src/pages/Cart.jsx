@@ -67,15 +67,15 @@ const Cart = () => {
 
                 {/* Product Image & Details */}
                 <div className="col-6 col-md-4 d-flex align-items-center gap-3">
-
-                  {/* 🟢 CHANGE 1: Use 'w-25' and 'img-fluid' instead of 80px */}
-                  <img
-                    src={images.length > 0 ? getImageUrl(images[0]) : PLACEHOLDER_IMG}
-                    alt="product"
-                    className={`img-fluid rounded w-25 object-fit-cover ${isOutOfStock ? 'out-of-stock' : ''}`}
-                    onError={(e) => { e.target.src = PLACEHOLDER_IMG; }}
-                  />
-
+                  <Link to={`/product/${item.product?.id || item.product_id || item.id}`} className="w-25">
+                    {/* 🟢 CHANGE 1: Use 'w-25' and 'img-fluid' instead of 80px */}
+                    <img
+                      src={images.length > 0 ? getImageUrl(images[0]) : PLACEHOLDER_IMG}
+                      alt="product"
+                      className={`img-fluid rounded w-100 object-fit-cover ${isOutOfStock ? 'out-of-stock' : ''}`}
+                      onError={(e) => { e.target.src = PLACEHOLDER_IMG; }}
+                    />
+                  </Link>
                   <div>
                     <h6 className="fs-6 fw-bold mb-1">{item?.name || item?.product?.name || "Untitled Product"}</h6>
                     {isOutOfStock ? (
@@ -122,7 +122,7 @@ const Cart = () => {
         ) : (
           <div className="text-center py-5">
             <h5>Your cart is empty!</h5>
-            <Link to="/" className="btn btn-dark mt-3">Go to Collection</Link>
+            <Link to="/" className="btn btn-primary mt-3">Go to Collection</Link>
           </div>
         )}
       </div>
@@ -148,7 +148,7 @@ const Cart = () => {
               <hr />
               <div className="mt-4">
                 <button
-                  className={`btn w-100 py-2 fw-bold text-uppercase ${hasOutOfStockItems ? 'btn-secondary' : 'btn-dark'}`}
+                  className={`btn w-100 py-2 fw-bold text-uppercase ${hasOutOfStockItems ? 'btn-secondary' : 'btn-primary'}`}
                   onClick={handleCheckout}
                   disabled={hasOutOfStockItems}
                   title={hasOutOfStockItems ? "Please remove sold out items before proceeding" : ""}

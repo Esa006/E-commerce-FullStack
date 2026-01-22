@@ -35,38 +35,36 @@ const Navbar = () => {
   const totalItems = cartItems ? cartItems.reduce((total, item) => total + item.quantity, 0) : 0;
 
   return (
-    // 🟢 1. Navbar Container: White background, bottom border, sticky
-    <nav className="navbar navbar-expand-lg bg-white border-bottom sticky-top py-3">
+    // 🟢 1. Navbar Container: Custom background from App.css, shadow, sticky
+    <nav className="navbar navbar-expand-lg bg-navbar-theme shadow-sm sticky-top py-3">
       <div className="container">
 
-        <Link className="navbar-brand fw-bold fs-3 text-uppercase text-black" to="/">
+        <Link className="navbar-brand fw-bold fs-3 text-uppercase text-navbar-theme" to="/">
           Forever
         </Link>
-
-        {/* 🟢 CENTRAL NAVIGATION LINKS */}
         <ul className="d-none d-md-flex align-items-center gap-4 list-unstyled mb-0">
           <li>
-            <Link to="/" className={`text-decoration-none text-dark small fw-bold text-uppercase pb-1 ${isActive("/", null) ? "border-bottom border-dark border-2" : ""}`}>
+            <Link to="/" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/", null) ? "border-bottom border-white border-2" : ""}`}>
               Home
             </Link>
           </li>
           <li>
-            <Link to="/products" className={`text-decoration-none text-dark small fw-bold text-uppercase pb-1 ${isActive("/products", null) ? "border-bottom border-dark border-2" : ""}`}>
+            <Link to="/products" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", null) ? "border-bottom border-secondary border-2" : ""}`}>
               Collection
             </Link>
           </li>
           <li>
-            <Link to="/products?category=Men" className={`text-decoration-none text-dark small fw-bold text-uppercase pb-1 ${isActive("/products", "Men") ? "border-bottom border-dark border-2" : ""}`}>
+            <Link to="/products?category=Men" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", "Men") ? "border-bottom border-secondary border-2" : ""}`}>
               Men
             </Link>
           </li>
           <li>
-            <Link to="/products?category=Women" className={`text-decoration-none text-dark small fw-bold text-uppercase pb-1 ${isActive("/products", "Women") ? "border-bottom border-dark border-2" : ""}`}>
+            <Link to="/products?category=Women" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", "Women") ? "border-bottom border-secondary border-2" : ""}`}>
               Women
             </Link>
           </li>
           <li>
-            <Link to="/products?category=Kids" className={`text-decoration-none text-dark small fw-bold text-uppercase pb-1 ${isActive("/products", "Kids") ? "border-bottom border-dark border-2" : ""}`}>
+            <Link to="/products?category=Kids" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", "Kids") ? "border-bottom border-secondary border-2" : ""}`}>
               Kids
             </Link>
           </li>
@@ -79,11 +77,11 @@ const Navbar = () => {
           <SearchBar />
 
           {/* 🟢 Wishlist Icon */}
-          <Link to="/wishlist" className="position-relative text-danger text-decoration-none">
+          <Link to="/wishlist" className="position-relative text-navbar-theme text-decoration-none">
             <i className="bi bi-heart fs-4"></i>
             {wishlistCount > 0 && (
               <span
-                className="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-black text-white"
+                className="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-white text-primary fw-bold"
               >
                 {wishlistCount}
               </span>
@@ -91,11 +89,11 @@ const Navbar = () => {
           </Link>
 
           {/* 🟢 3. Cart Icon & Badge */}
-          <Link to="/cart" className="position-relative text-black text-decoration-none">
+          <Link to="/cart" className="position-relative text-navbar-theme text-decoration-none">
             <i className="bi bi-bag fs-4"></i>
             {totalItems > 0 && (
               <span
-                className="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-black text-white"
+                className="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-white text-primary fw-bold"
               >
                 {totalItems}
               </span>
@@ -106,7 +104,7 @@ const Navbar = () => {
           <div className="dropdown d-flex align-items-center">
             <Link
               to={token ? "#" : "/login"}
-              className="text-black text-decoration-none d-flex align-items-center"
+              className="text-navbar-theme text-decoration-none d-flex align-items-center"
               role="button"
               data-bs-toggle={token ? "dropdown" : ""}
               aria-expanded="false"

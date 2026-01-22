@@ -21,7 +21,7 @@ const ProductCard = ({ product }) => {
       {/* Out Of Stock Badge */}
       {isOutOfStock && (
         <div className="position-absolute top-50 start-50 translate-middle z-3">
-          <span className="badge bg-dark text-uppercase px-3 py-2 fs-6 shadow">Sold Out</span>
+          <p><span className="badge bg-dark text-uppercase px-3 py-2 fs-6 shadow">Sold Out</span></p>
         </div>
       )}
 
@@ -35,7 +35,7 @@ const ProductCard = ({ product }) => {
       </button>
 
       <Link to={`/product/${product?.id}`} className="text-decoration-none">
-        <div className="ratio ratio-vertical">
+        <div>
           <img
             src={displayImage}
             className={`object-fit-cover w-100 h-100 rounded-top ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
@@ -69,7 +69,7 @@ const ProductCard = ({ product }) => {
 
         <Link
           to={`/product/${product?.id}`}
-          className={`btn w-100 mt-auto rounded-0 text-uppercase fw-bold py-2 ${isOutOfStock ? 'btn-secondary disabled' : 'btn-dark'}`}
+          className={`btn w-100 mt-auto rounded-0 text-uppercase fw-bold py-2 ${isOutOfStock ? 'btn-secondary disabled' : 'btn-primary'}`}
           style={{ pointerEvents: isOutOfStock ? 'none' : 'auto' }} // Optional: prevent clicking button if strictly disabled
         >
           {isOutOfStock ? "Sold Out" : "View Details"}
