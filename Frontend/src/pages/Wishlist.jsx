@@ -20,7 +20,7 @@ const Wishlist = () => {
         text: "Please login to view your wishlist.",
         confirmButtonText: "Login",
         customClass: {
-          confirmButton: "btn btn-primary "
+          confirmButton: "btn btn-custom-primary "
         },
         buttonsStyling: false
       }).then(() => {

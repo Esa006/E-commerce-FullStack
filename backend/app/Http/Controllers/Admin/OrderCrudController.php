@@ -58,6 +58,7 @@ class OrderCrudController extends CrudController
         CRUD::column('order_number')->type('text');
         CRUD::column('email')->type('email');
         CRUD::column('total_amount')->type('number')->prefix('₹');
+        CRUD::column('shipping_fee')->type('number')->prefix('₹')->label('Shipping');
         
         CRUD::column('status')
             ->type('select_from_array')
@@ -95,6 +96,7 @@ class OrderCrudController extends CrudController
         CRUD::field('order_number')->type('text')->attributes(['readonly' => 'readonly']);
         CRUD::field('email')->type('email');
         CRUD::field('total_amount')->type('number')->prefix('₹');
+        CRUD::field('shipping_fee')->type('number')->prefix('₹')->label('Shipping Fee')->default(10);
         
         CRUD::field('status')
             ->type('select_from_array')

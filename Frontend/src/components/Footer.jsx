@@ -9,7 +9,7 @@ const Footer = () => {
                 <div className='row'>
                     {/* Column 1: Corporate / About */}
                     <div className='col-lg-3 col-md-6 mb-4'>
-                        <h6 className='text-uppercase fw-bold mb-3 small' style={{ letterSpacing: '0.25em' }}>Forever</h6>
+                        <h6 className='text-uppercase fw-bold mb-3 small tracking-widest'>Forever</h6>
                         <ul className='list-unstyled small'>
                             <li className='mb-2'><Link to='/about' className='text-decoration-none text-white-50 hover-text-white'>Who We Are</Link></li>
                             <li className='mb-2'><Link to='/contact' className='text-decoration-none text-white-50 hover-text-white'>Join Our Team</Link></li>
@@ -21,7 +21,7 @@ const Footer = () => {
 
                     {/* Column 2: Help */}
                     <div className='col-lg-3 col-md-6 mb-4'>
-                        <h6 className='text-uppercase fw-bold mb-3 small' style={{ letterSpacing: '0.25em' }}>Help</h6>
+                        <h6 className='text-uppercase fw-bold mb-3 small tracking-widest'>Help</h6>
                         <ul className='list-unstyled small'>
                             <li className='mb-2'><Link to='/track-order' className='text-decoration-none text-white-50 hover-text-white'>Track Your Order</Link></li>
                             <li className='mb-2'><Link to='/faq' className='text-decoration-none text-white-50 hover-text-white'>Frequently Asked Questions</Link></li>
@@ -33,7 +33,7 @@ const Footer = () => {
 
                     {/* Column 3: Shop By */}
                     <div className='col-lg-3 col-md-6 mb-4'>
-                        <h6 className='text-uppercase fw-bold mb-3 small' style={{ letterSpacing: '0.25em' }}>Shop By</h6>
+                        <h6 className='text-uppercase fw-bold mb-3 small tracking-widest'>Shop By</h6>
                         <ul className='list-unstyled small'>
                             <li className='mb-2'><Link to='/products' className='text-decoration-none text-white-50 hover-text-white'>New Arrivals</Link></li>
                             <li className='mb-2'><Link to='/products?category=Men' className='text-decoration-none text-white-50 hover-text-white'>Men</Link></li>
@@ -45,13 +45,13 @@ const Footer = () => {
 
                     {/* Column 4: Follow Us */}
                     <div className='col-lg-3 col-md-6 mb-4'>
-                        <h6 className='text-uppercase fw-bold mb-3 small' style={{ letterSpacing: '0.25em' }}>Contact Us</h6>
+                        <h6 className='text-uppercase fw-bold mb-3 small tracking-widest'>Contact Us</h6>
                         <ul className='list-unstyled small mb-4'>
                             <li className='mb-2 text-white-50'>+91 9858547546</li>
                             <li className='mb-2 text-white-50'>support@forever.com</li>
                         </ul>
 
-                        <h6 className='text-uppercase fw-bold mb-3 small' style={{ letterSpacing: '0.25em' }}>Follow Us</h6>
+                        <h6 className='text-uppercase fw-bold mb-3 small tracking-widest'>Follow Us</h6>
                         <div className='d-flex gap-3'>
                             <a href='#' className='text-white fs-5 opacity-75 hover-opacity-100'><i className='bi bi-facebook'></i></a>
                             <a href='#' className='text-white fs-5 opacity-75 hover-opacity-100'><i className='bi bi-instagram'></i></a>

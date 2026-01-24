@@ -76,20 +76,7 @@ class CartController extends Controller
         Log::info('Cart: updateQuantity() called', ['id' => $id, 'data' => $request->all()]);
         $request->validate(['quantity' => 'required|integer|min:1']);
         
-        $cart = Cart::where('id', $id)->where('user_id', Auth::id())->first();
-
-        if (!$cart) {
-            return response()->json(['message' => 'Cart item not found'], 404);
-        }
-        
-        // Safety Check: If product was deleted but cart item remains
-        if (!$cart->product) {
-            $cart->delete();
-            return response()->json([
-                'message' => 'Product no longer available (removed from cart)',
-                'cart' => $this->getCartState()
-            ], 404); 
-        }
+        $cart = Cart::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
         
         if ($cart->product->stock < $request->quantity) {
             return response()->json([

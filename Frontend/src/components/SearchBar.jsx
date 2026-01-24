@@ -25,14 +25,13 @@ const SearchBar = () => {
         if (!text && !searchParams.get('search')) return;
 
         const timer = setTimeout(() => {
-            // Allow in-place search on /products AND / (Home)
-            if (location.pathname !== '/products' && location.pathname !== '/') {
-                // If on another page (not Home or Products), navigate to collection
+            if (location.pathname !== '/products') {
+                // If on another page, navigate to collection with search term
                 if (text.trim()) {
                     navigate(`/products?search=${encodeURIComponent(text.trim())}`);
                 }
             } else {
-                // On collection page OR Home page, update search params in place
+                // On collection page, update search params in place
                 const newParams = new URLSearchParams(searchParams);
                 if (text.trim()) {
                     newParams.set('search', text.trim());

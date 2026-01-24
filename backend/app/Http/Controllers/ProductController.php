@@ -47,7 +47,7 @@ class ProductController extends Controller
         }
 
         // 5. Pagination (Dynamic per_page with max limit)
-        $perPage = min((int) $request->input('per_page',12), 60); // Default 12, max 60
+        $perPage = min((int) $request->input('per_page',10), 60); // Default 12, max 60
         $products = $query->paginate($perPage);
         
         return response()->json([
@@ -133,30 +133,11 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::find($id);
+        // 🟢 EAGER LOAD 'sizes' RELATIONAL DATA
+        $product = Product::with('sizeVariants')->find($id);
         if (!$product)
             return response()->json(['success' => false], 404);
-
-        $canReview = false;
-        // Check if user is authenticated via Sanctum
-        $user = auth('sanctum')->user();
-        
-        if ($user) {
-            // Check if user has a delivered order for this product
-            $hasDeliveredOrder = \App\Models\Order::where('user_id', $user->id)
-                ->where('status', 'delivered')
-                ->whereHas('orderItems', function ($query) use ($id) {
-                    $query->where('product_id', $id);
-                })
-                ->exists();
-            
-            $canReview = $hasDeliveredOrder;
-        }
-
-        $productData = $product->toArray();
-        $productData['can_review'] = $canReview;
-
-        return response()->json(['success' => true, 'data' => $productData]);
+        return response()->json(['success' => true, 'data' => $product]);
     }
 
     public function store(Request $request)

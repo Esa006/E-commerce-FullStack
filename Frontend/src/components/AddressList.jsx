@@ -179,7 +179,7 @@ const AddressList = () => {
                 <>
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <h5 className="mb-0">My Addresses</h5>
-                        <button className="btn btn-primary btn-sm" onClick={handleAddClick}>
+                        <button className="btn btn-custom-primary btn-sm" onClick={handleAddClick}>
                             <FaPlus className="me-1" /> Add New
                         </button>
                     </div>

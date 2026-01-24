@@ -1,26 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ProductApi from "../api/Products";
 
 import ProductCard from "../components/ProductCard";
 import Swal from "sweetalert2";
 
 const Home = () => {
-  const [searchParams] = useSearchParams(); // Hook moved to top
   const [newArrivals, setNewArrivals] = useState([]);
   const [bestsellers, setBestsellers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(null);
-
-  const searchTerm = searchParams.get("search")?.toLowerCase() || "";
-
-  // Helper to filter products
-  const filterProducts = (products) => {
-    if (!searchTerm) return products;
-    return products.filter((p) =>
-      p.name?.toLowerCase().includes(searchTerm)
-    );
-  };
 
   const fetchHomeData = async () => {
     try {
@@ -49,9 +38,6 @@ const Home = () => {
     fetchHomeData();
   }, []);
 
-  const filteredBestsellers = filterProducts(bestsellers);
-  const filteredNewArrivals = filterProducts(newArrivals);
-
   if (loading)
     return <div className="text-center mt-5 d-flex justify-content-center align-items-center fw-bold text-primary" style={{ minHeight: "200px" }}><p>Loading Products...</p></div>;
 
@@ -66,6 +52,8 @@ const Home = () => {
 
   return (
     <>
+
+
       {/* Category Section */}
       <div className="container py-5">
         <div className="text-center mb-5">
@@ -113,21 +101,24 @@ const Home = () => {
           </div>
         </div>
 
+
+
+
         {/* Bestseller Section */}
         <div className="text-center mb-5 mt-5">
           <h2 className="section-title text-uppercase">Best Sellers</h2>
           <p className="text-muted">Explore our most popular items loved by everyone.</p>
         </div>
         <div className="row mb-5">
-          {filteredBestsellers.length > 0 ? (
-            filteredBestsellers.slice(0, 5).map((item) => (
+          {bestsellers.length > 0 ? (
+            bestsellers.slice(0, 4).map((item) => (
               <div key={item.id} className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4">
                 <ProductCard product={item} />
               </div>
             ))
           ) : (
             <div className="col-12 text-center text-muted">
-              {searchTerm ? <p>No bestsellers match your search.</p> : <p>Check back soon for our top picks!</p>}
+              <p>Check back soon for our top picks!</p>
             </div>
           )}
         </div>
@@ -138,15 +129,15 @@ const Home = () => {
           <p className="text-muted">Discover our newest arrivals.</p>
         </div>
         <div className="row">
-          {filteredNewArrivals.length > 0 ? (
-            filteredNewArrivals.slice(0, 8).map((item) => (
+          {newArrivals.length > 0 ? (
+            newArrivals.slice(0, 8).map((item) => (
               <div key={item.id} className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4">
                 <ProductCard product={item} />
               </div>
             ))
           ) : (
             <div className="col-12 text-center text-muted">
-              {searchTerm ? <p>No new products match your search.</p> : <p>No new products found at the moment.</p>}
+              <p>No new products found at the moment.</p>
             </div>
           )}
         </div>
