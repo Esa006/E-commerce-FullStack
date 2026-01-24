@@ -79,11 +79,11 @@ const Cart = () => {
                   <div>
                     <h6 className="fs-6 fw-bold mb-1">{item?.name || item?.product?.name || "Untitled Product"}</h6>
                     {isOutOfStock ? (
-                      <p><span className="badge bg-danger">SoldOut</span></p>
+                      <p><span className="badge bg-danger text-uppercase">Sold Out</span></p>
                     ) : (
                       <div className="d-flex align-items-center gap-2 small text-muted">
                         <span>₹{item?.price || item?.product?.price || 0}</span>
-                        <span className="px-2 py-1 border bg-light">{item?.size || "N/A"}</span>
+                        <span className="badge bg-light text-dark border">{item?.size || "N/A"}</span>
                       </div>
                     )}
                     {!isOutOfStock && availableStock <= 5 && availableStock > 0 && (

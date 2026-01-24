@@ -49,7 +49,7 @@ const RelativeProduct = () => {
   }, []);
 
   if (loading)
-    return <div className="text-center mt-5 loader"><p>Loading Products...</p></div>;
+    return <div className="text-center mt-5 d-flex justify-content-center align-items-center fw-bold text-primary" style={{ minHeight: "200px" }}><p>Loading Products...</p></div>;
 
   if (apiError)
     return (

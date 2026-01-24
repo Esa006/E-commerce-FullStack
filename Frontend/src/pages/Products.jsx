@@ -215,7 +215,7 @@ const Products = () => {
             </p>
 
             <select
-              className='form-select form-select-sm w-auto border-secondary'
+              className='form-select form-select-sm w-auto border-secondary text-secondary'
               onChange={(e) => setSortType(e.target.value)}
               value={sortType}
             >
@@ -252,7 +252,7 @@ const Products = () => {
                 <ul className="pagination">
                   <li className={`page-item ${currentPage === 1 || loading ? 'disabled' : ''}`}>
                     <button
-                      className="page-link text-dark"
+                      className="page-link border-secondary rounded-0 text-secondary"
                       onClick={() => !loading && handlePageChange(Math.max(currentPage - 1, 1))}
                       aria-label="Previous"
                       disabled={loading}
@@ -264,7 +264,7 @@ const Products = () => {
                   {[...Array(totalPages)].map((_, i) => (
                     <li key={i + 1} className="page-item">
                       <button
-                        className={`page-link ${currentPage === i + 1 ? 'bg-dark border-dark text-white' : 'text-dark border-light-subtle'}`}
+                        className={`page-link border-secondary rounded-0 ${currentPage === i + 1 ? 'active bg-secondary text-white' : 'text-secondary'}`}
                         onClick={() => !loading && handlePageChange(i + 1)}
                         disabled={loading}
                       >
@@ -275,7 +275,7 @@ const Products = () => {
 
                   <li className={`page-item ${currentPage === totalPages || loading ? 'disabled' : ''}`}>
                     <button
-                      className="page-link text-dark"
+                      className="page-link border-secondary rounded-0 text-secondary"
                       onClick={() => !loading && handlePageChange(Math.min(currentPage + 1, totalPages))}
                       aria-label="Next"
                       disabled={loading}

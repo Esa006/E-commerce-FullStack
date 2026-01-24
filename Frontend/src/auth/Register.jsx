@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'; // Professional Alerts
 import AuthApi from "../api/auth";// Import the service we made above
-import './Register.css';
 
 export default function Register() {
     const navigate = useNavigate();
