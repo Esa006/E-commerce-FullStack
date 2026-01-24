@@ -1,9 +1,10 @@
 import React from "react";
-import { useContext, useState, useEffect } from "react";
+import { useCallback, useContext, useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
 import apiClient from "../api/apiClient";
+import axios from "axios";
 import Swal from "sweetalert2";
 import { parseImages, getImageUrl, PLACEHOLDER_IMG } from "../utils/imageUtils";
 import Observability from "../utils/Observability";
@@ -385,6 +386,7 @@ const ProductDetails = () => {
                   </div>
                 </form>
               </div>
+            ) : null}
 
             {/* --- REVIEWS LIST --- */}
             <div className="mt-5">
