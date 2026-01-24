@@ -130,7 +130,7 @@ const ProductDetails = () => {
         icon: "warning",
         title: "Stock Limit",
         text: `We only have ${productData.stock} units available.`,
-        confirmButtonColor: "btn-btn-primary"
+        confirmButtonColor: "#343a40"
       });
     }
   };
@@ -341,7 +341,7 @@ const ProductDetails = () => {
               <h4 className="fw-bold text-uppercase tracking-widest mb-3">Ratings & Reviews</h4>
               <div className="d-flex justify-content-center align-items-center gap-3">
                 <div className="bg-success text-white px-3 py-1 fw-bold fs-4 d-flex align-items-center gap-2 rounded-1">
-                  {productData.rating?.toFixed(1) || "0.0"} <i className="bi bi-star-fill fs-6"></i>
+                  {parseFloat(productData.rating || 0).toFixed(1)} <i className="bi bi-star-fill fs-6"></i>
                 </div>
                 <div className="text-muted small">
                   Based on Verified Purchases
