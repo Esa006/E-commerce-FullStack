@@ -302,7 +302,7 @@ const TrackOrder = () => {
                                                     return (
                                                         <tr key={idx} className="border-bottom">
                                                             <td className="ps-3 py-3">
-                                                                <di className="">
+                                                                <div>
                                                                     <img
                                                                         src={imageUrl}
                                                                         alt="product"

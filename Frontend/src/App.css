@@ -1,8 +1,41 @@
 :root {
-    --bs-primary: #000000;
-    --bs-primary-rgb: 0, 0, 0;
+    --bs-primary: #181616;
+    --bs-primary-rgb: 24, 22, 22;
+    --bs-secondary: #1b1919;
+    --bs-secondary-rgb: 27, 25, 25;
     --navbar-bg: #ffffff;
-    --navbar-text: #555555;
+    --navbar-text: var(--bs-primary);
+    --nav-active-border: var(--bs-primary);
+    --bs-body-bg: #ffffff;
+}
+
+
+.nav-link-active {
+    border-bottom: 2px solid var(--nav-active-border) !important;
+}
+
+/* --- Utilities --- */
+.text-primary {
+    color: var(--bs-primary) !important;
+}
+
+.text-secondary {
+    color: var(--bs-secondary) !important;
+}
+
+/* Override Bootstrap text-muted to match secondary theme */
+.text-muted {
+    color: var(--bs-secondary) !important;
+}
+
+/* --- Global Resets & Typography --- */
+body {
+    color: var(--bs-primary) !important;
+}
+
+a {
+    text-decoration: none;
+    color: var(--bs-primary);
 }
 
 .bg-navbar-theme {
@@ -13,33 +46,40 @@
     color: var(--navbar-text);
 }
 
+/* --- Button Overrides --- */
 .btn-primary {
     --bs-btn-bg: var(--bs-primary);
     --bs-btn-border-color: var(--bs-primary);
-    --bs-btn-hover-bg: #000000;
-    --bs-btn-hover-border-color: #000000;
+    --bs-btn-hover-bg: #333333;
+    --bs-btn-hover-border-color: #333333;
+    --bs-btn-active-bg: #000000;
+    --bs-btn-active-border-color: #000000;
 }
 
+.btn-outline-primary {
+    --bs-btn-color: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+}
+
+
+/* --- Badge Overrides --- */
+.badge {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
 
 .category-card-img {
     height: 380px;
-}
-
-.product-main-img {
-    width: 100%;
-    height: auto;
+    object-position: center;
 }
 
 .cart-quantity-input {
     max-width: 60px;
-}
-
-.product-detail-img {
-    width: 300px;
-}
-
-.order-loading-container {
-    min-height: 60vh;
 }
 
 .product-loading-area {
@@ -49,7 +89,6 @@
 .order-item-img {
     width: 80px;
     height: 100px;
-
 }
 
 .login-card {
@@ -57,12 +96,9 @@
     max-width: 400px;
 }
 
-
-
 .qty-input-group {
     width: 110px;
 }
-
 
 .text-spacing-1 {
     letter-spacing: 1px;

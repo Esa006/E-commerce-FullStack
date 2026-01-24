@@ -44,27 +44,27 @@ const Navbar = () => {
         </Link>
         <ul className="d-none d-md-flex align-items-center gap-4 list-unstyled mb-0">
           <li>
-            <Link to="/" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/", null) ? "border-bottom border-white border-2" : ""}`}>
+            <Link to="/" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/", null) ? "nav-link-active" : ""}`}>
               Home
             </Link>
           </li>
           <li>
-            <Link to="/products" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", null) ? "border-bottom border-secondary border-2" : ""}`}>
+            <Link to="/products" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", null) ? "nav-link-active" : ""}`}>
               Collection
             </Link>
           </li>
           <li>
-            <Link to="/products?category=Men" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", "Men") ? "border-bottom border-secondary border-2" : ""}`}>
+            <Link to="/products?category=Men" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", "Men") ? "nav-link-active" : ""}`}>
               Men
             </Link>
           </li>
           <li>
-            <Link to="/products?category=Women" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", "Women") ? "border-bottom border-secondary border-2" : ""}`}>
+            <Link to="/products?category=Women" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", "Women") ? "nav-link-active" : ""}`}>
               Women
             </Link>
           </li>
           <li>
-            <Link to="/products?category=Kids" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", "Kids") ? "border-bottom border-secondary border-2" : ""}`}>
+            <Link to="/products?category=Kids" className={`text-decoration-none text-navbar-theme small fw-bold text-uppercase pb-1 ${isActive("/products", "Kids") ? "nav-link-active" : ""}`}>
               Kids
             </Link>
           </li>

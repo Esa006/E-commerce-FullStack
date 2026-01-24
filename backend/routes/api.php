@@ -10,11 +10,9 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ErrorReportController;
 
-/*
-|--------------------------------------------------------------------------
-| 🟢 PUBLIC ROUTES (No Login Required)
-|--------------------------------------------------------------------------
-*/
+
+ //🟢 PUBLIC ROUTES (No Login Required)
+
 Route::post('/error-report', [ErrorReportController::class, 'report'])->middleware('throttle:5,1');
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/new-arrivals', [ProductController::class, 'getNewArrivals']);

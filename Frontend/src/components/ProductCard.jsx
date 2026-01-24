@@ -6,6 +6,7 @@ import StarRating from "./StarRating";
 
 const ProductCard = ({ product }) => {
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
+  const [isImgLoaded, setIsImgLoaded] = React.useState(false);
   const inWishlist = isInWishlist(product.id);
 
   // Parse images helper
@@ -35,13 +36,24 @@ const ProductCard = ({ product }) => {
       </button>
 
       <Link to={`/product/${product?.id}`} className="text-decoration-none">
-        <div>
+        <div style={{ height: '300px', backgroundColor: '#f0f0f0' }} className="w-100 rounded-top overflow-hidden position-relative">
+          {!isImgLoaded && (
+            <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-secondary">
+              <div className="spinner-border spinner-border-sm" role="status"></div>
+            </div>
+          )}
+
           <img
             src={displayImage}
             className={`object-fit-cover w-100 h-100 rounded-top ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
             loading="lazy"
             alt={product?.name || "Product"}
-            style={{ filter: isOutOfStock ? 'grayscale(100%)' : 'none' }}
+            onLoad={() => setIsImgLoaded(true)}
+            style={{
+              filter: isOutOfStock ? 'grayscale(100%)' : 'none',
+              opacity: isImgLoaded ? 1 : 0,
+              transition: 'opacity 0.3s ease-in-out'
+            }}
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = PLACEHOLDER_IMG;
@@ -54,7 +66,7 @@ const ProductCard = ({ product }) => {
         <div className="small text-uppercase fw-bold text-muted mb-1">
           {product?.brand || "Brand"}
         </div>
-        <h6 className="card-title text-truncate mb-1 text-dark">
+        <h6 className="card-title text-truncate mb-1 text-secondary">
           {product?.name || "Untitled Product"}
         </h6>
 

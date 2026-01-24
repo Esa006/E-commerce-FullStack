@@ -133,12 +133,13 @@ const Orders = () => {
 
                                     return (
                                         <div key={idx} className="d-flex gap-3 p-3 border-top">
-                                            <img
-                                                src={imageUrl}
-                                                alt={item.product?.name || "Product"}
-                                                className="img-thumbnail object-fit-cover order-item-img"
-                                            />
-
+                                            <div className="order-item-img">
+                                                <img
+                                                    src={imageUrl}
+                                                    alt={item.product?.name || "Product"}
+                                                    className="img-thumbnail object-fit-cover w-100 h-100"
+                                                />
+                                            </div>
                                             <div className="d-flex justify-content-between align-items-center w-100">
                                                 <div>
                                                     <div className="fw-bold">

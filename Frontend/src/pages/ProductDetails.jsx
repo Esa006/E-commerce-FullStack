@@ -176,12 +176,14 @@ const ProductDetails = () => {
             </ol>
           </nav>
           <div className="mb-3 text-center product-detail">
-            <img
-              src={selectedImage ? getImageUrl(selectedImage) : PLACEHOLDER_IMG}
-              className="img-fluid product-main-img object-fit-contain"
-              alt={productData.name}
-              onError={(e) => (e.target.src = PLACEHOLDER_IMG)}
-            />
+            <div className="product-main-img"> {/* ✅ Quote is now present */}
+              <img
+                src={selectedImage ? getImageUrl(selectedImage) : PLACEHOLDER_IMG}
+                className="img-fluid object-fit-contain"
+                alt={productData.name}
+                onError={(e) => (e.target.src = PLACEHOLDER_IMG)}
+              />
+            </div>
           </div>
 
           {images.length > 1 && (
@@ -340,9 +342,9 @@ const ProductDetails = () => {
             <div className="text-center mb-5">
               <h4 className="fw-bold text-uppercase tracking-widest mb-3">Ratings & Reviews</h4>
               <div className="d-flex justify-content-center align-items-center gap-3">
-                <div className="bg-success text-white px-3 py-1 fw-bold fs-4 d-flex align-items-center gap-2 rounded-1">
+                <span className="badge bg-success px-3 py-2 fs-5 d-flex align-items-center gap-2 rounded-1">
                   {productData.rating?.toFixed(1) || "0.0"} <i className="bi bi-star-fill fs-6"></i>
-                </div>
+                </span>
                 <div className="text-muted small">
                   {productData.rating_count || 0} Reviews
                 </div>
@@ -416,9 +418,7 @@ const ProductDetails = () => {
           )
         }
       </div>
-
-
-    </div >
+    </div>
 
   );
 };
