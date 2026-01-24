@@ -11,6 +11,25 @@ const CartProvider = ({ children }) => {
   // Helper to check authentication status
   const isAuthenticated = () => !!localStorage.getItem("ACCESS_TOKEN");
 
+  // 🟢 Helper to get available stock for an item/size
+  const getAvailableStock = (product, size) => {
+    if (product.size_stock) {
+      let stocks = product.size_stock;
+      if (typeof stocks === 'string') {
+        try { stocks = JSON.parse(stocks); } catch (e) { }
+      }
+
+      // Array (Admin Table)
+      if (Array.isArray(stocks)) {
+        const found = stocks.find(s => s.size === size);
+        return found ? parseInt(found.qty || 0) : 0;
+      }
+      // Object
+      return stocks[size] !== undefined ? parseInt(stocks[size]) : product.stock;
+    }
+    return product.stock || 0;
+  };
+
   /**
    * 1. INITIAL HYDRATION
    * Loads from LocalStorage if guest, or API if authenticated.
@@ -22,16 +41,19 @@ const CartProvider = ({ children }) => {
         const response = await CartApi.getCart();
         // Server returns items with nested product: { id, quantity, size, product: { name, price, stock, ... } }
         // We flatten or adapt if needed, but keeping backend structure is safer
-        const backendItems = response.data.map(item => ({
-          cart_id: item.id, // ID of the cart record
-          id: item.product.id, // ID of the product
-          name: item.product.name,
-          price: item.product.price,
-          image: item.product.image,
-          stock: item.product.stock,
-          quantity: item.quantity,
-          size: item.size
-        }));
+        const backendItems = response.data
+          .filter(item => item.product) // 🔴 Safety Filter: Ignore items without product data
+          .map(item => ({
+            cart_id: item.id, // ID of the cart record
+            id: item.product.id, // ID of the product
+            name: item.product.name,
+            price: item.product.price,
+            image: item.product.image,
+            size_stock: item.product.size_stock, // 🟢 Added
+            stock: item.product.stock,
+            quantity: item.quantity,
+            size: item.size
+          }));
         setCartItems(backendItems);
       } else {
         const savedCart = localStorage.getItem("cartItems");
@@ -102,6 +124,7 @@ const CartProvider = ({ children }) => {
             name: item.product.name,
             price: item.product.price,
             image: item.product.image,
+            size_stock: item.product.size_stock, // 🟢 Added
             stock: item.product.stock,
             quantity: item.quantity,
             size: item.size
@@ -131,18 +154,21 @@ const CartProvider = ({ children }) => {
 
       if (existingIndex > -1) {
         const currentQty = cartData[existingIndex].quantity;
-        if (currentQty + quantity > product.stock) {
+        const available = getAvailableStock(product, size);
+
+        if (currentQty + quantity > available) {
           Swal.fire({
             icon: 'warning',
             title: 'Stock Limit',
-            text: `Only ${product.stock} available.`,
+            text: `Only ${available} available${size ? ' for size ' + size : ''}.`,
           });
           return;
         }
         cartData[existingIndex].quantity += quantity;
       } else {
-        if (quantity > product.stock) {
-          Swal.fire({ icon: 'error', title: 'Insufficient Stock' });
+        const available = getAvailableStock(product, size);
+        if (quantity > available) {
+          Swal.fire({ icon: 'error', title: 'Insufficient Stock', text: `Only ${available} available.` });
           return;
         }
         cartData.push({ ...product, size, quantity });
@@ -178,6 +204,7 @@ const CartProvider = ({ children }) => {
             name: item.product.name,
             price: item.product.price,
             image: item.product.image,
+            size_stock: item.product.size_stock, // 🟢 Added
             stock: item.product.stock,
             quantity: item.quantity,
             size: item.size
@@ -185,6 +212,21 @@ const CartProvider = ({ children }) => {
           setCartItems(updatedItems);
         }
       } catch (error) {
+        // 🟢 Robust handling: If backend fixed the cart (e.g. removed invalid item), sync state
+        if (error.response?.status === 404 && error.response?.data?.cart) {
+          const updatedItems = error.response.data.cart.map(item => ({
+            cart_id: item.id,
+            id: item.product.id,
+            name: item.product.name,
+            price: item.product.price,
+            image: item.product.image,
+            stock: item.product.stock,
+            quantity: item.quantity,
+            size: item.size
+          }));
+          setCartItems(updatedItems);
+        }
+
         Swal.fire({
           icon: 'warning',
           title: 'Update failed',
@@ -195,9 +237,11 @@ const CartProvider = ({ children }) => {
       // Guest Logic
       const updatedCart = cartItems.map(item => {
         if (item.id === itemId && item.size === size) {
-          const finalQty = Math.min(quantity, item.stock);
-          if (quantity > item.stock) {
-            Swal.fire({ icon: 'warning', title: 'Limit Reached', text: `Only ${item.stock} in stock` });
+          const available = getAvailableStock(item, size);
+          const finalQty = Math.min(quantity, available);
+
+          if (quantity > available) {
+            Swal.fire({ icon: 'warning', title: 'Limit Reached', text: `Only ${available} in stock` });
           }
           return { ...item, quantity: Math.max(1, finalQty) };
         }

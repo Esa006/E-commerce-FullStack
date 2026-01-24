@@ -54,7 +54,7 @@ const Orders = () => {
 
     if (loading) {
         return (
-            <div className="d-flex justify-content-center align-items-center loading-container">
+            <div className="d-flex justify-content-center align-items-center order-loading-container">
                 <div className="spinner-border text-dark" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </div>
@@ -87,7 +87,7 @@ const Orders = () => {
             {orders.length === 0 && !error ? (
                 <div className="card border-0 bg-light text-center p-4">
                     <h6 className="text-muted mb-2">You haven't placed any orders yet.</h6>
-                    <Link to="/" className="btn btn-dark btn-sm px-3 py-1 mx-auto">Start Shopping</Link>
+                    <Link to="/" className="btn btn-custom-primary btn-sm px-3 py-1 mx-auto">Start Shopping</Link>
                 </div>
             ) : (
                 <div className="d-flex flex-column gap-4">
@@ -133,20 +133,35 @@ const Orders = () => {
 
                                     return (
                                         <div key={idx} className="d-flex gap-3 p-3 border-top">
-                                            <img
-                                                src={imageUrl}
-                                                alt={item.product?.name || "Product"}
-                                                className="img-thumbnail object-fit-cover order-item-img"
-                                            />
-
                                             <div>
-                                                <div className="fw-bold">
-                                                    {item.product?.name || item.product_name || "Product"}
+                                                <img
+                                                    src={imageUrl}
+                                                    alt={item.product?.name || "Product"}
+                                                    className="img-thumbnail object-fit-cover order-item-img"
+                                                />
+                                            </div>
+
+                                            <div className="d-flex justify-content-between align-items-center w-100">
+                                                <div>
+                                                    <div className="fw-bold">
+                                                        {item.product?.name || item.product_name || "Product"}
+                                                    </div>
+                                                    <small className="text-muted d-block">
+                                                        Size: {item.size || 'N/A'}
+                                                    </small>
+                                                    <small className="text-muted">
+                                                        Qty: {item.quantity}
+                                                    </small>
+                                                    <div className="fw-semibold">₹{item.price}</div>
                                                 </div>
-                                                <small className="text-muted">
-                                                    Qty: {item.quantity}
-                                                </small>
-                                                <div className="fw-semibold">₹{item.price}</div>
+                                                {(order.status || '').toLowerCase() === 'delivered' && (
+                                                    <Link
+                                                        to={`/product/${item.product?.id || item.product_id}`}
+                                                        className="btn btn-outline-dark btn-sm rounded-0"
+                                                    >
+                                                        Write Review
+                                                    </Link>
+                                                )}
                                             </div>
                                         </div>
                                     );

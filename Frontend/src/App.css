@@ -1,20 +1,107 @@
-/* .category-card-img {
+:root {
+    --primary-color: #000000;
+    --primary-hover: #333333;
+    --secondary-color: #ffffff;
+    --secondary-hover: #f0f0f0;
+    --page-bg: #ffffff;
+    --text-main: #121212;
+    --text-light: #6c757d;
+    --border-color: #e5e5e5;
+    --danger-color: #dc3545;
+    /* Bootstrap danger red match */
+    --bs-primary: #000000;
+    --bs-primary-rgb: 0, 0, 0;
+    --navbar-bg: #ffffff;
+    --navbar-text: #555555;
+    --bs-secondary: #ffffff;
+
+}
+
+
+body {
+    background-color: var(--page-bg);
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+
+}
+
+.btn-custom-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-custom-primary:hover,
+.btn-custom-primary:focus,
+.btn-custom-primary:active {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: #ffffff;
+}
+
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: #000000;
+    color: #000000;
+    font-weight: 500;
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+}
+
+
+.text-primary {
+    color: var(--primary-color);
+}
+
+.text-main {
+    color: var(--text-main);
+}
+
+.bg-danger-custom {
+    background-color: var(--danger-color);
+    color: #ffffff;
+}
+
+.bg-primary {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+
+.card {
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+
+}
+
+
+.bg-navbar-theme {
+    background-color: var(--navbar-bg);
+}
+
+.text-navbar-theme {
+    color: var(--navbar-text);
+}
+
+
+.category-card-img {
     height: 380px;
 }
 
-/* Product Details Page */
 .product-main-img {
-    max-height: 400px;
+    width: 100%;
+    height: auto;
 }
 
-/* Cart Page */
-.cart-quantity-input {
-    max-width: 60px;
-}
-
-/* Orders Page */
-.loading-container {
-    min-height: 60vh;
+.product-detail-img {
+    width: 300px;
 }
 
 .order-item-img {
@@ -22,99 +109,38 @@
     height: 100px;
 }
 
-.login-card {
-    width: 100%;
-    max-width: 400px;
-}
-
-/* Shop Page */
-.shop-card-img {
-    height: 250px;
+.cart-quantity-input {
+    max-width: 60px;
 }
 
 .qty-input-group {
     width: 110px;
 }
 
-/* Override default Bootstrap flex behavior to prevent shrinking/growing issues */
-.qty-input-group .form-control {
-    flex: 0 0 auto !important;
-    width: 40px !important;
-}
-
-/* Custom Ratio 125% (Product Portrait) */
-.ratio-vertical {
-    --bs-aspect-ratio: 125%;
-}
-
-/* App.jsx main loader */
-.loading-main {
+/* Loading Containers */
+.order-loading-container {
     min-height: 60vh;
 }
 
-/* Custom Width for Action Buttons */
-.w-40 {
-    width: 40% !important;
-}
-
-/* Utility for breadcrumb truncation */
-.mw-400 {
-    max-width: 400px;
-}
-
-/* Utility to disable textarea resize */
-.resize-none {
-    resize: none;
-}
-
-/* Sidebar min-width */
-.min-w-240 {
-    min-width: 240px;
-}
-
-/* Min-height for loading/empty states */
-.min-h-600 {
+.product-loading-area {
     min-height: 600px;
 }
 
-/* Product Card Wrapper for responsive sizing in flex/grid */
-/* Min-widths for responsive cards */
-.min-w-250 {
-    min-width: 250px;
+.order-success-loading {
+    min-height: 60vh;
 }
 
-/* Flex grow utilities with 0 basis for equal columns */
-.flex-2-0 {
-    flex: 2 0 0% !important;
+/* Login Card */
+.login-card {
+    width: 100%;
+    max-width: 400px;
 }
 
-.flex-1-0 {
-    flex: 1 0 0% !important;
+/* Text Utilities */
+.text-spacing-1 {
+    letter-spacing: 1px;
 }
 
-/* Search Bar Input Styling */
-.search-input {
-    width: 240px;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
-}
-
-/* Cursor Utilities */
-.cursor-pointer {
-    cursor: pointer;
-}
-
-.cursor-default {
-    cursor: default;
-}
-
-/* Footer Column Styling */
-.footer-col {
-    width: 25%;
-    min-width: 250px;
-}
-
-/* Utilities */
-.flex-basis-50 {
-    flex-basis: 50%;
+.tracking-widest {
+    letter-spacing: 0.25em;
 }

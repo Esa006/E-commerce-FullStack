@@ -20,7 +20,7 @@ const Wishlist = () => {
         text: "Please login to view your wishlist.",
         confirmButtonText: "Login",
         customClass: {
-          confirmButton: "btn btn-dark "
+          confirmButton: "btn btn-custom-primary "
         },
         buttonsStyling: false
       }).then(() => {
@@ -42,7 +42,7 @@ const Wishlist = () => {
             </div>
             <div className="row">
               {wishlistItems.map((item) => (
-                <div key={item.id} className="col-6 col-md-4 col-lg-3 mb-4">
+                <div key={item.id} className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4">
                   <ProductCard product={item} />
                 </div>
               ))}
@@ -51,7 +51,7 @@ const Wishlist = () => {
         ) : (
           <div className="text-center py-5">
             <h4 className="text-muted mb-3">Your wishlist is empty.</h4>
-            <a href="/products" className="btn btn-dark">
+            <a href="/products" className="btn btn-custom-primary">
               Continue Shopping
             </a>
           </div>

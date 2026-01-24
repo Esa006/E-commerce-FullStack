@@ -12,23 +12,36 @@ const ProductCard = ({ product }) => {
   const images = parseImages(product.image);
   const displayImage = images.length > 0 ? getImageUrl(images[0]) : PLACEHOLDER_IMG;
 
+  const isOutOfStock = !product?.stock || product?.stock <= 0;
+
   return (
 
-    <div className="card h-100 border-0 shadow-sm position-relative">
+    <div className={`card h-100 border-0 shadow-sm position-relative ${isOutOfStock ? 'bg-light' : ''}`}>
+
+      {/* Out Of Stock Badge */}
+      {isOutOfStock && (
+        <div className="position-absolute top-50 start-50 translate-middle z-3">
+          <p><span className="badge bg-dark text-uppercase px-3 py-2 fs-6 shadow">Sold Out</span></p>
+        </div>
+      )}
+
       <button
-        className="btn btn-light rounded-circle position-absolute top-0 end-0 m-2 d-flex justify-content-center align-items-center shadow-sm p-2 z-3"
+        className="btn btn-light position-absolute top-0 end-0 m-2 d-flex justify-content-center align-items-center shadow-sm p-2 z-3"
         onClick={() => toggleWishlist(product)}
+        disabled={isOutOfStock}
+        title={isOutOfStock ? "Out of Stock" : "Add to Wishlist"}
       >
         <i className={`bi fs-6 ${inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart text-dark'}`}></i>
       </button>
 
       <Link to={`/product/${product?.id}`} className="text-decoration-none">
-        <div className="ratio ratio-vertical">
+        <div>
           <img
             src={displayImage}
-            className="object-fit-cover w-100 h-100 rounded-top"
+            className={`object-fit-cover w-100 h-100 rounded-top ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
             loading="lazy"
             alt={product?.name || "Product"}
+            style={{ filter: isOutOfStock ? 'grayscale(100%)' : 'none' }}
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = PLACEHOLDER_IMG;
@@ -37,7 +50,7 @@ const ProductCard = ({ product }) => {
         </div>
       </Link>
 
-      <div className="card-body d-flex flex-column p-2 text-center">
+      <div className={`card-body d-flex flex-column p-2 text-center ${isOutOfStock ? 'opacity-50' : ''}`}>
         <div className="small text-uppercase fw-bold text-muted mb-1">
           {product?.brand || "Brand"}
         </div>
@@ -46,16 +59,20 @@ const ProductCard = ({ product }) => {
         </h6>
 
         <div className="d-flex justify-content-center mb-2">
-          <StarRating rating={product?.rating || 0} />
+          <StarRating rating={product?.rating || 0} reviews={product?.rating_count || 0} />
         </div>
 
         <div className="fw-bold text-dark mb-3">
-          ₹{product?.price || 0}
+          {isOutOfStock ? <span className="text-danger">Out of Stock</span> : `₹${product?.price || 0}`}
         </div>
 
 
-        <Link to={`/product/${product?.id}`} className="btn btn-dark w-100 mt-auto rounded-0 text-uppercase fw-bold py-2">
-          View Details
+        <Link
+          to={`/product/${product?.id}`}
+          className={`btn w-100 mt-auto rounded-0 text-uppercase fw-bold py-2 ${isOutOfStock ? 'btn-secondary disabled' : 'btn-custom-primary'}`}
+          style={{ pointerEvents: isOutOfStock ? 'none' : 'auto' }} // Optional: prevent clicking button if strictly disabled
+        >
+          {isOutOfStock ? "Sold Out" : "View Details"}
         </Link>
       </div>
     </div>

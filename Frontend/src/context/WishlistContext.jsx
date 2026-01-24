@@ -34,7 +34,7 @@ const WishlistProvider = ({ children }) => {
         text: "Please login to add items to your wishlist.",
         confirmButtonText: "Login",
         customClass: {
-          confirmButton: "btn btn-dark py-2 px-4"
+          confirmButton: "btn btn-custom-primary py-2 px-4"
         },
         buttonsStyling: false
       }).then(() => {

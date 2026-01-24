@@ -128,7 +128,7 @@ export default function Register() {
 
                         {/* Submit Button */}
                         <div className="d-flex flex-column">
-                            <button type="submit" className="btn btn-primary py-2 fw-bold" disabled={loading}>
+                            <button type="submit" className="btn btn-custom-primary py-2 fw-bold" disabled={loading}>
                                 {loading ? (
                                     <span><span className="spinner-border spinner-border-sm me-2"></span>Processing...</span>
                                 ) : (

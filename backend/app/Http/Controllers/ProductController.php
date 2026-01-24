@@ -133,7 +133,8 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::find($id);
+        // 🟢 EAGER LOAD 'sizes' RELATIONAL DATA
+        $product = Product::with('sizeVariants')->find($id);
         if (!$product)
             return response()->json(['success' => false], 404);
         return response()->json(['success' => true, 'data' => $product]);

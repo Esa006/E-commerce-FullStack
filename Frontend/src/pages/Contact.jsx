@@ -62,7 +62,7 @@ const Contact = () => {
                   <label className="form-label text-muted small fw-bold">MESSAGE</label>
                   <textarea className="form-control" rows="4" placeholder="How can we help?"></textarea>
                 </div>
-                <button type="submit" className="btn btn-dark w-100 py-2">SEND MESSAGE</button>
+                <button type="submit" className="btn btn-custom-primary w-100 py-2">SEND MESSAGE</button>
               </form>
             </div>
           </div>

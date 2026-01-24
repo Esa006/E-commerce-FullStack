@@ -103,8 +103,12 @@ export default function OrderSuccess() {
         const statusOrder = ["pending", "processing", "shipped", "delivered"];
 
         let currentStatus = status?.toLowerCase() || "pending";
-        // Handle variations if backend sends different strings
-        if (currentStatus === 'placed') currentStatus = 'pending';
+
+        // Robust normalization
+        if (['pending', 'ordered', 'placed'].includes(currentStatus)) currentStatus = 'pending';
+        else if (['processing', 'confirmed', 'confirm'].includes(currentStatus)) currentStatus = 'processing';
+        else if (['shipped', 'out_for_delivery', 'dispatch'].includes(currentStatus)) currentStatus = 'shipped';
+        else if (['delivered', 'done', 'completed'].includes(currentStatus)) currentStatus = 'delivered';
 
         const idx = statusOrder.indexOf(currentStatus);
 
@@ -117,7 +121,7 @@ export default function OrderSuccess() {
 
     if (loading) {
         return (
-            <div className="container-fluid py-5 text-center" style={{ minHeight: "60vh" }}>
+            <div className="container-fluid py-5 text-center order-success-loading">
                 <div className="spinner-border text-dark" />
                 <p className="mt-3 text-muted">Loading order details...</p>
             </div>
@@ -126,8 +130,6 @@ export default function OrderSuccess() {
 
     if (!orderData) return null;
 
-    // Calculate subtotal if not explicitly provided
-    // Some APIs give total_amount but not subtotal, so we can sum items
     const calculateSubtotal = () => {
         return orderData.items.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
     };
@@ -143,10 +145,11 @@ export default function OrderSuccess() {
                 <FaCheckCircle size={64} className="text-success mb-3" />
                 <h2 className="fw-bold text-uppercase">Thank You!</h2>
                 <p className="text-muted fs-5">Your order has been placed successfully.</p>
-                <div className="mt-2">
+                <p className="">
                     <span className="text-muted">Order #</span>
                     <span className="fw-bold text-dark ms-1">{orderData.order_number || orderData.id}</span>
-                </div>
+                    <span className={`badge ms-2 ${getStatusBadge(orderData.status)}`}>{orderData.status}</span>
+                </p>
             </div>
 
             <div className="row g-4">
@@ -216,12 +219,12 @@ export default function OrderSuccess() {
                                             <img
                                                 src={displayImage}
                                                 className="img-fluid rounded object-fit-cover w-100 h-100 border"
-                                                alt={item.product_name || "Product"}
+                                                alt={item.product?.name || item.product_name || "Product"}
                                                 onError={(e) => e.target.src = PLACEHOLDER_IMG}
                                             />
                                         </div>
                                         <div className="flex-grow-1">
-                                            <h6 className="fw-bold mb-1">{item.product_name || item.name || "Product Name"}</h6>
+                                            <h6 className="fw-bold mb-1">{item.product?.name || item.product_name || item.name || "Product Name"}</h6>
                                             <div className="text-muted small">
                                                 {item.size && <span className="me-3">Size: {item.size}</span>}
                                                 <span>Qty: {item.quantity}</span>
@@ -301,12 +304,18 @@ export default function OrderSuccess() {
 
                     {/* ACTIONS */}
                     <div className="d-grid gap-2">
-                        <Link to="/orders" className="btn btn-dark py-2">View All Orders</Link>
+                        <button
+                            onClick={() => navigate('/track-order', { state: { orderNumber: orderData.order_number || orderData.id, email: orderData.email } })}
+                            className="btn btn-info text-white py-2 fw-bold"
+                        >
+                            <FaTruck className="me-2" /> Track Order Status
+                        </button>
+                        <Link to="/orders" className="btn btn-custom-primary py-2">View All Orders</Link>
                         <Link to="/" className="btn btn-outline-dark py-2">Continue Shopping</Link>
                     </div>
 
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

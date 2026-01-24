@@ -26,7 +26,7 @@ class OrderController extends Controller
             'zip_code' => 'required|string',
             'country' => 'required|string',
             'phone' => 'required|string',
-            'cart_items' => 'required|array',
+            'cart_items' => 'required|array|min:1',
             'total_amount' => 'required|numeric',
             // Email is optional for logged-in users (fallback to auth), required for guests
             'email' => 'nullable|email',
@@ -71,7 +71,8 @@ class OrderController extends Controller
                 }
 
                 // 🟢 Add standard shipping fee (matching frontend)
-                $totalAmount += 10;
+                $shippingFee = 10;
+                $totalAmount += $shippingFee;
 
                 // A. Create Order Record
                 $newOrder = Order::create([
@@ -88,6 +89,7 @@ class OrderController extends Controller
                     'country' => $request->country,
                     'phone' => $request->phone,
                     'total_amount' => $totalAmount, // 🟢 Recalculated Total
+                    'shipping_fee' => $shippingFee, // 🟢 Save shipping fee separately
                     'payment_method' => $request->payment_method,
                     'status' => 'pending',
                 ]);
@@ -96,8 +98,36 @@ class OrderController extends Controller
                 foreach ($processedItems as $pItem) {
                     $product = $pItem['product'];
                     
-                    // Decrease Stock
+                    // Decrease Global Stock
                     $product->stock = $product->stock - $pItem['quantity'];
+
+                    // 🟢 SIZE STOCK LOGIC
+                    $size = $pItem['size'];
+                    if ($size && is_array($product->size_stock)) {
+                        $sizeStock = $product->size_stock;
+                        $found = false;
+
+                        // Loop to find matching size
+                        foreach ($sizeStock as $key => $stockItem) {
+                            if (isset($stockItem['size']) && strcasecmp($stockItem['size'], $size) === 0) {
+                                $currentSizeQty = (int)($stockItem['qty'] ?? 0);
+                                
+                                if ($currentSizeQty < $pItem['quantity']) {
+                                    throw new Exception("SORRY! Size '{$size}' for '{$product->name}' is out of stock! (Only {$currentSizeQty} left)");
+                                }
+                                
+                                // Decrease quantity
+                                $sizeStock[$key]['qty'] = $currentSizeQty - $pItem['quantity'];
+                                $found = true;
+                                break;
+                            }
+                        }
+
+                        if ($found) {
+                            $product->size_stock = $sizeStock;
+                        }
+                    }
+
                     $product->save();
 
                     // Create Order Item
