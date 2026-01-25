@@ -85,8 +85,9 @@ class ProductCrudController extends CrudController
         CRUD::field('date');
         CRUD::field('stock')->type('number')->label('Total Stock');
         CRUD::field('size_stock')
-            ->type('table')
+            ->type('textarea')
             ->label('Stock Per Size')
+            ->hint('Example: {"S": 10, "M": 20, "L": 5}')
             ->columns([
                 'size' => 'Size',
                 'qty' => 'Quantity'
