@@ -1,4 +1,42 @@
 :root {
+    --bs-primary: #181616;
+    --bs-primary-rgb: 24, 22, 22;
+    --bs-secondary: #1b1919;
+    --bs-secondary-rgb: 27, 25, 25;
+    --navbar-bg: #ffffff;
+    --navbar-text: var(--bs-primary);
+    --nav-active-border: var(--bs-primary);
+    --bs-body-bg: #ffffff;
+}
+
+
+.nav-link-active {
+    border-bottom: 2px solid var(--nav-active-border) !important;
+}
+
+/* --- Utilities --- */
+.text-primary {
+    color: var(--bs-primary) !important;
+}
+
+.text-secondary {
+    color: var(--bs-secondary) !important;
+}
+
+/* Override Bootstrap text-muted to match secondary theme */
+.text-muted {
+    color: var(--bs-secondary) !important;
+}
+
+/* --- Global Resets & Typography --- */
+body {
+    color: var(--bs-primary) !important;
+}
+
+a {
+    text-decoration: none;
+    color: var(--bs-primary);
+=======
     --primary-color: #000000;
     --primary-hover: #333333;
     --secondary-color: #ffffff;
@@ -90,16 +128,43 @@ body {
     color: var(--navbar-text);
 }
 
+/* --- Button Overrides --- */
+.btn-primary {
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: #333333;
+    --bs-btn-hover-border-color: #333333;
+    --bs-btn-active-bg: #000000;
+    --bs-btn-active-border-color: #000000;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+
 
 .category-card-img {
     height: 380px;
+  }
+
+/* --- Badge Overrides --- */
+.badge {
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
-.product-main-img {
-    width: 100%;
-    height: auto;
+.category-card-img {
+    height: 380px;
+    object-position: center;
 }
 
+.cart-quantity-input {
+    max-width: 60px;
 .product-detail-img {
     width: 300px;
 }
@@ -126,6 +191,10 @@ body {
     min-height: 600px;
 }
 
+.order-item-img {
+    width: 80px;
+    height: 100px;
+
 .order-success-loading {
     min-height: 60vh;
 }
@@ -134,6 +203,10 @@ body {
 .login-card {
     width: 100%;
     max-width: 400px;
+}
+
+.qty-input-group {
+    width: 110px;
 }
 
 /* Text Utilities */

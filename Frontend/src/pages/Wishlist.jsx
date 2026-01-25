@@ -51,9 +51,9 @@ const Wishlist = () => {
         ) : (
           <div className="text-center py-5">
             <h4 className="text-muted mb-3">Your wishlist is empty.</h4>
-            <a href="/products" className="btn btn-custom-primary">
+            <Link to="/products" className="btn btn-primary">
               Continue Shopping
-            </a>
+            </Link>
           </div>
         )}
       </div>

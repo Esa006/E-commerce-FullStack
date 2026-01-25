@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -14,13 +15,26 @@ class CartController extends Controller
      * Get the current user's cart with product details.
      */
     public function index() {
-        return response()->json($this->getCartState());
+        Log::info('Cart: index() called', ['user_id' => Auth::id()]);
+        $cartItems = Cart::with('product')->where('user_id', Auth::id())->get();
+        // Clean up items where product no longer exists
+        $cleaned = false;
+        foreach ($cartItems as $key => $item) {
+            if (!$item->product) {
+                $item->delete();
+                unset($cartItems[$key]); // Remove from current collection
+                $cleaned = true;
+            }
+        }
+        
+        return response()->json($cleaned ? $cartItems->values() : $cartItems);
     }
 
     /**
      * Add a product to the cart or increment quantity.
      */
     public function addToCart(Request $request) {
+        Log::info('Cart: addToCart() called', $request->all());
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
@@ -28,16 +42,16 @@ class CartController extends Controller
         ]);
 
         $product = Product::findOrFail($request->product_id);
-        
+
         // Find existing item with same product and size
         $existingItem = Cart::where('user_id', Auth::id())
             ->where('product_id', $request->product_id)
             ->where('size', $request->size)
             ->first();
-
         $newQuantity = ($existingItem ? $existingItem->quantity : 0) + $request->quantity;
 
         if ($product->stock < $newQuantity) {
+            
             return response()->json([
                 'message' => 'Insufficient stock.',
                 'available_stock' => $product->stock
@@ -59,6 +73,7 @@ class CartController extends Controller
      * Update quantity of a specific cart item.
      */
     public function updateQuantity(Request $request, $id) {
+        Log::info('Cart: updateQuantity() called', ['id' => $id, 'data' => $request->all()]);
         $request->validate(['quantity' => 'required|integer|min:1']);
         
         $cart = Cart::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
@@ -82,6 +97,7 @@ class CartController extends Controller
      * Remove an item from the cart.
      */
     public function removeFromCart($id) {
+        Log::info('Cart: removeFromCart() called', ['id' => $id]);
         Cart::where('id', $id)->where('user_id', Auth::id())->delete();
         
         return response()->json([
@@ -94,6 +110,7 @@ class CartController extends Controller
      * Merge guest cart items into the authenticated user's cart.
      */
     public function sync(Request $request) {
+        Log::info('Cart: sync() called', ['items_count' => count($request->cart_items ?? [])]);
         $request->validate([
             'cart_items' => 'required|array',
             'cart_items.*.product_id' => 'required|exists:products,id',
@@ -132,6 +149,7 @@ class CartController extends Controller
      * Validate cart against real-time stock (Pre-checkout).
      */
     public function validateCart(Request $request) {
+        Log::info('Cart: validateCart() called', $request->all());
         $request->validate(['cart_items' => 'required|array']);
 
         $errors = [];

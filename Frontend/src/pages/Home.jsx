@@ -39,7 +39,7 @@ const Home = () => {
   }, []);
 
   if (loading)
-    return <div className="text-center mt-5 loader"><p>Loading Products...</p></div>;
+    return <div className="text-center mt-5 d-flex justify-content-center align-items-center fw-bold text-primary" style={{ minHeight: "200px" }}><p>Loading Products...</p></div>;
 
   if (apiError)
     return (
@@ -64,7 +64,9 @@ const Home = () => {
           {/* Men */}
           <div className="col-md-4">
             <div className="card text-white border-0 shadow-sm overflow-hidden category-card position-relative">
-              <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600" className="card-img object-fit-cover category-card-img" alt="Men" />
+              <div className="category-card-img">
+                <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600" className="card-img object-fit-cover  w-100 h-100" alt="Men" />
+              </div>
               <div className="card-img-overlay d-flex flex-column justify-content-end p-4 category-card-overlay">
                 <h3 className="card-title fw-bold">Men</h3>
                 <Link to="/products?category=Men" className="btn btn-light btn-sm fw-bold w-auto px-4 stretched-link">Shop Now</Link>
@@ -75,8 +77,10 @@ const Home = () => {
           {/* Women */}
           <div className="col-md-4">
             <div className="card text-white border-0 shadow-sm overflow-hidden category-card position-relative">
-              <img src="https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=600" className="card-img object-fit-cover category-card-img" alt="Women" />
-              <div className="card-img-overlay d-flex flex-column justify-content-end p-4 category-card-overlay">
+              <div className="category-card-img">
+                <img src="https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=600" className="card-img object-fit-cover w-100 h-100" alt="Women" />
+              </div>
+              <div className="card-img-overlay d-flex flex-column justify-content-end p-4">
                 <h3 className="card-title fw-bold">Women</h3>
                 <Link to="/products?category=Women" className="btn btn-light btn-sm fw-bold w-auto px-4 stretched-link">Shop Now</Link>
               </div>
@@ -86,14 +90,15 @@ const Home = () => {
           {/* Kids */}
           <div className="col-md-4 mb-5">
             <div className="card text-white border-0 shadow-sm overflow-hidden category-card position-relative">
-              <img src="https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?q=80&w=600&auto=format&fit=crop" className="card-img object-fit-cover category-card-img" alt="Kids" />
-              <div className="card-img-overlay d-flex flex-column justify-content-end p-4 category-card-overlay">
+              <div className="category-card-img">
+                <img src="https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?q=80&w=600&auto=format&fit=crop" className="card-img object-fit-cover w-100 h-100" alt="Kids" />
+              </div>
+              <div className="card-img-overlay d-flex flex-column justify-content-end p-4">
                 <h3 className="card-title fw-bold">Kids</h3>
                 <Link to="/products?category=Kids" className="btn btn-light btn-sm fw-bold w-auto px-4 stretched-link">Shop Now</Link>
               </div>
             </div>
           </div>
-
         </div>
 
 
