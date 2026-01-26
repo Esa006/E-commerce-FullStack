@@ -36,29 +36,31 @@ const ProductCard = ({ product }) => {
       </button>
 
       <Link to={`/product/${product?.id}`} className="text-decoration-none">
-        <div style={{ height: '300px', backgroundColor: '#f0f0f0' }} className="w-100 rounded-top overflow-hidden position-relative">
+        <div className="w-100 rounded-top overflow-hidden position-relative h-300 bg-light-f0">
           {!isImgLoaded && (
             <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-secondary">
               <div className="spinner-border spinner-border-sm" role="status"></div>
             </div>
           )}
+          <div >
+            <img
+              src={displayImage}
+              className={`object-fit-cover w-100 h-100 rounded-top ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
+              loading="lazy"
+              alt={product?.name || "Product"}
+              onLoad={() => setIsImgLoaded(true)}
+              style={{
+                filter: isOutOfStock ? 'grayscale(100%)' : 'none',
+                opacity: isImgLoaded ? 1 : 0,
+                transition: 'opacity 0.3s ease-in-out'
+              }}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = PLACEHOLDER_IMG;
+              }}
+            />
+          </div>
 
-          <img
-            src={displayImage}
-            className={`object-fit-cover w-100 h-100 rounded-top ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
-            loading="lazy"
-            alt={product?.name || "Product"}
-            onLoad={() => setIsImgLoaded(true)}
-            style={{
-              filter: isOutOfStock ? 'grayscale(100%)' : 'none',
-              opacity: isImgLoaded ? 1 : 0,
-              transition: 'opacity 0.3s ease-in-out'
-            }}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = PLACEHOLDER_IMG;
-            }}
-          />
         </div>
       </Link>
 
@@ -81,13 +83,12 @@ const ProductCard = ({ product }) => {
 
         <Link
           to={`/product/${product?.id}`}
-          className={`btn w-100 mt-auto rounded-0 text-uppercase fw-bold py-2 ${isOutOfStock ? 'btn-secondary disabled' : 'btn-custom-primary'}`}
-          style={{ pointerEvents: isOutOfStock ? 'none' : 'auto' }} // Optional: prevent clicking button if strictly disabled
+          className={`btn w-100 mt-auto rounded-0 text-uppercase fw-bold py-2 ${isOutOfStock ? 'btn-secondary disabled pointer-events-none' : 'btn-primary'}`}
         >
           {isOutOfStock ? "Sold Out" : "View Details"}
         </Link>
       </div>
-    </div>
+    </div >
   );
 };
 

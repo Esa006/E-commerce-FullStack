@@ -294,8 +294,8 @@ const TrackOrder = () => {
                                         <table className="table table-borderless align-middle">
                                             <thead className="bg-light">
                                                 <tr className="text-uppercase small text-muted">
-                                                    <th className="py-3 ps-3" style={{ minWidth: '80px' }}>Image</th>
-                                                    <th className="py-3" style={{ minWidth: '200px' }}>Product</th>
+                                                    <th className="py-3 ps-3 min-w-80">Image</th>
+                                                    <th className="py-3 min-w-200">Product</th>
                                                     <th className="py-3 text-center">Size</th>
                                                     <th className="py-3 text-center">Qty</th>
                                                     <th className="py-3 text-end">Price</th>
@@ -312,7 +312,7 @@ const TrackOrder = () => {
                                                     return (
                                                         <tr key={idx} className="border-bottom">
                                                             <td className="ps-3 py-3">
-                                                                <div>
+                                                                <div className="track-order-image">
                                                                     <img
                                                                         src={imageUrl}
                                                                         alt="product"

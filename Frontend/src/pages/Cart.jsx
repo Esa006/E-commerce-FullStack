@@ -129,7 +129,7 @@ const Cart = () => {
 
       {/* Cart Totals Section */}
       {cartData.length > 0 && (
-        <div className="row mt-5 justify-content-end">
+        <div className="row mt-5 justify-content-end mb-5">
           <div className="col-md-5">
             <div className="card border-0 shadow-sm p-4 bg-light">
               <h5 className="fw-bold mb-4 text-uppercase">Cart Totals</h5>

@@ -185,10 +185,10 @@ export default function OrderSuccess() {
                                     ))}
                                 </div>
                                 {/* Background Line */}
-                                <div className="position-absolute top-0 start-0 w-100 mt-4 translate-middle-y z-0" style={{ height: '2px', backgroundColor: '#e9ecef', top: '25px' }}>
+                                <div className="position-absolute top-0 start-0 w-100 mt-4 translate-middle-y z-0 timeline-line">
                                     <div
                                         className="h-100 bg-success transition-all"
-                                        style={{ width: `${(getStatusTimeline(orderData.status).filter(step => step.completed).length / 4) * 100}%` }}
+                                        style={{ '--progress-width': `${(getStatusTimeline(orderData.status).filter(step => step.completed).length / 4) * 100}%`, width: 'var(--progress-width)' }}
                                     ></div>
                                 </div>
                             </div>
@@ -215,7 +215,7 @@ export default function OrderSuccess() {
 
                                 return (
                                     <div key={i} className="d-flex align-items-center p-3 border-bottom last-border-0 gap-3">
-                                        <div className="flex-shrink-0" style={{ width: '80px', height: '80px' }}>
+                                        <div className="flex-shrink-0 avatar-80">
                                             <img
                                                 src={displayImage}
                                                 className="img-fluid rounded object-fit-cover w-100 h-100 border"

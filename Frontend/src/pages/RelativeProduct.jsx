@@ -49,7 +49,7 @@ const RelativeProduct = () => {
   }, []);
 
   if (loading)
-    return <div className="text-center mt-5 d-flex justify-content-center align-items-center fw-bold text-primary" style={{ minHeight: "200px" }}><p>Loading Products...</p></div>;
+    return <div className="text-center mt-5 d-flex justify-content-center align-items-center fw-bold text-primary min-h-200"><p>Loading Products...</p></div>;
 
   if (apiError)
     return (
@@ -63,7 +63,7 @@ const RelativeProduct = () => {
   return (
     <>
 
-      <div className="container-fluid px-3 px-md-4 px-lg-5 py-5">
+      <div className="container px-3 px-md-4 px-lg-5 py-5">
         <h2 className="text-center fw-bold mb-5">Latest Products</h2>
 
         <div className="row g-3 justify-content-center">

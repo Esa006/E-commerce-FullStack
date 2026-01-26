@@ -169,12 +169,13 @@ const ProductDetails = () => {
 
   // Calculate current stock for button disable logic
   const currentSizeStock = size ? getSizeQty(size) : (productData.stock || 0);
+  const sizes = productData?.sizes ?? [];
 
   return (
     <div className="container py-5">
       <div className="row g-5">
         {/* Left Column: Image Gallery */}
-        <div className="col-12 col-md-5">
+        <div className="col-12 col-md-4">
           {/* Breadcrumbs */}
           <nav aria-label="breadcrumb" className="mb-4">
             <ol className="breadcrumb d-flex justify-content-start align-items-center flex-nowrap small mb-0">
@@ -205,11 +206,14 @@ const ProductDetails = () => {
                     onClick={() => setSelectedImage(img)}
                     className={`btn p-1 w-100 border-2 ratio ratio-1x1 ${selectedImage === img ? "border-primary" : "border"}`}
                   >
-                    <img
-                      src={getImageUrl(img)}
-                      className="img-fluid object-fit-cover rounded"
-                      alt="thumbnail"
-                    />
+                    <div>
+                      <img
+                        src={getImageUrl(img)}
+                        className="img-fluid object-fit-cover rounded  w-100 h-100"
+                        alt="thumbnail "
+                      />
+
+                    </div>
                   </button>
                 </div>
               ))}
@@ -269,7 +273,7 @@ const ProductDetails = () => {
                 </button>
                 <input
                   type="text"
-                  className="form-control text-center border-primary border-start-0 border-end-0 rounded-0"
+                  className="qty-input form-control text-center border-primary border-start-0 border-end-0 rounded-0"
                   value={quantity}
                   readOnly
                 />
@@ -291,7 +295,7 @@ const ProductDetails = () => {
                   addToCart(productData, size, quantity);
                 }
               }}
-              className="btn btn-primary w-50 py-3 fw-bold text-uppercase rounded-0"
+              className="btn btn-primary w-25 py-3 fw-bold text-uppercase rounded-0"
             >
               {currentSizeStock >= step ? "Add to Cart" : "Sold Out"}
             </button>
@@ -317,7 +321,7 @@ const ProductDetails = () => {
                   {Array.isArray(productData.product_details) ? (
                     productData.product_details.map((item, index) => (
                       <tr key={index}>
-                        <td className="bg-light fw-semibold text-muted px-3 py-2" style={{ width: '30%' }}>{item.key}</td>
+                        <td className="bg-light fw-semibold text-muted px-3 py-2 w-30">{item.key}</td>
                         <td className="px-3 py-2">{item.value}</td>
                       </tr>
                     ))
@@ -325,7 +329,7 @@ const ProductDetails = () => {
                     /* Fallback for plain object format */
                     Object.entries(productData.product_details).map(([key, value]) => (
                       <tr key={key}>
-                        <td className="bg-light fw-semibold text-muted px-3 py-2" style={{ width: '30%' }}>{key}</td>
+                        <td className="bg-light fw-semibold text-muted px-3 py-2 w-30">{key}</td>
                         <td className="px-3 py-2">{String(value)}</td>
                       </tr>
                     ))
@@ -367,13 +371,7 @@ const ProductDetails = () => {
                   <div className="mb-4">
                     <label className="form-label text-muted small mb-2">Write a Review</label>
                     <textarea
-                      className="form-control rounded-0 border-secondary-subtle"
-                      rows="3"
-                      placeholder="What did you like or dislike?"
-                      value={reviewComment}
-                      onChange={(e) => setReviewComment(e.target.value)}
-                      required
-                      style={{ resize: 'none' }}
+                      className="form-control rounded-0 border-secondary-subtle resize-none"
                     ></textarea>
                   </div>
 
@@ -399,12 +397,12 @@ const ProductDetails = () => {
                     <div key={review.id} className="border-bottom pb-4">
                       <div className="d-flex justify-content-between align-items-center mb-2">
                         <div className="d-flex align-items-center gap-2">
-                          <div className="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
+                          <div className="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center avatar-40">
                             {review.user?.name?.charAt(0).toUpperCase() || 'U'}
                           </div>
                           <div>
                             <h6 className="fw-bold mb-0 text-dark small">{review.user?.name || "Anonymous"}</h6>
-                            <small className="text-muted" style={{ fontSize: '0.75rem' }}>
+                            <small className="text-muted fs-075">
                               {new Date(review.created_at).toLocaleDateString()}
                             </small>
                           </div>

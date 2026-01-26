@@ -39,7 +39,7 @@ const Home = () => {
   }, []);
 
   if (loading)
-    return <div className="text-center mt-5 d-flex justify-content-center align-items-center fw-bold text-primary" style={{ minHeight: "200px" }}><p>Loading Products...</p></div>;
+    return <div className="text-center mt-5 d-flex justify-content-center align-items-center fw-bold text-primary min-h-200"><p>Loading Products...</p></div>;
 
   if (apiError)
     return (
@@ -65,7 +65,7 @@ const Home = () => {
           <div className="col-md-4">
             <div className="card text-white border-0 shadow-sm overflow-hidden category-card position-relative">
               <div className="category-card-img">
-                <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600" className="card-img object-fit-cover  w-100 h-100" alt="Men" />
+                <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600" className="card-img object-fit-cover  w-100 " alt="Men" />
               </div>
               <div className="card-img-overlay d-flex flex-column justify-content-end p-4 category-card-overlay">
                 <h3 className="card-title fw-bold">Men</h3>

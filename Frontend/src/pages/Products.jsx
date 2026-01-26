@@ -129,7 +129,7 @@ const Products = () => {
   };
 
   return (
-    <div className='container-fluid   border-top'>
+    <div className='container border-top'>
 
 
       {/* Title */}

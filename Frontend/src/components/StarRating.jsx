@@ -26,7 +26,6 @@ const StarRating = ({ rating, onRatingChange }) => {
                 key={index}
                 className={`${iconClass} ${isInteractive ? 'cursor-pointer' : ''}`}
                 onClick={() => isInteractive && onRatingChange(starValue)}
-                style={{ cursor: isInteractive ? 'pointer' : 'default' }}
             ></i>
         );
     });

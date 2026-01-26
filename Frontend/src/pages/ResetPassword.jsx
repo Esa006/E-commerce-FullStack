@@ -54,22 +54,17 @@ const ResetPassword = () => {
     };
 
     return (
-        <div className="container-fluid py-5" style={{
-            minHeight: '80vh',
-            background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
-            display: 'flex',
-            alignItems: 'center'
-        }}>
+        <div className="container-fluid py-5 auth-page-wrapper">
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-12 col-md-8 col-lg-5">
-                        <div className="card border-0 shadow-lg overflow-hidden" style={{ borderRadius: '15px' }}>
+                        <div className="card border-0 shadow-lg overflow-hidden auth-card">
                             <div className="card-body p-4 p-md-5 bg-white">
                                 <div className="text-center mb-5">
                                     <div className="mb-3 d-inline-block p-3 rounded-circle bg-light text-dark">
                                         <i className="bi bi-key-fill fs-1"></i>
                                     </div>
-                                    <h2 className="fw-bold text-uppercase tracking-wider mb-2" style={{ letterSpacing: '2px' }}>Reset Password</h2>
+                                    <h2 className="fw-bold text-uppercase tracking-wider mb-2 letter-spacing-2">Reset Password</h2>
                                     <p className="text-muted small">Please enter your new password to secure your account.</p>
                                 </div>
 
@@ -77,13 +72,7 @@ const ResetPassword = () => {
                                     <div className="form-floating mb-1">
                                         <input
                                             type="password"
-                                            className="form-control border-0 bg-light rounded-3 py-3"
-                                            id="passwordInput"
-                                            placeholder="New Password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            required
-                                            style={{ height: '60px', paddingLeft: '1.5rem' }}
+                                            className="form-control border-0 bg-light rounded-3 py-3 input-h-60 ps-1-5rem"
                                         />
                                         <label htmlFor="passwordInput" className="text-muted small ps-4">New Password</label>
                                     </div>
@@ -91,22 +80,14 @@ const ResetPassword = () => {
                                     <div className="form-floating mb-3">
                                         <input
                                             type="password"
-                                            className="form-control border-0 bg-light rounded-3 py-3"
-                                            id="confirmPasswordInput"
-                                            placeholder="Confirm Password"
-                                            value={passwordConfirmation}
-                                            onChange={(e) => setPasswordConfirmation(e.target.value)}
-                                            required
-                                            style={{ height: '60px', paddingLeft: '1.5rem' }}
+                                            className="form-control border-0 bg-light rounded-3 py-3 input-h-60 ps-1-5rem"
                                         />
                                         <label htmlFor="confirmPasswordInput" className="text-muted small ps-4">Confirm New Password</label>
                                     </div>
 
                                     <button
                                         type="submit"
-                                        className="btn btn-custom-primary w-100 py-3 rounded-3 text-uppercase fw-bold shadow-sm hover-lift transition-all"
-                                        disabled={loading}
-                                        style={{ letterSpacing: '1px', fontSize: '0.9rem' }}
+                                        className="btn btn-custom-primary w-100 py-3 rounded-3 text-uppercase fw-bold shadow-sm hover-lift transition-all text-spacing-1 fs-09rem"
                                     >
                                         {loading ? (
                                             <>
