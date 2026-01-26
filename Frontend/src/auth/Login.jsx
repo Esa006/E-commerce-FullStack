@@ -6,12 +6,14 @@ import Swal from 'sweetalert2';
 import AuthApi from "../api/auth";
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { AuthContext } from "../context/AuthContext";
 
 
 
 export default function Login() {
     const navigate = useNavigate();
     const { syncGuestCart } = useContext(CartContext);
+    const { login } = useContext(AuthContext);
 
     // State
     const [email, setEmail] = useState('');
@@ -29,8 +31,11 @@ export default function Login() {
             const response = await AuthApi.customerLogin(email, password);
             if (response.status === 200) {
                 // 🟢 CLEAR STALE ADMIN TOKEN: Prevents conflicts in axiosClient
+                // Handled inside login context now, but keeping for directness
                 localStorage.removeItem('admin_token');
-                localStorage.setItem('ACCESS_TOKEN', response.data.token);
+
+                // Use centralized login function
+                login(response.data.token, response.data.user);
 
                 // 🟢 SYNC CART: Merge guest items into backend
                 await syncGuestCart();

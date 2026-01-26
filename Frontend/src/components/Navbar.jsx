@@ -3,11 +3,13 @@ import { useContext } from "react";
 import { Link, useNavigate, NavLink, useLocation } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
+import { AuthContext } from "../context/AuthContext";
 import SearchBar from "./SearchBar";
 
 const Navbar = () => {
   const { cartItems } = useContext(CartContext);
   const { wishlistItems } = useContext(WishlistContext);
+  const { token, logout } = useContext(AuthContext);
   const wishlistCount = wishlistItems ? wishlistItems.length : 0;
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,11 +26,10 @@ const Navbar = () => {
     }
     return "";
   };
-  const token = localStorage.getItem("ACCESS_TOKEN");
+  // const token = localStorage.getItem("ACCESS_TOKEN"); // Now from context
 
-  const logout = () => {
-    localStorage.removeItem("ACCESS_TOKEN");
-    localStorage.removeItem("user");
+  const handleLogout = () => {
+    logout();
     navigate("/login");
   };
 
@@ -120,7 +121,7 @@ const Navbar = () => {
                 <li>
                   <button
                     className="dropdown-item text-danger w-100 text-start fw-bold"
-                    onClick={logout}
+                    onClick={handleLogout}
                   >
                     Logout
                   </button>

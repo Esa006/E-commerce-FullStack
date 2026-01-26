@@ -32,6 +32,7 @@ const ForgotPassword = React.lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = React.lazy(() => import("./pages/ResetPassword"));
 
 import ErrorBoundary from "./components/ErrorBoundary";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const location = useLocation();
@@ -58,10 +59,14 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/wishlist" element={<Wishlist />} />
 
-              <Route path="/place-order" element={<Checkout />} />
-              <Route path="/order-success" element={<OrderSuccess />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/track-order" element={<TrackOrder />} />
+              {/* Protected Routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/place-order" element={<Checkout />} />
+                <Route path="/order-success" element={<OrderSuccess />} />
+                <Route path="/orders" element={<Orders />} />
+                <Route path="/track-order" element={<TrackOrder />} />
+                <Route path="/profile" element={<Profile />} />
+              </Route>
 
               {/* Static Pages */}
               <Route path="/about" element={<About />} />
@@ -75,7 +80,6 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/profile" element={<Profile />} />
 
 
             </Routes>
